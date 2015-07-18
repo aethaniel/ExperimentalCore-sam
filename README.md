@@ -1,2 +1,2 @@
-# ExperimentalCore-sam
-Experimental new core for Arduino Due and other SAM boards
+# TemplateCore-sam
+Template core for Arduino and compatible boards
