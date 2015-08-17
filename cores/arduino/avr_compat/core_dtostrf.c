@@ -18,11 +18,15 @@
 */
 
 #include <stdio.h>
+#include "core_dtostrf.h"
 
-char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
+char *dtostrf (double val, signed char width, unsigned char prec, char *sout)
+{
   char fmt[20];
-  sprintf(fmt, "%%%d.%df", width, prec);
-  sprintf(sout, fmt, val);
+
+  snprintf(fmt, sizeof(fmt), "%%%d.%df", width, prec);
+  snprintf(sout, sizeof(fmt), fmt, val);
+
   return sout;
 }
 

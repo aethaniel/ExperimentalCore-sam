@@ -24,8 +24,8 @@
   THE SOFTWARE
 */
 
-#ifndef __PGMSPACE_H_
-#define __PGMSPACE_H_ 1
+#ifndef _AVR_PGMSPACE_H_
+#define _AVR_PGMSPACE_H_
 
 #include <inttypes.h>
 
@@ -67,4 +67,4 @@ typedef uint32_t prog_uint32_t;
 #define pgm_read_dword_far(addr) pgm_read_dword(addr)
 #define pgm_read_float_far(addr) pgm_read_float(addr)
 
-#endif
+#endif // _AVR_PGMSPACE_H_
