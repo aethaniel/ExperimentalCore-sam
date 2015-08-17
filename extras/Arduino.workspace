@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="Arduino" Database="" SWTLW="Yes">
+  <WorkspaceParserPaths/>
+  <Project Name="atmel_sam4s_xplained" Path="../variants/atmel_sam4s_xplained/atmel_sam4s_xplained.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/atmel_sam4s_xplained_pro.project" Active="No"/>
+  <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/atmel_sam4e_xplained_pro.project" Active="No"/>
+  <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/atmel_samg55_xplained_pro.project" Active="No"/>
+  <Project Name="arduino_due" Path="../variants/arduino_due/arduino_due.project" Active="No"/>
+  <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="Yes"/>
+  <Environment>
+    <![CDATA[]]>
+  </Environment>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="atmel_sam4s_xplained" ConfigName="Debug"/>
+      <Project Name="atmel_sam4s_xplained_pro" ConfigName="Debug"/>
+      <Project Name="atmel_sam4e_xplained_pro" ConfigName="Debug"/>
+      <Project Name="atmel_samg55_xplained_pro" ConfigName="Debug"/>
+      <Project Name="arduino_due" ConfigName="Debug"/>
+      <Project Name="blink" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="no">
+      <Project Name="atmel_sam4s_xplained" ConfigName="Release"/>
+      <Project Name="atmel_sam4s_xplained_pro" ConfigName="Release"/>
+      <Project Name="atmel_sam4e_xplained_pro" ConfigName="Release"/>
+      <Project Name="atmel_samg55_xplained_pro" ConfigName="Release"/>
+      <Project Name="arduino_due" ConfigName="Release"/>
+      <Project Name="blink" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
