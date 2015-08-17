@@ -21,23 +21,23 @@
 
 #include <inttypes.h>
 
-#include "Stream.h"
+#include "CoreStream.h"
 
-#define HARDSER_PARITY_EVEN (0x1ul)
-#define HARDSER_PARITY_ODD	(0x2ul)
-#define HARDSER_PARITY_NONE (0x3ul)
-#define HARDSER_PARITY_MASK	(0xFul)
+#define HARDSER_PARITY_EVEN            (0x1ul)
+#define HARDSER_PARITY_ODD	           (0x2ul)
+#define HARDSER_PARITY_NONE            (0x3ul)
+#define HARDSER_PARITY_MASK	           (0xFul)
 
-#define HARDSER_STOP_BIT_1		(0x10ul)
-#define HARDSER_STOP_BIT_1_5	(0x20ul)
-#define HARDSER_STOP_BIT_2	 	(0x30ul)
-#define HARDSER_STOP_BIT_MASK	(0xF0ul)
+#define HARDSER_STOP_BIT_1		         (0x10ul)
+#define HARDSER_STOP_BIT_1_5	         (0x20ul)
+#define HARDSER_STOP_BIT_2	 	         (0x30ul)
+#define HARDSER_STOP_BIT_MASK          (0xF0ul)
 
-#define HARDSER_DATA_5	 	(0x100ul)
-#define HARDSER_DATA_6	 	(0x200ul)
-#define HARDSER_DATA_7	 	(0x300ul)
-#define HARDSER_DATA_8	 	(0x400ul)
-#define HARDSER_DATA_MASK	(0xF00ul)
+#define HARDSER_DATA_5	 	             (0x100ul)
+#define HARDSER_DATA_6	 	             (0x200ul)
+#define HARDSER_DATA_7	 	             (0x300ul)
+#define HARDSER_DATA_8	 	             (0x400ul)
+#define HARDSER_DATA_MASK	             (0xF00ul)
 
 #define SERIAL_5N1	(HARDSER_STOP_BIT_1 | HARDSER_PARITY_NONE | HARDSER_DATA_5)
 #define SERIAL_6N1	(HARDSER_STOP_BIT_1 | HARDSER_PARITY_NONE | HARDSER_DATA_6)
@@ -68,7 +68,7 @@ class HardwareSerial : public Stream
 {
   public:
     virtual void begin(unsigned long);
-    virtual void end();
+    virtual void end(void);
     virtual int available(void) = 0;
     virtual int peek(void) = 0;
     virtual int read(void) = 0;

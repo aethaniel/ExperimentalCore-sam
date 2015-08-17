@@ -16,12 +16,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_MATH_
-#define _WIRING_MATH_
+#ifndef _ARDUINO_CORE_MATH_H_
+#define _ARDUINO_CORE_MATH_H_
 
 extern long random( long ) ;
 extern long random( long, long ) ;
 extern void randomSeed( uint32_t dwSeed ) ;
+
 extern long map( long, long, long, long, long ) ;
 
 extern uint16_t makeWord( uint16_t w ) ;
@@ -30,4 +31,4 @@ extern uint16_t makeWord( uint8_t h, uint8_t l ) ;
 #define word(...) makeWord(__VA_ARGS__)
 
 
-#endif /* _WIRING_MATH_ */
+#endif /* _ARDUINO_CORE_MATH_H_ */

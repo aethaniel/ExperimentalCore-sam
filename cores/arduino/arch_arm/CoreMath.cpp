@@ -16,13 +16,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-extern "C" {
-  #include "stdlib.h"
-  #include "stdint.h"
-}
+#define __STRICT_ANSI__
+#include <stdlib.h>
+#undef __STRICT_ANSI__
+#include "stdint.h"
+
 #include "CoreMath.h"
 
-void randomSeed(unsigned int seed)
+void randomSeed(uint32_t seed)
 {
   if ( seed != 0 )
   {

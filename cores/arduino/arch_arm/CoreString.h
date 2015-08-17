@@ -20,10 +20,12 @@
 #define String_class_h
 #ifdef __cplusplus
 
+#define __STRICT_ANSI__
 #include <stdlib.h>
+#undef __STRICT_ANSI__
 #include <string.h>
 #include <ctype.h>
-#include <avr/pgmspace.h>
+#include "core_pgmspace.h"
 
 // When compiling programs with this class, the following gcc parameters
 // dramatically increase performance and memory (RAM) efficiency, typically

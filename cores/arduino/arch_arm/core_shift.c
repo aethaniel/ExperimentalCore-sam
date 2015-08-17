@@ -17,9 +17,10 @@
 */
 
 #include <stdint.h>
-#include "wiring_shift.h"
-#include "wiring_digital.h"
-#include "wiring_private.h"
+#include "core_shift.h"
+#include "core_digital.h"
+#include "core_private.h"
+#include "core_constants.h"
 
 #ifdef __cplusplus
 extern "C"{

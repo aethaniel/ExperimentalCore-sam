@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _ARDUINO_CORE_PRIVATE_
-#define _ARDUINO_CORE_PRIVATE_
+#ifndef _ARDUINO_CORE_PRIVATE_H_
+#define _ARDUINO_CORE_PRIVATE_H_
 
 #include <stdint.h>
 #include <stdio.h>
@@ -29,20 +29,20 @@ extern "C" {
 
 // Includes Atmel CMSIS headers
 #include "sam.h"
+#include "core_variant.h"
 
-#include "core_constants.h"
 /*
  * \brief Allocates a pin to a specific peripheral (GPIO mutiplexer).
  *
  * \param ulPin         pin number
  * \param ulPeripheral  peripheral
  */
-
-int pinPeripheral( uint32_t ulPin, EPioType ulPeripheral );
+int pinPeripheral( uint32_t ulPin, EGPIOType ulPeripheral );
 
 #ifdef __cplusplus
 } // extern "C"
 
-#include "HardwareSerial.h"
+#include "CoreHardwareSerial.h"
+#endif // __cplusplus
 
-#endif // _ARDUINO_CORE_PRIVATE_
+#endif // _ARDUINO_CORE_PRIVATE_H_

@@ -15,21 +15,20 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-#pragma once
+#ifndef _ARDUINO_CORE_ITOA_H_
+#define _ARDUINO_CORE_ITOA_H_
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-//extern void itoa( int n, char s[] ) ;
-
-extern char* itoa( int value, char *string, int radix ) ;
-extern char* ltoa( long value, char *string, int radix ) ;
-extern char* utoa( unsigned long value, char *string, int radix ) ;
-extern char* ultoa( unsigned long value, char *string, int radix ) ;
+extern char* ltoa( long value, char *string, int radix );
+extern char* itoa( int value, char *string, int radix );
+extern char* ultoa( unsigned long value, char *string, int radix );
+extern char* utoa( unsigned long value, char *string, int radix );
 
 #ifdef __cplusplus
 } // extern "C"
 #endif
 
+#endif // _ARDUINO_CORE_ITOA_H_

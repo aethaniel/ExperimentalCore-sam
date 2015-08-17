@@ -19,7 +19,8 @@
 #ifndef IPAddress_h
 #define IPAddress_h
 
-#include <Printable.h>
+#include "Udp.h"
+#include "CorePrintable.h"
 
 // A class to make it easier to handle and pass around IP addresses
 
