@@ -27,7 +27,7 @@
 #define VARIANT_MAINOSC		(12000000ul)
 
 /** Master clock frequency */
-#define VARIANT_MCK			  (120000000ul)
+#define VARIANT_MCK			(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -50,9 +50,9 @@ extern "C"
 
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           (26ul)
-#define NUM_DIGITAL_PINS     (14u)
-#define NUM_ANALOG_INPUTS    (8u)
-#define NUM_ANALOG_OUTPUTS   (1u)
+#define NUM_DIGITAL_PINS     (5u)
+#define NUM_ANALOG_INPUTS    (0u)
+#define NUM_ANALOG_OUTPUTS   (0u)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -66,6 +66,8 @@ extern "C"
  * pair PIO_OER/PIO_ODR.
  */
 // #define portModeRegister(port)   ( &(port->PIO_OSR) )
+
+#define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
 
 /*
  * digitalPinToTimer(..) is AVR-specific and is not defined for SAM
@@ -81,10 +83,8 @@ extern "C"
 
 // LEDs
 #define PIN_LED_13           (0u)
-#define PIN_LED_RXL          (0u)
-#define PIN_LED_TXL          (1u)
 #define PIN_LED              PIN_LED_13
-#define PIN_LED2             PIN_LED_TXL
+#define PIN_LED2             (1u)
 #define LED_BUILTIN          PIN_LED_13
 
 /*
@@ -136,11 +136,10 @@ static const uint8_t A5  = PIN_A5 ;
 #define PIN_SPI_SS0          (77u)
 #define PIN_SPI_SS1          (87u)
 
-static const uint8_t SS	  = PIN_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
-static const uint8_t MOSI = PIN_SPI_MOSI ;
-static const uint8_t MISO = PIN_SPI_MISO ;
-static const uint8_t SCK  = PIN_SPI_SCK ;
-#endif // TODO SPI
+static const uint8_t SS	  = PIN_SPI_SS0;
+static const uint8_t MOSI = PIN_SPI_MOSI;
+static const uint8_t MISO = PIN_SPI_MISO;
+static const uint8_t SCK  = PIN_SPI_SCK;
 
 #if 0 // TODO Wire
 /*

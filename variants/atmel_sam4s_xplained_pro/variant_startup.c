@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Arduino LLC & Thibaut VIARD.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -210,23 +210,24 @@ void SystemInit( void )
   /* Initialize main oscillator */
   if ( !(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL) )
   {
-    PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN;
+    PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN;
     for ( ; !(PMC->PMC_SR & PMC_SR_MOSCXTS) ; );
   }
 
   /* Switch to 3-20MHz Xtal oscillator */
-  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
+  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
   for ( ; !(PMC->PMC_SR & PMC_SR_MOSCSELS) ; );
 //  for ( ; !(PMC->CKGR_MCFR & CKGR_MCFR_MAINFRDY) ; );
 
   /* Initialize PLLA */
-  PMC->CKGR_PLLAR = (CKGR_PLLAR_MULA(29) | CKGR_PLLAR_PLLACOUNT(0x1) | CKGR_PLLAR_DIVA(3));
+  PMC->CKGR_PLLAR = (CKGR_PLLAR_MULA(0x1dul) | CKGR_PLLAR_PLLACOUNT(0x1ul) | CKGR_PLLAR_DIVA(3ul));
   for ( ; !(PMC->PMC_SR & PMC_SR_LOCKA) ; );
 
   /* Switch to main clock */
   PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
+	/* Switch to PLLA */
   PMC->PMC_MCKR = (PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK) ;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 

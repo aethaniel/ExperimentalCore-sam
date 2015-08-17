@@ -24,7 +24,7 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="variants">
-    <VirtualDirectory Name="atmel_samg55-xpro">
+    <VirtualDirectory Name="atmel_samg55_xpro">
       <VirtualDirectory Name="linker_scripts">
         <File Name="linker_scripts/gcc/variant_with_bootloader.ld"/>
         <File Name="linker_scripts/gcc/variant_without_bootloader.ld"/>

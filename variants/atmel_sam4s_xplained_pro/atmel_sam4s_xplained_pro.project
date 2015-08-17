@@ -26,11 +26,11 @@
   <VirtualDirectory Name="variants">
     <VirtualDirectory Name="atmel_sam4s_xpro">
       <VirtualDirectory Name="linker_scripts">
-        <File Name="../atmel_sam4s_xplained_pro/linker_scripts/gcc/variant_with_bootloader.ld"/>
-        <File Name="../atmel_sam4s_xplained_pro/linker_scripts/gcc/variant_without_bootloader.ld"/>
+        <File Name="linker_scripts/gcc/variant_with_bootloader.ld"/>
+        <File Name="linker_scripts/gcc/variant_without_bootloader.ld"/>
       </VirtualDirectory>
-      <File Name="../atmel_sam4s_xplained_pro/variant_init.cpp"/>
-      <File Name="../atmel_sam4s_xplained_pro/variant_startup.c"/>
+      <File Name="variant_init.cpp"/>
+      <File Name="variant_startup.c"/>
       <File Name="Makefile"/>
       <File Name="pins_arduino.h"/>
       <File Name="variant.cpp"/>

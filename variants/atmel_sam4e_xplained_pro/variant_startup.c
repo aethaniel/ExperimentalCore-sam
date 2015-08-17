@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Arduino LLC & Thibaut VIARD.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@
 
 #include "sam.h"
 #include "variant.h"
+#include "core_delay.h"
 
 /* Initialize segments */
 extern uint32_t __etext ;
@@ -61,77 +62,57 @@ void SVC_Handler       (void) { svcHook(); }
 void PendSV_Handler    (void) {	pendSVHook(); }
 
 /* Peripherals handlers */
-void SUPC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void RSTC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void RTC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void RTT_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void WDT_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void PMC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void EFC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void UART0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void PIOA_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void PIOB_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef _SAM4E_PIOC_INSTANCE_
-void PIOC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_PIOC_INSTANCE_ */
-void PIOD_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef _SAM4E_PIOE_INSTANCE_
-void PIOE_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_PIOE_INSTANCE_ */
-void USART0_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void USART1_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void TWI0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void TWI1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void SPI_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void DMAC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void TC0_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void TC1_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void TC2_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef _SAM4E_TC1_INSTANCE_
-void TC3_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC1_INSTANCE_
-void TC4_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC1_INSTANCE_
-void TC5_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
-void TC6_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC2_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
-void TC7_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC2_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
-void TC8_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_TC2_INSTANCE_ */
-void AFEC0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void DACC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void ACC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void ARM_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void UDP_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void PWM_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void CAN0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef _SAM4E_CAN1_INSTANCE_
-void CAN1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif /* _SAM4E_CAN1_INSTANCE_ */
-void AES_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void GMAC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void UART1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-
-void SysTick_Handler(void)
-{
-	if (sysTickHook())
-		return;
-
-	tickReset();
-
-	// Increment tick count each ms
-	TimeTick_Increment();
-}
-
+void SUPC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void RSTC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void RTC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void RTT_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void WDT_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void PMC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void EFC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void UART0_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOA_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOB_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef PIOC
+void PIOC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* PIOC */
+void PIOD_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef PIOE
+void PIOE_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* PIOE */
+void USART0_Handler ( void ) __attribute__ ((weak, alias("__halt")));
+void USART1_Handler ( void ) __attribute__ ((weak, alias("__halt")));
+void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void TWI0_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void TWI1_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void SPI_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void DMAC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void TC0_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC1_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC2_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef TC1
+void TC3_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC4_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC5_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* TC1 */
+#ifdef TC2
+void TC6_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC7_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC8_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* TC2 */
+void AFEC0_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void DACC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void ACC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void ARM_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void UDP_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void PWM_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void CAN0_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef CAN1
+void CAN1_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* CAN1 */
+void AES_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void GMAC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void UART1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
 
 /* Exception Table */
 __attribute__ ((section(".isr_vector")))
@@ -168,17 +149,17 @@ const DeviceVectors exception_table=
   .pvReserved8       = (void*) (0UL),          /* 8  Reserved */
   .pfnPIOA_Handler   = (void*) PIOA_Handler,   /* 9  Parallel I/O Controller A */
   .pfnPIOB_Handler   = (void*) PIOB_Handler,   /* 10 Parallel I/O Controller B */
-#ifdef _SAM4E_PIOC_INSTANCE_
+#ifdef PIOC
   .pfnPIOC_Handler   = (void*) PIOC_Handler,   /* 11 Parallel I/O Controller C */
 #else
   .pvReserved11      = (void*) (0UL),          /* 11 Reserved */
-#endif /* _SAM4E_PIOC_INSTANCE_ */
+#endif /* PIOC */
   .pfnPIOD_Handler   = (void*) PIOD_Handler,   /* 12 Parallel I/O Controller D */
-#ifdef _SAM4E_PIOE_INSTANCE_
+#ifdef PIOE
   .pfnPIOE_Handler   = (void*) PIOE_Handler,   /* 13 Parallel I/O Controller E */
 #else
   .pvReserved13      = (void*) (0UL),          /* 13 Reserved */
-#endif /* _SAM4E_PIOE_INSTANCE_ */
+#endif /* PIOE */
   .pfnUSART0_Handler = (void*) USART0_Handler, /* 14 USART 0 */
   .pfnUSART1_Handler = (void*) USART1_Handler, /* 15 USART 1 */
   .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 16 Multimedia Card Interface */
@@ -189,36 +170,24 @@ const DeviceVectors exception_table=
   .pfnTC0_Handler    = (void*) TC0_Handler,    /* 21 Timer/Counter 0 */
   .pfnTC1_Handler    = (void*) TC1_Handler,    /* 22 Timer/Counter 1 */
   .pfnTC2_Handler    = (void*) TC2_Handler,    /* 23 Timer/Counter 2 */
-#ifdef _SAM4E_TC1_INSTANCE_
+#ifdef TC1
   .pfnTC3_Handler    = (void*) TC3_Handler,    /* 24 Timer/Counter 3 */
-#else
-  .pvReserved24      = (void*) (0UL),          /* 24 Reserved */
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC1_INSTANCE_
   .pfnTC4_Handler    = (void*) TC4_Handler,    /* 25 Timer/Counter 4 */
-#else
-  .pvReserved25      = (void*) (0UL),          /* 25 Reserved */
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC1_INSTANCE_
   .pfnTC5_Handler    = (void*) TC5_Handler,    /* 26 Timer/Counter 5 */
 #else
+  .pvReserved24      = (void*) (0UL),          /* 24 Reserved */
+  .pvReserved25      = (void*) (0UL),          /* 25 Reserved */
   .pvReserved26      = (void*) (0UL),          /* 26 Reserved */
-#endif /* _SAM4E_TC1_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
+#endif /* TC1 */
+#ifdef TC2
   .pfnTC6_Handler    = (void*) TC6_Handler,    /* 27 Timer/Counter 6 */
-#else
-  .pvReserved27      = (void*) (0UL),          /* 27 Reserved */
-#endif /* _SAM4E_TC2_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
   .pfnTC7_Handler    = (void*) TC7_Handler,    /* 28 Timer/Counter 7 */
-#else
-  .pvReserved28      = (void*) (0UL),          /* 28 Reserved */
-#endif /* _SAM4E_TC2_INSTANCE_ */
-#ifdef _SAM4E_TC2_INSTANCE_
   .pfnTC8_Handler    = (void*) TC8_Handler,    /* 29 Timer/Counter 8 */
 #else
+  .pvReserved27      = (void*) (0UL),          /* 27 Reserved */
+  .pvReserved28      = (void*) (0UL),          /* 28 Reserved */
   .pvReserved29      = (void*) (0UL),          /* 29 Reserved */
-#endif /* _SAM4E_TC2_INSTANCE_ */
+#endif /* TC2 */
   .pfnAFEC0_Handler  = (void*) AFEC0_Handler,  /* 30 Analog Front End 0 */
   .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 31 Analog Front End 1 */
   .pfnDACC_Handler   = (void*) DACC_Handler,   /* 32 Digital To Analog Converter */
@@ -227,11 +196,11 @@ const DeviceVectors exception_table=
   .pfnUDP_Handler    = (void*) UDP_Handler,    /* 35 USB DEVICE */
   .pfnPWM_Handler    = (void*) PWM_Handler,    /* 36 PWM */
   .pfnCAN0_Handler   = (void*) CAN0_Handler,   /* 37 CAN0 */
-#ifdef _SAM4E_CAN1_INSTANCE_
+#ifdef CAN1
   .pfnCAN1_Handler   = (void*) CAN1_Handler,   /* 38 CAN1 */
 #else
   .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
-#endif /* _SAM4E_CAN1_INSTANCE_ */
+#endif /* CAN1 */
   .pfnAES_Handler    = (void*) AES_Handler,    /* 39 AES */
   .pvReserved40      = (void*) (0UL),          /* 40 Reserved */
   .pvReserved41      = (void*) (0UL),          /* 41 Reserved */
@@ -254,35 +223,35 @@ void SystemInit( void )
   /* Initialize main oscillator */
   if ( !(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL) )
   {
-  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8U) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN ;
-  	while ( !(PMC->PMC_SR & PMC_SR_MOSCXTS) ) ;
-	}
+    PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN;
+    for ( ; !(PMC->PMC_SR & PMC_SR_MOSCXTS) ; );
+  }
 
-	/* Switch to 3-20MHz Xtal oscillator */
-	PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8U) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
-	while ( !(PMC->PMC_SR & PMC_SR_MOSCSELS) ) ;
+  /* Switch to 3-20MHz Xtal oscillator */
+  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MOSCSELS) ; );
 
-	PMC->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK ;
-	while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
+  PMC->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK ;
+  while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
 
-	/* Initialize PLLA */
-	PMC->CKGR_PLLAR = CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x13U) | CKGR_PLLAR_PLLACOUNT(0x3fU) | CKGR_PLLAR_DIVA(0x1U) ;
-	while ( !(PMC->PMC_SR & PMC_SR_LOCKA) ) ;
+  /* Initialize PLLA */
+  PMC->CKGR_PLLAR = CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x13ul) | CKGR_PLLAR_PLLACOUNT(0x3ful) | CKGR_PLLAR_DIVA(0x1ul) ;
+  for ( ; !(PMC->PMC_SR & PMC_SR_LOCKA) ; );
 
-	/* Switch to main clock */
-	PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) |	PMC_MCKR_CSS_MAIN_CLK ;
-	while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
+  /* Switch to main clock */
+  PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) |	PMC_MCKR_CSS_MAIN_CLK ;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
 	/* Switch to PLLA */
-	PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK ;
-	while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
+  PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK ;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
-  SystemCoreClock=__SYSTEM_CLOCK_120MHZ ;
+  SystemCoreClock=__SYSTEM_CLOCK_120MHZ;
 }
 
 /**
  * \brief This is the code that gets called on processor reset.
- * To initialize the device, and call the main() routine.
+ * Initializes the device and call the main() routine.
  */
 void Reset_Handler( void )
 {
@@ -310,8 +279,9 @@ void Reset_Handler( void )
   }
 
   /* Initialize the C library */
-  __libc_init_array();
+//  __libc_init_array();
 
+  /* Initialize the system */
   SystemInit() ;
 
   /* Branch to main function */
@@ -321,4 +291,11 @@ void Reset_Handler( void )
   while ( 1 )
   {
   }
+}
+
+void SysTick_Handler(void)
+{
+  if (sysTickHook())
+    return;
+  SysTick_DefaultHandler();
 }

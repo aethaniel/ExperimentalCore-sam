@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,8 +25,8 @@
  */
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 0x00040000
-  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00008000
+  FLASH (rx) : ORIGIN = 0x00400000, LENGTH = 0x00100000
+  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00020000
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -201,7 +201,7 @@ SECTIONS
 
 	/* Set stack top to end of RAM, and stack limit move down by
 	 * size of stack_dummy section */
-	__StackTop = ORIGIN(RAM) + LENGTH(RAM) ;
+	__StackTop = ORIGIN(RAM) + LENGTH(RAM);
 	__StackLimit = __StackTop - SIZEOF(.stack_dummy);
 	PROVIDE(__stack = __StackTop);
 

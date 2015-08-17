@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,8 +25,8 @@
  */
 MEMORY
 {
-  FLASH (rx) : ORIGIN = variant_flash_base_address+variant_bootloader_size, LENGTH = variant_flash_size-variant_bootloader_size /* First xxxKB used by bootloader */
-  RAM (rwx) : ORIGIN = variant_ram_base_address, LENGTH = variant_ram_size
+  FLASH (rx) : ORIGIN = 0x00400000+0x2000, LENGTH = 0x00100000-0x2000
+  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00020000
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -58,6 +58,7 @@ MEMORY
  *   __StackLimit
  *   __StackTop
  *   __stack
+ *   __ram_end__
  */
 ENTRY(Reset_Handler)
 

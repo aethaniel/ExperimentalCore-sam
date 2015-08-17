@@ -150,7 +150,6 @@ COMMON_FLAGS += -D$(DEVICE) -DDONT_USE_CMSIS_INIT -fdiagnostics-color=always
 COMMON_FLAGS += -Wa,-adhlns="$(OUTPUT_PATH)/$(subst .o,.lst,$@)"
 COMMON_FLAGS += $(INC_PATH) -DF_CPU=$(CORE_FREQUENCY)
 COMMON_FLAGS += --param max-inline-insns-single=500
-#
 
 ifeq ($(DEBUG),0)
 COMMON_FLAGS += -Os
@@ -175,7 +174,7 @@ AOBJS = $(patsubst %.s,%.o,$(PROJ_ASRCS))
 COBJS = $(patsubst %.c,%.o,$(PROJ_CSRCS))
 CPPOBJS = $(patsubst %.cpp,%.o,$(PROJ_CPPSRCS))
 
-all: $(VARIANT_PATH)/Makefile $(OUTPUT_FILE_PATH)
+all: $(OUTPUT_FILE_PATH)
 
 test:
 	@echo VPATH ---------------------------------------------------------------------------------------
@@ -197,7 +196,7 @@ test:
 	@echo ---------------------------------------------------------------------------------------
 	@echo $(PWD)
 
-$(OUTPUT_FILE_PATH): Makefile $(OUTPUT_PATH) $(AOBJS) $(COBJS) $(CPPOBJS)
+$(OUTPUT_FILE_PATH): $(VARIANT_PATH)/Makefile $(OUTPUT_PATH) $(AOBJS) $(COBJS) $(CPPOBJS)
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(AOBJS))
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(COBJS))
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(CPPOBJS))
@@ -226,17 +225,16 @@ clean:
 	-rm -f $(OUTPUT_FILE_PATH)
 	-rm -f $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
 
+$(OUTPUT_PATH)/%.o : %.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+
+.phony: $(OUTPUT_PATH) clean test
+
 upload: $(OUTPUT_FILE_PATH)
 	$(OPENOCD) -f "$(RESOURCES_OPENOCD_UPLOAD)" -c "program $(OUTPUT_FILE_PATH) verify reset"
 
 openocd: $(OUTPUT_FILE_PATH)
-	$(OPENOCD) -f "$(RESOURCES_OPENOCD_START)" -c "init"
+	$(OPENOCD) -f "$(RESOURCES_OPENOCD_START)" -c "init" -c "halt"
 
 debug: $(OUTPUT_FILE_PATH)
 	$(GDB) -x "$(RESOURCES_GDB)" -ex "reset" -readnow -se $(OUTPUT_FILE_PATH)
-
-$(OUTPUT_PATH)/%.o : %.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
-
-.phony: create_build_folder clean test
-

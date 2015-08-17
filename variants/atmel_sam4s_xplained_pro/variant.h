@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_
-#define _VARIANT_ATMEL_SAM4S_XPLAINED_
+#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_
+#define _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_
 
 /*----------------------------------------------------------------------------
  *        Definitions
@@ -27,7 +27,7 @@
 #define VARIANT_MAINOSC		(12000000ul)
 
 /** Master clock frequency */
-#define VARIANT_MCK			  (120000000ul)
+#define VARIANT_MCK			(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -50,14 +50,24 @@ extern "C"
 
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           (26ul)
-#define NUM_DIGITAL_PINS     (14u)
-#define NUM_ANALOG_INPUTS    (8u)
-#define NUM_ANALOG_OUTPUTS   (1u)
+#define NUM_DIGITAL_PINS     (4u)
+#define NUM_ANALOG_INPUTS    (0u)
+#define NUM_ANALOG_OUTPUTS   (0u)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
 #define portInputRegister(port)    ( &(port->PIO_PDSR) )
-#define portModeRegister(port)     ( &(port->DIR.reg) )
+
+/*
+ * portModeRegister(..) should return a register to set pin mode
+ * INPUT or OUTPUT by setting the corresponding bit to 0 or 1.
+ * Unfortunately on SAM architecture the PIO_OSR register is
+ * read-only and can be set only through the enable/disable registers
+ * pair PIO_OER/PIO_ODR.
+ */
+// #define portModeRegister(port)   ( &(port->PIO_OSR) )
+
+#define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
 
 /*
  * digitalPinToTimer(..) is AVR-specific and is not defined for SAM
@@ -69,19 +79,17 @@ extern "C"
 // #define digitalPinToTimer(P)
 
 // Interrupts
-#define digitalPinToInterrupt(P)   ( g_aPinMap[P].ulExtInt )
+#define digitalPinToInterrupt(p)  ((p) < NUM_DIGITAL_PINS ? (p) : -1)
 
 // LEDs
 #define PIN_LED_13           (0u)
-#define PIN_LED_RXL          (0u)
-#define PIN_LED_TXL          (1u)
 #define PIN_LED              PIN_LED_13
-#define PIN_LED2             PIN_LED_TXL
 #define LED_BUILTIN          PIN_LED_13
 
 /*
  * Analog pins
  */
+#if 0 // TODO Analog pins
 #define PIN_A0               (14ul)
 #define PIN_A1               (15ul)
 #define PIN_A2               (16ul)
@@ -96,26 +104,22 @@ static const uint8_t A3  = PIN_A3 ;
 static const uint8_t A4  = PIN_A4 ;
 static const uint8_t A5  = PIN_A5 ;
 #define ADC_RESOLUTION		12
-
-// Other pins
-#define PIN_ATN              (38ul)
-static const uint8_t ATN = PIN_ATN;
+#endif // TODO Analog pins
 
 /*
  * Serial interfaces
  */
-// Serial (JLink-OB)
-#define PIN_SERIAL_RX       (31ul)
-#define PIN_SERIAL_TX       (30ul)
-#define PAD_SERIAL_TX       (UART_TX_PAD_2)
-#define PAD_SERIAL_RX       (SERCOM_RX_PAD_3)
+// Serial (EDBG)
+#define PIN_SERIAL_RX       (2ul)
+#define PIN_SERIAL_TX       (3ul)
 
+#if 0 // TODO Serial1
 // Serial1
 #define PIN_SERIAL1_RX       (0ul)
 #define PIN_SERIAL1_TX       (1ul)
-#define PAD_SERIAL1_TX       (UART_TX_PAD_2)
-#define PAD_SERIAL1_RX       (SERCOM_RX_PAD_3)
+#endif // TODO Serial1
 
+#if 0 // TODO SPI
 /*
  * SPI Interfaces
  */
@@ -131,11 +135,12 @@ static const uint8_t ATN = PIN_ATN;
 #define PIN_SPI_SS0          (77u)
 #define PIN_SPI_SS1          (87u)
 
-static const uint8_t SS	  = PIN_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
-static const uint8_t MOSI = PIN_SPI_MOSI ;
-static const uint8_t MISO = PIN_SPI_MISO ;
-static const uint8_t SCK  = PIN_SPI_SCK ;
+static const uint8_t SS	  = PIN_SPI_SS0;
+static const uint8_t MOSI = PIN_SPI_MOSI;
+static const uint8_t MISO = PIN_SPI_MISO;
+static const uint8_t SCK  = PIN_SPI_SCK;
 
+#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
@@ -143,12 +148,15 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 
 #define PIN_WIRE_SDA         (20u)
 #define PIN_WIRE_SCL         (21u)
+#endif // TODO Wire
 
+#if 0 // TODO USB
 /*
  * USB
  */
 #define PIN_USB_DM          (28ul)
 #define PIN_USB_DP          (29ul)
+#endif // TODO USB
 
 #ifdef __cplusplus
 }
@@ -186,5 +194,5 @@ extern UARTClass Serial1;
 #define SERIAL_PORT_HARDWARE        Serial1
 #define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
-#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_ */
+#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_ */
 

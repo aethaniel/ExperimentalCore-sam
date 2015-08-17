@@ -25,7 +25,7 @@ OPENOCD = openocd
 DEVICE = __SAMG55J19__
 CORE = cortex-m4
 VARIANT_NAME = atmel_samg55_xplained_pro
-CORE_FREQUENCY = 4000000ul
+CORE_FREQUENCY = 8000000ul
 
 ROOT_PATH=../..
 VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
