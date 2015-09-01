@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef NEW_H
-#define NEW_H
+#ifndef _ARDUINO_CORE_NEW_H_
+#define _ARDUINO_CORE_NEW_H_
 
 #include <stdlib.h>
 
@@ -26,5 +26,5 @@ void * operator new[](size_t size);
 void operator delete(void * ptr);
 void operator delete[](void * ptr);
 
-#endif
+#endif // _ARDUINO_CORE_NEW_H_
 
