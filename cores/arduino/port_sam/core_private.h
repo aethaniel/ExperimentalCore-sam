@@ -39,6 +39,42 @@ extern "C" {
  */
 int pinPeripheral( uint32_t ulPin, EGPIOType ulPeripheral );
 
+/*
+ * \brief Faster digitalRead. Assumes the pin is fully configured before.
+ *
+ * \param pPin         pin description, eg &g_aPinMap[ulPin]
+ */
+inline uint32_t digitalReadFast( const PinDescription* pPin ) __attribute__((always_inline));
+inline uint32_t digitalReadFast( const PinDescription* pPin )
+{
+  if ( (Ports[pPin->iPort].pGPIO->PIO_PDSR & pPin->ulPin) != 0 )
+  {
+    return HIGH ;
+  }
+
+  return LOW ;
+}
+
+/*
+ * \brief Faster digitalWrite. Assumes the pin is fully configured before.
+ *
+ * \param pPin         pin description, eg &g_aPinMap[ulPin]
+ * \param ulVal        0 means LOW, any other value means HIGH
+ */
+inline void digitalWriteFast( const PinDescription* pPin, uint32_t ulVal ) __attribute__((always_inline));
+inline void digitalWriteFast( const PinDescription* pPin, uint32_t ulVal )
+{
+  if ( ulVal )
+  {
+    Ports[pPin->iPort].pGPIO->PIO_SODR=pPin->ulPin;
+  }
+  else
+  {
+    Ports[pPin->iPort].pGPIO->PIO_CODR=pPin->ulPin;
+  }
+}
+
+
 #ifdef __cplusplus
 } // extern "C"
 
