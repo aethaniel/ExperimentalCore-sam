@@ -28,10 +28,6 @@ extern "C" {
  */
 extern void init(void);
 
-/**
- * \brief Initialize the variant.
- */
-extern void initVariant(void);
 
 #ifdef __cplusplus
 }

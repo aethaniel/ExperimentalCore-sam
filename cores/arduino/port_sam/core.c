@@ -27,8 +27,8 @@ extern "C" {
  *
  * Good to know:
  *   - At reset, Reset_Handler did the system clock configuration. Core is running at F_CPU MHz.
- *   - Watchdog is disabled by default
- *   - During reset, all GPIO lines are configured as inputs with input buffers, output buffers and pull disabled.
+ *   - Watchdog may be disabled by default in variant_init.cpp
+ *   - During reset, all GPIO lines are configured as outputs.
  */
 void init( void )
 {
@@ -38,6 +38,33 @@ void init( void )
     // Capture error
     while ( 1 ) ;
   }
+
+  /* We disable the watchdog for this system */
+  WDT->WDT_MR=WDT_MR_WDDIS;
+
+  /* Disable pull-up on every pin */
+#if 0
+  for (unsigned i = 0; i < PINS_COUNT; i++)
+  {
+    digitalWrite(i, LOW);
+  }
+#endif // 0
+
+  // Enable parallel access on PIO output data registers
+#if 0
+#ifdef PIOA
+  PIOA->PIO_OWER = 0xFFFFFFFF;
+#endif /* PIOA */
+#ifdef PIOB
+  PIOB->PIO_OWER = 0xFFFFFFFF;
+#endif /* PIOB */
+#ifdef PIOC
+  PIOC->PIO_OWER = 0xFFFFFFFF;
+#endif /* PIOC */
+#ifdef PIOD
+  PIOD->PIO_OWER = 0xFFFFFFFF;
+#endif /* PIOD */
+#endif // 0
 }
 
 #ifdef __cplusplus
