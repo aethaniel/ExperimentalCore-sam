@@ -19,22 +19,7 @@
 #include "sam.h"
 #include "variant.h"
 #include "core_delay.h"
-
-/* Initialize segments */
-extern uint32_t __etext ;
-extern uint32_t __data_start__ ;
-extern uint32_t __data_end__ ;
-extern uint32_t __bss_start__ ;
-extern uint32_t __bss_end__ ;
-extern uint32_t __StackTop;
-
-extern int main( void ) ;
-extern void __libc_init_array(void);
-
-
-extern void svcHook(void);
-extern void pendSVHook(void);
-extern int sysTickHook(void);
+#include "core_hooks.h"
 
 #define __SYSTEM_CLOCK_4MHZ   (4000000UL)
 #define __SYSTEM_CLOCK_120MHZ (120000000UL)
@@ -45,21 +30,11 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_4MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void __halt() {
-	// Halts
-	while (1)
-		;
+static void __halt()
+{
+  // Halts
+  while (1);
 }
-
-/* Cortex-M3 core handlers */
-void NMI_Handler       (void) __attribute__ ((weak, alias("__halt")));
-void HardFault_Handler (void) __attribute__ ((weak, alias("__halt")));
-void MemManage_Handler (void) __attribute__ ((weak, alias("__halt")));
-void BusFault_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void UsageFault_Handler(void) __attribute__ ((weak, alias("__halt")));
-void DebugMon_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void SVC_Handler       (void) { svcHook(); }
-void PendSV_Handler    (void) {	pendSVHook(); }
 
 /* Peripherals handlers */
 void SUPC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
@@ -115,11 +90,11 @@ void GMAC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
 void UART1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
 
 /* Exception Table */
-__attribute__ ((section(".isr_vector")))
-const DeviceVectors exception_table=
+//__attribute__ ((section(".isr_vector")))
+DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
-  .pvStack = (void*) (&__StackTop),
+  .pvStack = 0ul, // not used (void*) (&__StackTop),
 
   .pfnReset_Handler      = (void*) Reset_Handler,
   .pfnNMI_Handler        = (void*) NMI_Handler,
@@ -144,7 +119,7 @@ const DeviceVectors exception_table=
   .pfnRTT_Handler    = (void*) RTT_Handler,    /* 3  Real Time Timer */
   .pfnWDT_Handler    = (void*) WDT_Handler,    /* 4  Watchdog/Dual Watchdog Timer */
   .pfnPMC_Handler    = (void*) PMC_Handler,    /* 5  Power Management Controller */
-  .pfnEFC_Handler    = (void*) EFC_Handler,    /* 6  Enhanced Embedded Flash Controller */
+  .pfnEFC0_Handler   = (void*) EFC0_Handler,   /* 6  Enhanced Embedded Flash Controller */
   .pfnUART0_Handler  = (void*) UART0_Handler,  /* 7  UART 0 */
   .pvReserved8       = (void*) (0UL),          /* 8  Reserved */
   .pfnPIOA_Handler   = (void*) PIOA_Handler,   /* 9  Parallel I/O Controller A */
@@ -218,7 +193,7 @@ const DeviceVectors exception_table=
 void SystemInit( void )
 {
   /* Set 6 FWS for Embedded Flash Access */
-  EFC->EEFC_FMR = EEFC_FMR_FWS(5) | EEFC_FMR_CLOE ;
+  EFC0->EEFC_FMR = EEFC_FMR_FWS(5) | EEFC_FMR_CLOE ;
 
   /* Initialize main oscillator */
   if ( !(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL) )
@@ -249,53 +224,3 @@ void SystemInit( void )
   SystemCoreClock=__SYSTEM_CLOCK_120MHZ;
 }
 
-/**
- * \brief This is the code that gets called on processor reset.
- * Initializes the device and call the main() routine.
- */
-void Reset_Handler( void )
-{
-  uint32_t *pSrc, *pDest;
-
-  /* Initialize the initialized data section */
-  pSrc = &__etext;
-  pDest = &__data_start__;
-
-  if ( (&__data_start__ != &__data_end__) && (pSrc != pDest) )
-  {
-    for (; pDest < &__data_end__ ; pDest++, pSrc++ )
-    {
-      *pDest = *pSrc ;
-    }
-  }
-
-  /* Clear the zero section */
-  if ( &__bss_start__ != &__bss_end__ )
-  {
-    for ( pDest = &__bss_start__ ; pDest < &__bss_end__ ; pDest++ )
-    {
-      *pDest = 0ul ;
-    }
-  }
-
-  /* Initialize the C library */
-//  __libc_init_array();
-
-  /* Initialize the system */
-  SystemInit() ;
-
-  /* Branch to main function */
-  main() ;
-
-  /* Infinite loop */
-  while ( 1 )
-  {
-  }
-}
-
-void SysTick_Handler(void)
-{
-  if (sysTickHook())
-    return;
-  SysTick_DefaultHandler();
-}
