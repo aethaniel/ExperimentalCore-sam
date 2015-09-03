@@ -29,12 +29,12 @@
         <File Name="linker_scripts/gcc/variant_with_bootloader.ld"/>
         <File Name="linker_scripts/gcc/variant_without_bootloader.ld"/>
       </VirtualDirectory>
+      <File Name="variant_init.cpp"/>
+      <File Name="variant_startup.c"/>
       <File Name="Makefile"/>
       <File Name="pins_arduino.h"/>
       <File Name="variant.cpp"/>
       <File Name="variant.h"/>
-      <File Name="variant_startup.c"/>
-      <File Name="variant_init.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="libraries">
@@ -64,7 +64,6 @@
   <VirtualDirectory Name="cores">
     <VirtualDirectory Name="arduino">
       <VirtualDirectory Name="arch_arm">
-        <File Name="../../cores/arduino/arch_arm/core.h"/>
         <File Name="../../cores/arduino/arch_arm/CoreHardwareSerial.h"/>
         <File Name="../../cores/arduino/arch_arm/CoreMath.cpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreMath.h"/>
@@ -83,12 +82,15 @@
         <File Name="../../cores/arduino/arch_arm/core_itoa.c"/>
         <File Name="../../cores/arduino/arch_arm/core_itoa.h"/>
         <File Name="../../cores/arduino/arch_arm/core_main.cpp"/>
-        <File Name="../../cores/arduino/arch_arm/core_private.h"/>
         <File Name="../../cores/arduino/arch_arm/core_reset.h"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.c"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.h"/>
         <File Name="../../cores/arduino/arch_arm/IPAddress.cpp"/>
         <File Name="../../cores/arduino/arch_arm/IPAddress.h"/>
+        <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.c"/>
+        <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.h"/>
+        <File Name="../../cores/arduino/arch_arm/core_hooks.h"/>
+        <File Name="../../cores/arduino/arch_arm/core_init.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="arch_common">
         <File Name="../../cores/arduino/arch_common/Client.h"/>
@@ -107,13 +109,9 @@
       </VirtualDirectory>
       <VirtualDirectory Name="port_sam">
         <File Name="../../cores/arduino/port_sam/Arduino.h"/>
-        <File Name="../../cores/arduino/port_sam/core.c"/>
         <File Name="../../cores/arduino/port_sam/CoreSPI.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreSPI.h"/>
-        <File Name="../../cores/arduino/port_sam/CoreUART.cpp"/>
-        <File Name="../../cores/arduino/port_sam/CoreUART.h"/>
         <File Name="../../cores/arduino/port_sam/CoreUSART.cpp"/>
-        <File Name="../../cores/arduino/port_sam/CoreUSART.h"/>
         <File Name="../../cores/arduino/port_sam/CoreWire.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreWire.h"/>
         <File Name="../../cores/arduino/port_sam/core_analog.c"/>
@@ -128,10 +126,14 @@
         <File Name="../../cores/arduino/port_sam/core_pulse.h"/>
         <File Name="../../cores/arduino/port_sam/core_reset.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_reset.h"/>
-        <File Name="../../cores/arduino/port_sam/core_variant.h"/>
         <File Name="../../cores/arduino/port_sam/CoreTone.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreTone.h"/>
         <File Name="../../cores/arduino/port_sam/core_private.c"/>
+        <File Name="../../cores/arduino/port_sam/CoreSerial.cpp"/>
+        <File Name="../../cores/arduino/port_sam/CoreSerial.h"/>
+        <File Name="../../cores/arduino/port_sam/core_private.h"/>
+        <File Name="../../cores/arduino/port_sam/core_variant.h"/>
+        <File Name="../../cores/arduino/port_sam/core_init.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
