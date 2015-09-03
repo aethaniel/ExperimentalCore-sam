@@ -17,7 +17,12 @@
 */
 
 #include "Arduino.h"
+#include "core_private.h"
 
 void initVariant( void )
 {
+  // Initialize Serial port UART0 pins
+  pinPeripheral(0, GPIO_PERIPH_A);
+  digitalWrite(0, HIGH); // Enable pullup for URXD0
+  pinPeripheral(1, GPIO_PERIPH_A);
 }

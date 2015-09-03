@@ -16,18 +16,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_
-#define _VARIANT_ATMEL_SAM4S_XPLAINED_
+#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_H_
+#define _VARIANT_ATMEL_SAM4S_XPLAINED_H_
 
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(12000000ul)
+#define VARIANT_MAINOSC   (12000000ul) // This system has an on-board 12MHz oscillator
 
 /** Master clock frequency */
-#define VARIANT_MCK			(120000000ul)
+#define VARIANT_MCK       (F_CPU) //(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreUsart.h"
+#include "CoreSerial.h"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -49,10 +49,10 @@ extern "C"
  *----------------------------------------------------------------------------*/
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (26ul)
-#define NUM_DIGITAL_PINS     (5u)
-#define NUM_ANALOG_INPUTS    (0u)
-#define NUM_ANALOG_OUTPUTS   (0u)
+#define PINS_COUNT           (5ul)
+#define NUM_DIGITAL_PINS     (5ul)
+#define NUM_ANALOG_INPUTS    (0ul)
+#define NUM_ANALOG_OUTPUTS   (0ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -82,9 +82,9 @@ extern "C"
 #define digitalPinToInterrupt(p)  ((p) < NUM_DIGITAL_PINS ? (p) : -1)
 
 // LEDs
-#define PIN_LED_13           (0u)
+#define PIN_LED_13           (2u)
 #define PIN_LED              PIN_LED_13
-#define PIN_LED2             (1u)
+#define PIN_LED2             (3u)
 #define LED_BUILTIN          PIN_LED_13
 
 /*
@@ -111,8 +111,8 @@ static const uint8_t A5  = PIN_A5 ;
  * Serial interfaces
  */
 // Serial (JLink-OB)
-#define PIN_SERIAL_RX       (3ul)
-#define PIN_SERIAL_TX       (4ul)
+#define PIN_SERIAL_RX       (0ul)
+#define PIN_SERIAL_TX       (1ul)
 
 #if 0 // TODO Serial1
 // Serial1
@@ -140,6 +140,7 @@ static const uint8_t SS	  = PIN_SPI_SS0;
 static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
+#endif // TODO SPI
 
 #if 0 // TODO Wire
 /*
@@ -169,8 +170,8 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #ifdef __cplusplus
 
-extern UARTClass Serial;
-extern UARTClass Serial1;
+extern SAMSerial Serial;
+//extern SAMSerial Serial1;
 
 #endif
 
@@ -192,8 +193,8 @@ extern UARTClass Serial1;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-#define SERIAL_PORT_HARDWARE        Serial1
-#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+//#define SERIAL_PORT_HARDWARE        Serial1
+//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
-#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_ */
+#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_H_ */
 
