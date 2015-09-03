@@ -143,6 +143,20 @@ extern const PinDescription g_aPinMap[] ;
 #define digitalPinToBitMask(P)     ( g_aPinMap[P].ulPin )
 #define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
 
+
+/**
+ * \brief Initialize the variant.
+ */
+extern void initVariant(void);
+
+/**
+ * \brief Setup the microcontroller system.
+ *
+ * Initialize the System and update the SystemFrequency variable.
+ */
+extern void SystemInit(void);
+
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
