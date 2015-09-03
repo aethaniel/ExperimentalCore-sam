@@ -1,7 +1,7 @@
 #
 #  Variant GDB/OpenOCD script.
 #
-#  Copyright (c) 2014-2015 Arduino LLC. All right reserved.
+#  Copyright (c) 2015 Thibaut VIARD. All right reserved.
 #
 #  This library is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public
@@ -18,24 +18,25 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-# Define 'reset' command
-define reset
-
-info reg
-
-break main
-
-# End of 'reset' command
-end
-
+# provide information about available hardware breakpoints
 set remote hardware-breakpoint-limit 6
 set remote hardware-watchpoint-limit 4
 
+# connect to target, OpenOCD listens on port 3333 by default. Change this value in case of customization.
 target remote localhost:3333
 
-monitor halt
+# reset and halt core
+monitor reset halt
 
-break init
-continue
+# print ARM Cortex-M registers values
+info reg
 
-#target remote | openocd -c "interface cmsis-dap" -c "set CHIPNAME variant_device" -f target/variant_target.cfg -c "gdb_port pipe; log_output openocd.log"
+# create 2 one-stop breakpoints at Reset_Handler() and at main()
+thbreak Reset_Handler
+thbreak main
+
+# print breakpoints information
+info breakpoints
+
+# switch to asynchronous mode
+monitor poll
