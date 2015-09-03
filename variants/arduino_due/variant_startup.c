@@ -19,22 +19,8 @@
 #include "sam.h"
 #include "variant.h"
 #include "core_delay.h"
+#include "core_hooks.h"
 
-/* Initialize segments */
-extern uint32_t __etext ;
-extern uint32_t __data_start__ ;
-extern uint32_t __data_end__ ;
-extern uint32_t __bss_start__ ;
-extern uint32_t __bss_end__ ;
-extern uint32_t __StackTop;
-
-extern int main( void ) ;
-extern void __libc_init_array(void);
-
-
-extern void svcHook(void);
-extern void pendSVHook(void);
-extern int sysTickHook(void);
 #define __SYSTEM_CLOCK_4MHZ   (4000000UL)
 #define __SYSTEM_CLOCK_84MHZ (84000000UL)
 
@@ -44,21 +30,11 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_4MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void __halt() {
-	// Halts
-	while (1)
-		;
+static void __halt()
+{
+  // Halts
+  while (1);
 }
-
-/* Cortex-M3 core handlers */
-void NMI_Handler       (void) __attribute__ ((weak, alias("__halt")));
-void HardFault_Handler (void) __attribute__ ((weak, alias("__halt")));
-void MemManage_Handler (void) __attribute__ ((weak, alias("__halt")));
-void BusFault_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void UsageFault_Handler(void) __attribute__ ((weak, alias("__halt")));
-void DebugMon_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void SVC_Handler       (void) { svcHook(); }
-void PendSV_Handler    (void) {	pendSVHook(); }
 
 /* Peripherals handlers */
 void SUPC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
@@ -122,11 +98,11 @@ void CAN0_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
 void CAN1_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
 
 /* Exception Table */
-__attribute__ ((section(".isr_vector")))
-const DeviceVectors exception_table=
+//__attribute__ ((section(".isr_vector")))
+DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
-  .pvStack = (void*) (&__StackTop),
+  .pvStack = 0ul, // not used (void*) (&__StackTop),
 
   .pfnReset_Handler      = (void*) Reset_Handler,
   .pfnNMI_Handler        = (void*) NMI_Handler,
@@ -151,8 +127,8 @@ const DeviceVectors exception_table=
   .pfnRTT_Handler    = (void*) RTT_Handler,    /* 3  Real Time Timer */
   .pfnWDT_Handler    = (void*) WDT_Handler,    /* 4  Watchdog Timer */
   .pfnPMC_Handler    = (void*) PMC_Handler,    /* 5  Power Management Controller */
-  .pfnEFC0_Handler   = (void*) EFC0_Handler,   /* 6  Enhanced Flash Controller 0 */
-  .pfnEFC1_Handler   = (void*) EFC1_Handler,   /* 7  Enhanced Flash Controller 1 */
+  .pfnEFC0_Handler   = (void*) EFC0_Handler,   /* 6  Enhanced Embedded Flash Controller 0 */
+  .pfnEFC1_Handler   = (void*) EFC1_Handler,   /* 7  Enhanced Embedded Flash Controller 1 */
   .pfnUART_Handler   = (void*) UART_Handler,   /* 8  Universal Asynchronous Receiver Transceiver */
 #ifdef SMC
   .pfnSMC_Handler    = (void*) SMC_Handler,    /* 9  Static Memory Controller */
@@ -226,10 +202,6 @@ const DeviceVectors exception_table=
   .pfnCAN1_Handler   = (void*) CAN1_Handler    /* 44 CAN Controller 1 */
 } ;
 
-
-/* Clock settings (84MHz) */
-uint32_t SystemCoreClock = CHIP_FREQ_MAINCK_RC_4MHZ;
-
 /**
  * \brief Setup the microcontroller system.
  *
@@ -267,56 +239,6 @@ void SystemInit( void )
   PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
-  SystemCoreClock = __SYSTEM_CLOCK_84MHZ; //VARIANT_MCK;
+  SystemCoreClock = __SYSTEM_CLOCK_84MHZ;
 }
 
-/**
- * \brief This is the code that gets called on processor reset.
- * Initializes the device and call the main() routine.
- */
-void Reset_Handler( void )
-{
-  uint32_t *pSrc, *pDest;
-
-  /* Initialize the initialized data section */
-  pSrc = &__etext;
-  pDest = &__data_start__;
-
-  if ( (&__data_start__ != &__data_end__) && (pSrc != pDest) )
-  {
-    for (; pDest < &__data_end__ ; pDest++, pSrc++ )
-    {
-      *pDest = *pSrc ;
-    }
-  }
-
-  /* Clear the zero section */
-  if ( &__bss_start__ != &__bss_end__ )
-  {
-    for ( pDest = &__bss_start__ ; pDest < &__bss_end__ ; pDest++ )
-    {
-      *pDest = 0ul ;
-    }
-  }
-
-  /* Initialize the C library */
-//  __libc_init_array();
-
-  /* Initialize the system */
-  SystemInit() ;
-
-  /* Branch to main function */
-  main() ;
-
-  /* Infinite loop */
-  while ( 1 )
-  {
-  }
-}
-
-void SysTick_Handler(void)
-{
-  if (sysTickHook())
-    return;
-  SysTick_DefaultHandler();
-}

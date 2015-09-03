@@ -16,18 +16,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_ARDUINO_DUE_X_
-#define _VARIANT_ARDUINO_DUE_X_
+#ifndef _VARIANT_ARDUINO_DUE_H_
+#define _VARIANT_ARDUINO_DUE_H_
 
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		   (12000000ul)
+#define VARIANT_MAINOSC   (12000000ul) // This system has an on-board 12MHz oscillator
 
 /** Master clock frequency */
-#define VARIANT_MCK			     (84000000ul)
+#define VARIANT_MCK       (F_CPU) //(84000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreUsart.h"
+#include "CoreSerial.h"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -49,9 +49,10 @@ extern "C"
  *----------------------------------------------------------------------------*/
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (79u)
-#define NUM_DIGITAL_PINS     (54u)
-#define NUM_ANALOG_INPUTS    (12u)
+#define PINS_COUNT           (79ul)
+#define NUM_DIGITAL_PINS     (54ul)
+#define NUM_ANALOG_INPUTS    (12ul)
+#define NUM_ANALOG_OUTPUTS   (2ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -65,6 +66,8 @@ extern "C"
  * pair PIO_OER/PIO_ODR.
  */
 // #define portModeRegister(port)   ( &(port->PIO_OSR) )
+
+#define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
 
 /*
  * digitalPinToTimer(..) is AVR-specific and is not defined for SAM
@@ -87,6 +90,30 @@ extern "C"
 #define PIN_LED3             PIN_LED_TXL
 #define LED_BUILTIN          PIN_LED_13
 
+/*
+ * Analog pins
+ */
+#if 0 // TODO Analog pins
+static const uint8_t A0  = 54;
+static const uint8_t A1  = 55;
+static const uint8_t A2  = 56;
+static const uint8_t A3  = 57;
+static const uint8_t A4  = 58;
+static const uint8_t A5  = 59;
+static const uint8_t A6  = 60;
+static const uint8_t A7  = 61;
+static const uint8_t A8  = 62;
+static const uint8_t A9  = 63;
+static const uint8_t A10 = 64;
+static const uint8_t A11 = 65;
+
+#define ADC_RESOLUTION		12
+
+static const uint8_t DAC0 = 66;
+static const uint8_t DAC1 = 67;
+#endif // TODO Analog pins
+
+#if 0 // TODO SPI
 /*
  * SPI Interfaces
  */
@@ -124,7 +151,9 @@ static const uint8_t SS3  = BOARD_SPI_SS3;
 static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
+#endif // TODO SPI
 
+#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
@@ -143,6 +172,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #define WIRE1_INTERFACE_ID   ID_TWI0
 #define WIRE1_ISR_HANDLER    TWI0_Handler
 #define WIRE1_ISR_ID         TWI0_IRQn
+#endif // TODO Wire
 
 /*
  * UART/USART Interfaces
@@ -156,35 +186,18 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 // Serial3
 #define PINS_USART3          (84u)
 
+#if 0 // TODO USB
 /*
  * USB Interfaces
  */
 #define PINS_USB             (85u)
+#endif // TODO USB
 
 /*
- * Analog pins
+ * CAN pins
  */
-static const uint8_t A0  = 54;
-static const uint8_t A1  = 55;
-static const uint8_t A2  = 56;
-static const uint8_t A3  = 57;
-static const uint8_t A4  = 58;
-static const uint8_t A5  = 59;
-static const uint8_t A6  = 60;
-static const uint8_t A7  = 61;
-static const uint8_t A8  = 62;
-static const uint8_t A9  = 63;
-static const uint8_t A10 = 64;
-static const uint8_t A11 = 65;
-static const uint8_t DAC0 = 66;
-static const uint8_t DAC1 = 67;
 static const uint8_t CANRX = 68;
 static const uint8_t CANTX = 69;
-#define ADC_RESOLUTION		12
-
-/*
- * Complementary CAN pins
- */
 static const uint8_t CAN1RX = 88;
 static const uint8_t CAN1TX = 89;
 
@@ -233,10 +246,10 @@ static const uint8_t CAN1TX = 89;
 
 #ifdef __cplusplus
 
-extern UARTClass Serial;
-extern USARTClass Serial1;
-extern USARTClass Serial2;
-extern USARTClass Serial3;
+extern SAMSerial Serial;
+//extern SAMSerial Serial1;
+//extern SAMSerial Serial2;
+//extern SAMSerial Serial3;
 
 #endif
 
@@ -255,8 +268,8 @@ extern USARTClass Serial3;
 //
 // SERIAL_PORT_HARDWARE_OPEN  Hardware serial ports which are open for use.  Their RX & TX
 //                            pins are NOT connected to anything by default.
-#define SERIAL_PORT_MONITOR         Serial
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
+#define SERIAL_PORT_MONITOR         Serial
 #define SERIAL_PORT_HARDWARE_OPEN   Serial1
 #define SERIAL_PORT_HARDWARE_OPEN1  Serial2
 #define SERIAL_PORT_HARDWARE_OPEN2  Serial3
@@ -265,5 +278,5 @@ extern USARTClass Serial3;
 #define SERIAL_PORT_HARDWARE2       Serial2
 #define SERIAL_PORT_HARDWARE3       Serial3
 
-#endif /* _VARIANT_ARDUINO_DUE_X_ */
+#endif /* _VARIANT_ARDUINO_DUE_H_ */
 

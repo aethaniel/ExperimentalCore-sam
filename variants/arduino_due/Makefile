@@ -59,11 +59,10 @@ OUTPUT_FILE_PATH = $(VARIANT_PATH)/$(OUTPUT_NAME).a
 #$(CORE_SAM_PATH)/CoreSPI.h
 #$(CORE_SAM_PATH)/CoreWire.cpp
 #$(CORE_SAM_PATH)/CoreWire.h
-#$(CORE_SAM_PATH)/CoreUART.cpp
-#$(CORE_SAM_PATH)/CoreUART.h
+#$(CORE_SAM_PATH)/CoreSerial.cpp
 
 SOURCES=\
-$(CORE_ARM_PATH)/core.h                 \
+$(CORE_ARM_PATH)/core_init.h            \
 $(CORE_ARM_PATH)/CoreHardwareSerial.h   \
 $(CORE_ARM_PATH)/CoreMath.cpp           \
 $(CORE_ARM_PATH)/CoreMath.h             \
@@ -79,13 +78,15 @@ $(CORE_ARM_PATH)/CoreString.h           \
 $(CORE_ARM_PATH)/core_abi.cpp           \
 $(CORE_ARM_PATH)/core_character.h       \
 $(CORE_ARM_PATH)/core_hooks.c           \
+$(CORE_ARM_PATH)/core_hooks.h           \
 $(CORE_ARM_PATH)/core_itoa.c            \
 $(CORE_ARM_PATH)/core_itoa.h            \
 $(CORE_ARM_PATH)/core_main.cpp          \
-$(CORE_ARM_PATH)/core_private.h         \
 $(CORE_ARM_PATH)/core_reset.h           \
 $(CORE_ARM_PATH)/core_shift.c           \
 $(CORE_ARM_PATH)/core_shift.h           \
+$(CORE_ARM_PATH)/core_cortex_vectors.c  \
+$(CORE_ARM_PATH)/core_cortex_vectors.h  \
 $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.cpp        \
@@ -95,7 +96,7 @@ $(CORE_AVR_PATH)/core_dtostrf.h         \
 $(CORE_AVR_PATH)/core_interrupt.h       \
 $(CORE_AVR_PATH)/core_pgmspace.h        \
 $(CORE_SAM_PATH)/Arduino.h              \
-$(CORE_SAM_PATH)/core.c                 \
+$(CORE_SAM_PATH)/core_init.c            \
 $(CORE_SAM_PATH)/core_analog.h          \
 $(CORE_SAM_PATH)/core_delay.c           \
 $(CORE_SAM_PATH)/core_delay.h           \
@@ -104,6 +105,7 @@ $(CORE_SAM_PATH)/core_digital.h         \
 $(CORE_SAM_PATH)/core_interrupts.c      \
 $(CORE_SAM_PATH)/core_interrupts.h      \
 $(CORE_SAM_PATH)/core_private.c         \
+$(CORE_SAM_PATH)/core_private.h         \
 $(CORE_SAM_PATH)/core_pulse.cpp         \
 $(CORE_SAM_PATH)/core_pulse.h           \
 $(CORE_SAM_PATH)/core_reset.cpp         \
@@ -111,10 +113,12 @@ $(CORE_SAM_PATH)/core_reset.h           \
 $(CORE_SAM_PATH)/CoreTone.cpp           \
 $(CORE_SAM_PATH)/CoreTone.h             \
 $(CORE_SAM_PATH)/core_variant.h         \
+$(CORE_SAM_PATH)/CoreSerial.h           \
 $(VARIANT_PATH)/pins_arduino.h          \
 $(VARIANT_PATH)/variant.h               \
 $(VARIANT_PATH)/variant.cpp             \
-$(VARIANT_PATH)/variant_startup.c
+$(VARIANT_PATH)/variant_startup.c       \
+$(VARIANT_PATH)/variant_init.cpp
 
 #|---------------------------------------------------------------------------------------|
 #| Extract file names and path                                                           |
@@ -123,6 +127,7 @@ PROJ_ASRCS  = $(filter %.s,$(foreach file,$(SOURCES),$(notdir $(file))))
 PROJ_CSRCS  = $(filter %.c,$(foreach file,$(SOURCES),$(notdir $(file))))
 PROJ_CPPSRCS  = $(filter %.cpp,$(foreach file,$(SOURCES),$(notdir $(file))))
 PROJ_CHDRS  = $(filter %.h,$(foreach file,$(SOURCES),$(notdir $(file))))
+PROJ_CPPHDRS  = $(filter %.hpp,$(foreach file,$(SOURCES),$(notdir $(file))))
 
 #|---------------------------------------------------------------------------------------|
 #| Set important path variables                                                          |
@@ -179,19 +184,21 @@ all: $(OUTPUT_FILE_PATH)
 test:
 	@echo VPATH ---------------------------------------------------------------------------------------
 	@echo $(VPATH)
-	@echo SOURCES ---------------------------------------------------------------------------------------
+	@echo SOURCES -------------------------------------------------------------------------------------
 	@echo $(SOURCES)
-	@echo PROJ_CHDRS ---------------------------------------------------------------------------------------
+	@echo PROJ_CHDRS ----------------------------------------------------------------------------------
 	@echo $(PROJ_CHDRS)
+	@echo PROJ_CPPHDRS --------------------------------------------------------------------------------
+	@echo $(PROJ_CPPHDRS)
 	@echo AOBJS ---------------------------------------------------------------------------------------
 	@echo $(AOBJS)
-	@echo PROJ_CSRCS ---------------------------------------------------------------------------------------
+	@echo PROJ_CSRCS ----------------------------------------------------------------------------------
 	@echo $(PROJ_CSRCS)
 	@echo COBJS ---------------------------------------------------------------------------------------
 	@echo $(COBJS)
-	@echo PROJ_CPPSRCS ---------------------------------------------------------------------------------------
+	@echo PROJ_CPPSRCS --------------------------------------------------------------------------------
 	@echo $(PROJ_CPPSRCS)
-	@echo CPPOBJS ---------------------------------------------------------------------------------------
+	@echo CPPOBJS -------------------------------------------------------------------------------------
 	@echo $(CPPOBJS)
 	@echo ---------------------------------------------------------------------------------------
 	@echo $(PWD)
@@ -213,7 +220,7 @@ $(COBJS): %.o: %.c $(PROJ_CHDRS)
 	@echo +++ Compiling [$(notdir $<)]
 	@$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
 
-$(CPPOBJS): %.o: %.cpp $(PROJ_CHDRS)
+$(CPPOBJS): %.o: %.cpp $(PROJ_CPPHDRS) $(PROJ_CHDRS)
 	@echo +++ Compiling [$(notdir $<)]
 	@$(CC) $(CPPFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
 
@@ -230,11 +237,3 @@ $(OUTPUT_PATH)/%.o : %.c
 
 .phony: $(OUTPUT_PATH) clean test
 
-upload: $(OUTPUT_FILE_PATH)
-	$(OPENOCD) -f "$(RESOURCES_OPENOCD_UPLOAD)" -c "program $(OUTPUT_FILE_PATH) verify reset"
-
-openocd: $(OUTPUT_FILE_PATH)
-	$(OPENOCD) -f "$(RESOURCES_OPENOCD_START)" -c "init" -c "halt"
-
-debug: $(OUTPUT_FILE_PATH)
-	$(GDB) -x "$(RESOURCES_GDB)" -ex "reset" -readnow -se $(OUTPUT_FILE_PATH)
