@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Arduino LLC & Thibaut VIARD.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,22 +19,7 @@
 #include "sam.h"
 #include "variant.h"
 #include "core_delay.h"
-
-/* Initialize segments */
-extern uint32_t __etext ;
-extern uint32_t __data_start__ ;
-extern uint32_t __data_end__ ;
-extern uint32_t __bss_start__ ;
-extern uint32_t __bss_end__ ;
-extern uint32_t __StackTop;
-
-extern int main( void ) ;
-extern void __libc_init_array(void);
-
-
-extern void svcHook(void);
-extern void pendSVHook(void);
-extern int sysTickHook(void);
+#include "core_hooks.h"
 
 #define __SYSTEM_CLOCK_4MHZ   (4000000UL)
 #define __SYSTEM_CLOCK_120MHZ (120000000UL)
@@ -45,21 +30,11 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_4MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void __halt() {
-	// Halts
-	while (1)
-		;
+static void __halt()
+{
+  // Halts
+  while (1);
 }
-
-/* Cortex-M3 core handlers */
-void NMI_Handler       (void) __attribute__ ((weak, alias("__halt")));
-void HardFault_Handler (void) __attribute__ ((weak, alias("__halt")));
-void MemManage_Handler (void) __attribute__ ((weak, alias("__halt")));
-void BusFault_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void UsageFault_Handler(void) __attribute__ ((weak, alias("__halt")));
-void DebugMon_Handler  (void) __attribute__ ((weak, alias("__halt")));
-void SVC_Handler       (void) { svcHook(); }
-void PendSV_Handler    (void) {	pendSVHook(); }
 
 /* Peripherals handlers */
 void SUPC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
@@ -108,11 +83,11 @@ void ACC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
 void UDP_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
 
 /* Exception Table */
-__attribute__ ((section(".isr_vector")))
-const DeviceVectors exception_table=
+//__attribute__ ((section(".isr_vector")))
+DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
-  .pvStack = (void*) (&__StackTop),
+  .pvStack = 0ul, // not used (void*) (&__StackTop),
 
   .pfnReset_Handler      = (void*) Reset_Handler,
   .pfnNMI_Handler        = (void*) NMI_Handler,
@@ -207,84 +182,63 @@ void SystemInit( void )
   EFC1->EEFC_FMR = EEFC_FMR_FWS(5)|EEFC_FMR_CLOE;
 #endif // EFC1
 
-  /* Initialize main oscillator */
-  if ( !(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL) )
-  {
-    PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN;
-    for ( ; !(PMC->PMC_SR & PMC_SR_MOSCXTS) ; );
-  }
+  /*
+   * We are coming from a Hard Reset or Backup mode.
+   * The core is clocked by Internal Fast RC @ 4MHz.
+   * We intend to use the device @120MHz from external Oscillator.
+   * Steps are (cf datasheet chapter '29.14 Programming Sequence'):
+   * 1- Activation of external oscillator
+   * 2- Switch the MAINCK to the main crystal oscillator
+   * 3- Wait for the MOSCSELS to be set
+   * 4- Check the main clock frequency
+   * 5- Set PLLx and Divider
+   * 6- Select the master clock and processor clock
+   * 7- Select the programmable clocks (optional)
+   */
 
-  /* Switch to 3-20MHz Xtal oscillator */
-  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
-  for ( ; !(PMC->PMC_SR & PMC_SR_MOSCSELS) ; );
-//  for ( ; !(PMC->CKGR_MCFR & CKGR_MCFR_MAINFRDY) ; );
+  /* Step 1 - Activation of external oscillator
+   * As we are clocking the core from internal Fast RC, we keep the bit CKGR_MOR_MOSCRCEN.
+   * Main Crystal Oscillator Start-up Time (CKGR_MOR_MOSCXTST) is set to maximum value.
+   * Then, we wait the startup time to be finished by checking PMC_SR_MOSCXTS in PMC_SR.
+   */
+  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0xfful) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN;
+  for ( ; (PMC->PMC_SR & PMC_SR_MOSCXTS) != PMC_SR_MOSCXTS ; );
 
-  /* Initialize PLLA */
-  PMC->CKGR_PLLAR = (CKGR_PLLAR_MULA(29ul) | CKGR_PLLAR_PLLACOUNT(0x1) | CKGR_PLLAR_DIVA(3));
-  for ( ; !(PMC->PMC_SR & PMC_SR_LOCKA) ; );
+  /* Step 2 - Switch the MAINCK to the main crystal oscillator
+   * We add the CKGR_MOR_MOSCSEL bit.
+   * Then we wait for the selection to be done by checking PMC_SR_MOSCSELS in PMC_SR.
+   */
+  PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0xfful) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
+  /* Step 3 - Wait for the MOSCSELS to be set */
+  for ( ; (PMC->PMC_SR & PMC_SR_MOSCSELS) != PMC_SR_MOSCSELS ; );
 
-  /* Switch to main clock */
-  PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK;
-  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
+  /* Step 4 - Check the main clock frequency */
+  /* As written in the DS, we could check the MAINF value here (0x18a2) */
 
-  /* Switch to PLLA */
-  PMC->PMC_MCKR = (PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK) ;
-  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
+  /* Step 5 - Set PLLx and Divider
+   * The external oscillator is 12MHz. As we intend to clock the system @120MHz,
+   * we need to multiply the oscillator frequency by 10.
+   * This can be done by setting MULx to value 9 and DIV to 1.
+   * We set the maximum PLL Lock time to maximum in CKGR_PLLAR_PLLACOUNT.
+   */
+  //PMC->CKGR_PLLAR = CKGR_PLLAR_ONE | (CKGR_PLLAR_MULA(0x1dul) | CKGR_PLLAR_DIVA(3ul) | CKGR_PLLAR_PLLACOUNT(0x1ul));
+  PMC->CKGR_PLLAR = CKGR_PLLAR_ONE | (CKGR_PLLAR_MULA(0x9ul) | CKGR_PLLAR_DIVA(1ul) | CKGR_PLLAR_PLLACOUNT(0x3ful));
+  for ( ; (PMC->PMC_SR & PMC_SR_LOCKA) != PMC_SR_LOCKA ; );
 
-  // Output MCK on PCK1/pin PA17
-  // Optional, needed for system clock test purpose
-  PMC->PMC_SCER = PMC_SCER_PCK1 ;
+  /* Step 6 - Select the master clock and processor clock
+   * Source for MasterClock will be PLLA output (PMC_MCKR_CSS_PLLA_CLK), without frequency division.
+   */
+  PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_1 | PMC_MCKR_CSS_PLLA_CLK;
+  for ( ; (PMC->PMC_SR & PMC_SR_MCKRDY) != PMC_SR_MCKRDY ; );
 
-  SystemCoreClock=__SYSTEM_CLOCK_120MHZ; //VARIANT_MCK;
+  /*
+   * Step 7 - Select the programmable clocks
+   * *
+   * Output MCK on PCK1/pin PA17
+   * Used to validate Master Clock settings
+   */
+//  PMC->PMC_SCER = PMC_SCER_PCK1 ;
+
+  SystemCoreClock=__SYSTEM_CLOCK_120MHZ;
 }
 
-/**
- * \brief This is the code that gets called on processor reset.
- * Initializes the device and call the main() routine.
- */
-void Reset_Handler( void )
-{
-  uint32_t *pSrc, *pDest;
-
-  /* Initialize the initialized data section */
-  pSrc = &__etext;
-  pDest = &__data_start__;
-
-  if ( (&__data_start__ != &__data_end__) && (pSrc != pDest) )
-  {
-    for (; pDest < &__data_end__ ; pDest++, pSrc++ )
-    {
-      *pDest = *pSrc ;
-    }
-  }
-
-  /* Clear the zero section */
-  if ( &__bss_start__ != &__bss_end__ )
-  {
-    for ( pDest = &__bss_start__ ; pDest < &__bss_end__ ; pDest++ )
-    {
-      *pDest = 0ul ;
-    }
-  }
-
-  /* Initialize the C library */
-//  __libc_init_array();
-
-  /* Initialize the system */
-  SystemInit() ;
-
-  /* Branch to main function */
-  main() ;
-
-  /* Infinite loop */
-  while ( 1 )
-  {
-  }
-}
-
-void SysTick_Handler(void)
-{
-  if (sysTickHook())
-    return;
-  SysTick_DefaultHandler();
-}
