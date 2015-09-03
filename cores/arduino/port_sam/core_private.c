@@ -52,19 +52,19 @@ int pinPeripheral( uint32_t pin, EGPIOType ulPeripheral )
 #endif /* (SAM3XA_SERIES) */
     break ;
 
-#ifdef PIOC
+#if !(SAM3XA_SERIES)
     case GPIO_PERIPH_C:
       pPort->pGPIO->PIO_ABCDSR[0]&=~mask & pPort->pGPIO->PIO_ABCDSR[0];
       pPort->pGPIO->PIO_ABCDSR[1]=mask | pPort->pGPIO->PIO_ABCDSR[1];
     break ;
-#endif /* PIOC */
+#endif /* (SAM3XA_SERIES) */
 
-#ifdef PIOD
+#if !(SAM3XA_SERIES)
     case GPIO_PERIPH_D:
       pPort->pGPIO->PIO_ABCDSR[0]=mask | pPort->pGPIO->PIO_ABCDSR[0];
       pPort->pGPIO->PIO_ABCDSR[1]=mask | pPort->pGPIO->PIO_ABCDSR[1];
     break ;
-#endif /* PIOD */
+#endif /* (SAM3XA_SERIES) */
 
     // Assign the pin to GPIO
     case GPIO_NOMUX:

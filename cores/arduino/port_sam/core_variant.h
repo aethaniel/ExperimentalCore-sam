@@ -41,11 +41,15 @@ typedef enum _EAnalogChannel
   ADC_Channel5=5,
   ADC_Channel6=6,
   ADC_Channel7=7,
+  ADC_Channel8=8,
+  ADC_Channel9=9,
   ADC_Channel10=10,
-  ADC_Channel16=16,
-  ADC_Channel17=17,
-  ADC_Channel18=18,
-  ADC_Channel19=19,
+  ADC_Channel11=11,
+  ADC_Channel12=12,
+  ADC_Channel13=13,
+  ADC_Channel14=14,
+  ADC_Channel15=15,
+
   DAC_Channel0,
   DAC_Channel1
 } EAnalogChannel ;
@@ -54,12 +58,44 @@ typedef enum _EAnalogChannel
 typedef enum _ETimerChannel
 {
   NOT_ON_TIMER=-1,
+#ifdef TC0
+  TC0_CHA0=0,
+  TC0_CHB0,
+  TC0_CHA1,
+  TC0_CHB1,
+  TC0_CHA2,
+  TC0_CHB2,
+#endif // TC0
+#ifdef TC1
+  TC1_CHA3,
+  TC1_CHB3,
+  TC1_CHA4,
+  TC1_CHB4,
+  TC1_CHA5,
+  TC1_CHB5,
+#endif // TC1
+#ifdef TC2
+  TC2_CHA6,
+  TC2_CHB6,
+  TC2_CHA7,
+  TC2_CHB7,
+  TC2_CHA8,
+  TC2_CHB8
+#endif // TC2
 } ETimerChannel ;
 
 // Definitions for PWM channels
 typedef enum _EPWMChannel
 {
   NOT_ON_PWM=-1,
+  PWM_CH0=0,
+  PWM_CH1,
+  PWM_CH2,
+  PWM_CH3,
+  PWM_CH4,
+  PWM_CH5,
+  PWM_CH6,
+  PWM_CH7
 } EPWMChannel ;
 
 // I/O controllers indexes, should be affined to device packages instead of product series
@@ -117,12 +153,12 @@ typedef enum _EGPIOType
   GPIO_NOMUX,
   GPIO_PERIPH_A,
   GPIO_PERIPH_B,
-#ifdef PIOC
+#if (SAM4S_SERIES || SAM4E_SERIES)
   GPIO_PERIPH_C, // Only on SAM4S and SAM4E
-#endif /* PIOC */
-#ifdef PIOD
+#endif /* (SAM4S_SERIES || SAM4E_SERIES) */
+#if (SAM4S_SERIES)
   GPIO_PERIPH_D // Only on some SAM4S
-#endif /* PIOD */
+#endif /* SAM4S_SERIES */
 } EGPIOType ;
 
 /* Types used for the table below */
