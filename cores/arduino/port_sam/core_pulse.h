@@ -31,18 +31,6 @@
  */
 extern uint32_t pulseIn( uint32_t ulPin, uint32_t ulState, uint32_t ulTimeout = 1000000L ) ;
 
-inline uint32_t digitalReadFast( const PinDescription* pPin ) __attribute__((always_inline));
-inline uint32_t digitalReadFast( const PinDescription* pPin )
-{
-  if ( (Ports[pPin->iPort].pGPIO->PIO_PDSR & pPin->ulPin) != 0 )
-  {
-    return HIGH ;
-  }
-
-  return LOW ;
-}
-
-
 #ifdef __cplusplus
 }
 #endif
