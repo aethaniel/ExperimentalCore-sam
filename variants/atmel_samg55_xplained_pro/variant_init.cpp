@@ -17,7 +17,15 @@
 */
 
 #include "Arduino.h"
+#include "core_private.h"
 
 void initVariant( void )
 {
+  // Initialize Serial port Flexcom6 pins
+  pinPeripheral(PIN_SERIAL_RX, GPIO_PERIPH_B);
+  digitalWrite(PIN_SERIAL_RX, HIGH); // Enable pullup for RXD6
+  pinPeripheral(PIN_SERIAL_TX, GPIO_PERIPH_B);
+
+  // TODO: move this to Serial class!
+  FLEXCOM6->FLEXCOM_MR=FLEXCOM_MR_OPMODE_USART;
 }
