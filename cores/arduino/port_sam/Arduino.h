@@ -72,9 +72,9 @@ extern void loop( void ) ;
 #endif // __cplusplus
 
 // Include board variant
-#include "variant.h"
+#include "variant.h" // includes "core_variant.h"
 
-#include "core.h"
+#include "core_init.h"
 #include "core_delay.h"
 #include "core_digital.h"
 #include "core_analog.h"
