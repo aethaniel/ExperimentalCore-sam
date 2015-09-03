@@ -25,7 +25,7 @@ const Port Ports[NUM_PORTS]=
 {
   { .pGPIO=PIOA, .ulId=ID_PIOA },
   { .pGPIO=PIOB, .ulId=ID_PIOB },
-  { .pGPIO=PIOC, .ulId=ID_PIOC }
+  { .pGPIO=NULL, .ulId=NULL }
 };
 
 /*
