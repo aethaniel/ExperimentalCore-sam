@@ -24,45 +24,40 @@ extern "C" {
 #endif
 
 __attribute__ ((long_call, section (".ramfunc")))
-static void banzai() {
-	// Disable all interrupts
-	__disable_irq();
+static void banzai()
+{
+  // Disable all interrupts
+  __disable_irq();
 
-	// Set bootflag to run SAM-BA bootloader at restart
-	while ((EFC0->EEFC_FSR & EEFC_FSR_FRDY) == 0);
-	EFC0->EEFC_FCR =
-		EEFC_FCR_FCMD_CGPB |
-		EEFC_FCR_FARG(1) |
-		EEFC_FCR_FKEY_PASSWD;
-	while ((EFC0->EEFC_FSR & EEFC_FSR_FRDY) == 0);
+  // Set bootflag to run SAM-BA bootloader at restart
+  while ((EFC0->EEFC_FSR & EEFC_FSR_FRDY) == 0);
+  EFC0->EEFC_FCR = EEFC_FCR_FCMD_CGPB | EEFC_FCR_FARG(1) | EEFC_FCR_FKEY_PASSWD;
+  while ((EFC0->EEFC_FSR & EEFC_FSR_FRDY) == 0);
 
-	// From here flash memory is no more available.
+  // From here flash memory is no more available.
 
-	// BANZAIIIIIII!!!
-	RSTC->RSTC_CR =
-		RSTC_MR_KEY_PASSWD |
-		RSTC_CR_PROCRST |
-		RSTC_CR_PERRST;
+  // BANZAIIIIIII!!!
+  RSTC->RSTC_CR = RSTC_MR_KEY_PASSWD | RSTC_CR_PROCRST | RSTC_CR_PERRST;
 
-	while (true);
+  while (true);
 }
 
 static int ticks = -1;
 
 void initiateReset(int _ticks) {
-	ticks = _ticks;
+  ticks = _ticks;
 }
 
 void cancelReset() {
-	ticks = -1;
+  ticks = -1;
 }
 
 void tickReset() {
-	if (ticks == -1)
-		return;
-	ticks--;
-	if (ticks == 0)
-		banzai();
+  if (ticks == -1)
+    return;
+  ticks--;
+  if (ticks == 0)
+    banzai();
 }
 
 #ifdef __cplusplus
