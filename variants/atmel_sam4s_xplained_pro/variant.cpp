@@ -37,42 +37,40 @@ const PinDescription g_aPinMap[]=
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * + Pin number +  Board pin       |  PIN   | Label/Name      | Comments (* is for default peripheral in use)
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * |            | LEDs & button    |        |                 |
- * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | 0          | N/A              |  PC23  | LED0            | TIOA3
- * | 1          | N/A              |  PA2   | SW0             | WKUP2
- * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
-*/
-  { PORTC, PIO_PC23, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER },
-  { PORTA, PIO_PA2, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER },
-
-/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Serial           |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | 2          |                  |  PB2   | ICE USB Serial  | URXD1
- * | 3          |                  |  PB3   | ICE USB Serial  | UTXD1
+ * | 0          |                  |  PB2   | ICE USB Serial  | URXD1
+ * | 1          |                  |  PB3   | ICE USB Serial  | UTXD1
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTB, PIO_PB2A_URXD1, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // URXD1
-  { PORTB, PIO_PB3A_UTXD1, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // UTXD1
+  { PORTB, PIO_PB2A_URXD1, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, // URXD1
+  { PORTB, PIO_PB3A_UTXD1, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, // UTXD1
 
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | LEDs & button    |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 2          | N/A              |  PC23  | LED0            | TIOA3
+ * | 3          | N/A              |  PA2   | SW0             | WKUP2
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+*/
+  { PORTC, PIO_PC23, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },
+  { PORTA, PIO_PA2, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },
 } ;
-
 
 #ifdef __cplusplus
 }
 #endif
 
-#if 0
+#if 0 // TODO Serial
 /*
- * UART objects
+ * Serialx objects
  */
-UARTClass Serial( (Usart*)UART0, UART0_IRQn, ID_UART0, 1);
+SAMSerial Serial( (Usart*)UART1, UART1_IRQn, ID_UART1, 1);
 void serialEvent() __attribute__((weak));
 void serialEvent() { }
 
 // IT handlers
-void UART0_Handler(void)
+void UART1_Handler(void)
 {
   Serial.IrqHandler();
 }
@@ -83,8 +81,7 @@ void serialEventRun(void)
 {
   if (Serial.available()) serialEvent();
 }
-#endif //0
+#endif // TODO Serial
 
 // TODO: Serial peripherals Interrupt handlers
-
 
