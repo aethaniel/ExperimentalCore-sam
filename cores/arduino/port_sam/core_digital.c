@@ -87,6 +87,8 @@ void pinMode( uint32_t ulPin, PinMode ulMode )
       Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PUDR=g_aPinMap[ulPin].ulPin;
     }
 
+#if !(SAM3XA_SERIES)
+
     // Configure pull-down
     if ( ulMode == INPUT_PULLDOWN )
     {
@@ -96,6 +98,7 @@ void pinMode( uint32_t ulPin, PinMode ulMode )
     {
       Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PPDDR=g_aPinMap[ulPin].ulPin;
     }
+#endif // SAM3XA_SERIES
   }
   else
   {
