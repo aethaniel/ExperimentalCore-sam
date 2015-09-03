@@ -45,7 +45,6 @@ compiler.cpp.extra_flags= "-I{build.core.path}/port_sam/" "-I{build.core.path}/a
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
 
-4.0.0-atmel/
 compiler.libsam.c.flags="-I{build.system.path}/libsam" "-I{build.system.path}/CMSIS/CMSIS/Include/" "-I{build.system.path}/CMSIS/Device/ATMEL/"
 compiler.arm.cmsis.path="-I{runtime.tools.CMSIS.path}/CMSIS/Include/" "-I{runtime.tools.CMSIS.path}/Device/ATMEL/"
 
