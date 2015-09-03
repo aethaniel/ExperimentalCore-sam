@@ -158,54 +158,6 @@ void digitalWrite( uint32_t ulPin, uint32_t ulVal )
   }
 }
 
-void digitalWrite( uint32_t ulPin, uint32_t ulVal )
-{
-  /* Handle non-pin index */
-  if ( ulPin >= PINS_COUNT )
-  {
-    return ;
-  }
-
-  /* Test if pin is under control of GPIO */
-  if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PSR & g_aPinMap[ulPin].ulPin) != 0 )
-  {
-    /* Give the pin to GPIO controller */
-    Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PER=g_aPinMap[ulPin].ulPin;
-    /* Set pull-up */
-    Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PUER=g_aPinMap[ulPin].ulPin;
-
-    if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_OSR & g_aPinMap[ulPin].ulPin) != 0 )
-    {
-      /* Disable interrupts on the pin */
-      Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_IDR=g_aPinMap[ulPin].ulPin;
-
-      /* Configure pin(s) as output(s) */
-      Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_OER=g_aPinMap[ulPin].ulPin;
-
-      if ( ulVal )
-      {
-        Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_SODR=g_aPinMap[ulPin].ulPin;
-      }
-      else
-      {
-        Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_CODR=g_aPinMap[ulPin].ulPin;
-      }
-    }
-  }
-  else // Pin is configured as input, in this case we set internal pull-up resistor (yes, I know it is weird)
-  {
-    // Configure pull-up
-    if ( ulVal == LOW )
-    {
-      Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PUDR=g_aPinMap[ulPin].ulPin;
-    }
-    else /* HIGH or other non-zero values */
-    {
-      Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PUER=g_aPinMap[ulPin].ulPin;
-    }
-  }
-}
-
 int digitalRead( uint32_t ulPin )
 {
   /* Handle non-pin index */
