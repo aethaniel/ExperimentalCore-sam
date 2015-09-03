@@ -21,16 +21,18 @@
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
-void initVariant(void) __attribute__((weak));
-void initVariant(void) { }
+//void initVariant(void) __attribute__((weak));
+//void initVariant(void) { }
 
 /*
  * \brief Main entry point of Arduino application
  */
 int main( void )
 {
+  /* Initialize the Arduino Core API */
   init();
 
+  /* Initialize the variant */
   initVariant();
 
   delay(1);
