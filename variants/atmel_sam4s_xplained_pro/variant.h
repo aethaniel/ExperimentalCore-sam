@@ -16,18 +16,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_
-#define _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_
+#ifndef _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_H_
+#define _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_H_
 
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(12000000ul)
+#define VARIANT_MAINOSC   (12000000ul) // This system has an on-board 12MHz oscillator
 
 /** Master clock frequency */
-#define VARIANT_MCK			(120000000ul)
+#define VARIANT_MCK       (F_CPU) //(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreUsart.h"
+#include "CoreSerial.h"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -49,10 +49,10 @@ extern "C"
  *----------------------------------------------------------------------------*/
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (26ul)
-#define NUM_DIGITAL_PINS     (4u)
-#define NUM_ANALOG_INPUTS    (0u)
-#define NUM_ANALOG_OUTPUTS   (0u)
+#define PINS_COUNT           (4ul)
+#define NUM_DIGITAL_PINS     (4ul)
+#define NUM_ANALOG_INPUTS    (0ul)
+#define NUM_ANALOG_OUTPUTS   (0ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -82,7 +82,7 @@ extern "C"
 #define digitalPinToInterrupt(p)  ((p) < NUM_DIGITAL_PINS ? (p) : -1)
 
 // LEDs
-#define PIN_LED_13           (0u)
+#define PIN_LED_13           (2u)
 #define PIN_LED              PIN_LED_13
 #define LED_BUILTIN          PIN_LED_13
 
@@ -110,13 +110,13 @@ static const uint8_t A5  = PIN_A5 ;
  * Serial interfaces
  */
 // Serial (EDBG)
-#define PIN_SERIAL_RX       (2ul)
-#define PIN_SERIAL_TX       (3ul)
+#define PIN_SERIAL_RX       (0ul)
+#define PIN_SERIAL_TX       (1ul)
 
 #if 0 // TODO Serial1
 // Serial1
-#define PIN_SERIAL1_RX       (0ul)
-#define PIN_SERIAL1_TX       (1ul)
+#define PIN_SERIAL1_RX       (ul)
+#define PIN_SERIAL1_TX       (ul)
 #endif // TODO Serial1
 
 #if 0 // TODO SPI
@@ -129,16 +129,17 @@ static const uint8_t A5  = PIN_A5 ;
 #define SPI_INTERFACE_ID     ID_SPI
 #define SPI_CHANNELS_NUM     2
 
-#define PIN_SPI_MISO         (22u)
-#define PIN_SPI_MOSI         (23u)
-#define PIN_SPI_SCK          (24u)
-#define PIN_SPI_SS0          (77u)
-#define PIN_SPI_SS1          (87u)
+#define PIN_SPI_MISO         (ul)
+#define PIN_SPI_MOSI         (ul)
+#define PIN_SPI_SCK          (ul)
+#define PIN_SPI_SS0          (ul)
+#define PIN_SPI_SS1          (ul)
 
 static const uint8_t SS	  = PIN_SPI_SS0;
 static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
+#endif // TODO SPI
 
 #if 0 // TODO Wire
 /*
@@ -146,16 +147,16 @@ static const uint8_t SCK  = PIN_SPI_SCK;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
+#define PIN_WIRE_SDA         (ul)
+#define PIN_WIRE_SCL         (ul)
 #endif // TODO Wire
 
 #if 0 // TODO USB
 /*
  * USB
  */
-#define PIN_USB_DM          (28ul)
-#define PIN_USB_DP          (29ul)
+#define PIN_USB_DM           (ul)
+#define PIN_USB_DP           (ul)
 #endif // TODO USB
 
 #ifdef __cplusplus
@@ -168,8 +169,8 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #ifdef __cplusplus
 
-extern UARTClass Serial;
-extern UARTClass Serial1;
+extern SAMSerial Serial;
+//extern SAMSerial Serial1;
 
 #endif
 
@@ -191,8 +192,8 @@ extern UARTClass Serial1;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-#define SERIAL_PORT_HARDWARE        Serial1
-#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+//#define SERIAL_PORT_HARDWARE        Serial1
+//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
-#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_ */
+#endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_PRO_H_ */
 
