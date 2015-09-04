@@ -77,7 +77,7 @@ const PinDescription g_aPinMap[]=
 	{ PORTB, PIO_PB5, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D9
 	{ PORTB, PIO_PB2, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D10
 	{ PORTB, PIO_PB1, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D11
-	{ PORTB, PIO_PB11, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D12
+	{ PORTA, PIO_PA11, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D12
 	{ PORTB, PIO_PB0, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D13
 	{ PORTA, PIO_PA17, GPIO_NOMUX, ADC_Channel0, NOT_ON_PWM, NOT_ON_TIMER },					// A0
 	{ PORTA, PIO_PA18, GPIO_NOMUX, ADC_Channel1, NOT_ON_PWM, NOT_ON_TIMER },					// A1

@@ -90,7 +90,7 @@ extern "C"
 /*
  * Analog pins
  */
-#if 0 // TODO Analog pins
+
 #define PIN_A0               (14ul)
 #define PIN_A1               (15ul)
 #define PIN_A2               (16ul)
@@ -109,7 +109,6 @@ static const uint8_t A5  = PIN_A5 ;
 static const uint8_t A6  = PIN_A6 ;
 static const uint8_t A7  = PIN_A7 ;
 #define ADC_RESOLUTION		12
-#endif // TODO Analog pins
 
 /*
  * ESP pins
