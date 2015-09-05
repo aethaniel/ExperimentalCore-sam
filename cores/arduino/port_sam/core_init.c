@@ -40,9 +40,6 @@ void init( void )
     while ( 1 ) ;
   }
 
-  /* We disable the watchdog for this system */
-  WDT->WDT_MR=WDT_MR_WDDIS;
-
   /* Disable pull-up on every pin */
 #if 0
   for (unsigned i = 0; i < PINS_COUNT; i++)

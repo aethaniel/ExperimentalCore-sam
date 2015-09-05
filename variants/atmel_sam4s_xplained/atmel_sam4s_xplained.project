@@ -77,6 +77,7 @@
         <File Name="../../cores/arduino/arch_common/Server.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
         <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
+        <File Name="../../cores/arduino/arch_common/core_watchdog.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="avr_compat">
         <File Name="../../cores/arduino/avr_compat/core_dtostrf.c"/>
@@ -109,6 +110,7 @@
         <File Name="../../cores/arduino/port_sam/core_pulse.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_tone.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_tone.hpp"/>
+        <File Name="../../cores/arduino/port_sam/core_watchdog.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

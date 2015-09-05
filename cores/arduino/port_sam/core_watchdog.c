@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,41 +16,35 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
 #include "Arduino.h"
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-//void initVariant(void) __attribute__((weak));
-//void initVariant(void) { }
-
-/*
- * \brief Main entry point of Arduino application
- */
-int main( void )
+void watchdogEnable(uint32_t timeout)
 {
-  /* Initialize watchdog */
-  watchdogSetup();
-
-  /* Initialize the Arduino Core API */
-  init();
-
-  /* Initialize the variant */
-  initVariant();
-
-  delay(1);
-#if defined(USBCON)
-  USBDevice.init();
-  USBDevice.attach();
-#endif
-
-  setup();
-
-  for (;;)
-  {
-    loop();
-    if (serialEventRun) serialEventRun();
-  }
-
-  return 0;
+	/* this assumes the slow clock is running at 32.768 kHz
+	 * watchdog frequency is therefore 32768 / 128 = 256 Hz
+   */
+	timeout = timeout * 256 / 1000;
+	if (timeout == 0)
+		timeout = 1;
+	else if (timeout > 0xFFF)
+		timeout = 0xFFF;
+	timeout = WDT_MR_WDRSTEN | WDT_MR_WDV(timeout) | WDT_MR_WDD(timeout);
+	WDT_Enable (WDT, timeout);
 }
+
+void watchdogDisable(void)
+{
+	WDT_Disable(WDT);
+}
+
+void watchdogReset(void)
+{
+	WDT_Restart(WDT);
+}
+
+extern "C"
+void _watchdogDefaultSetup(void)
+{
+	WDT_Disable(WDT);
+}
+void watchdogSetup(void) __attribute__ ((weak, alias(_watchdogDefaultSetup)));
