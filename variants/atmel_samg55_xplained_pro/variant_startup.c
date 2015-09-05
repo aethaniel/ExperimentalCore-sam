@@ -103,7 +103,7 @@ DeviceVectors exception_table=
   .pfnRTT_Handler       = (void*) RTT_Handler,       /* 3  Real Time Timer */
   .pfnWDT_Handler       = (void*) WDT_Handler,       /* 4  Watchdog Timer */
   .pfnPMC_Handler       = (void*) PMC_Handler,       /* 5  Power Management Controller */
-  .pfnEFC_Handler       = (void*) EFC_Handler,       /* 6  Enhanced Flash Controller */
+  .pfnEFC0_Handler      = (void*) EFC0_Handler,      /* 6  Enhanced Flash Controller */
 #ifdef FLEXCOM7
   .pfnFLEXCOM7_Handler  = (void*) FLEXCOM7_Handler,  /* 7  FLEXCOM 7 */
 #else
@@ -117,7 +117,7 @@ DeviceVectors exception_table=
   .pfnPDMIC0_Handler    = (void*) PDMIC0_Handler,    /* 13 PDM 0 */
   .pfnFLEXCOM2_Handler  = (void*) FLEXCOM2_Handler,  /* 14 FLEXCOM2 */
   .pfnMEM2MEM_Handler   = (void*) MEM2MEM_Handler,   /* 15 MEM2MEM */
-  .pfnI2SC0_Handler     = (void*) I2SC0_Handler,    /* 16 I2SC0 */
+  .pfnI2SC0_Handler     = (void*) I2SC0_Handler,     /* 16 I2SC0 */
   .pfnI2SC1_Handler     = (void*) I2SC1_Handler,     /* 17 I2SC1 */
   .pfnPDMIC1_Handler    = (void*) PDMIC1_Handler,    /* 18 PDM 1 */
   .pfnFLEXCOM3_Handler  = (void*) FLEXCOM3_Handler,  /* 19 FLEXCOM3 */

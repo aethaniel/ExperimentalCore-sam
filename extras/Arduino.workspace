@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="Arduino" Database="" SWTLW="Yes">
   <WorkspaceParserPaths/>
-  <Project Name="atmel_sam4s_xplained" Path="../variants/atmel_sam4s_xplained/atmel_sam4s_xplained.project" Active="No"/>
-  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/atmel_sam4s_xplained_pro.project" Active="No"/>
-  <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/atmel_sam4e_xplained_pro.project" Active="No"/>
-  <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/atmel_samg55_xplained_pro.project" Active="No"/>
-  <Project Name="arduino_due" Path="../variants/arduino_due/arduino_due.project" Active="No"/>
-  <Project Name="logos_arachnio_due" Path="../variants/logos_arachnio_due/logos_arachnio_due.project" Active="No"/>
-  <Project Name="poppy_core" Path="../variants/poppy_core/poppy_core.project" Active="No"/>
+  <Project Name="arduino_due" Path="../variants/arduino_due/variant.project" Active="No"/>
+  <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained" Path="../variants/atmel_sam4s_xplained/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
+  <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
+  <Project Name="logos_arachnio_due" Path="../variants/logos_arachnio_due/variant.project" Active="No"/>
+  <Project Name="poppy_core" Path="../variants/poppy_core/variant.project" Active="No"/>
   <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="Yes"/>
   <Environment>
     <![CDATA[]]>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="atmel_samg55_xplained_pro" InternalType="">
+<CodeLite_Project Name="atmel_sam4e_xplained_pro" InternalType="">
   <Plugins>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
@@ -24,7 +24,9 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="variants">
-    <VirtualDirectory Name="atmel_samg55_xpro">
+    <File Name="../Makefile.rules"/>
+    <File Name="../Makefile.sources"/>
+    <VirtualDirectory Name="atmel_sam4e_xpro">
       <VirtualDirectory Name="linker_scripts">
         <File Name="linker_scripts/gcc/variant_with_bootloader.ld"/>
         <File Name="linker_scripts/gcc/variant_without_bootloader.ld"/>
@@ -37,30 +39,7 @@
       <File Name="variant.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
-  <VirtualDirectory Name="libraries">
-    <VirtualDirectory Name="USBHost">
-      <VirtualDirectory Name="src">
-        <File Name="../../libraries/USBHost/src/address.h"/>
-        <File Name="../../libraries/USBHost/src/adk.cpp"/>
-        <File Name="../../libraries/USBHost/src/adk.h"/>
-        <File Name="../../libraries/USBHost/src/confdescparser.h"/>
-        <File Name="../../libraries/USBHost/src/hid.h"/>
-        <File Name="../../libraries/USBHost/src/hid2.cpp"/>
-        <File Name="../../libraries/USBHost/src/hidboot.cpp"/>
-        <File Name="../../libraries/USBHost/src/hidboot.h"/>
-        <File Name="../../libraries/USBHost/src/hidusagestr.h"/>
-        <File Name="../../libraries/USBHost/src/KeyboardController.cpp"/>
-        <File Name="../../libraries/USBHost/src/KeyboardController.h"/>
-        <File Name="../../libraries/USBHost/src/MouseController.cpp"/>
-        <File Name="../../libraries/USBHost/src/MouseController.h"/>
-        <File Name="../../libraries/USBHost/src/parsetools.cpp"/>
-        <File Name="../../libraries/USBHost/src/parsetools.h"/>
-        <File Name="../../libraries/USBHost/src/Usb.cpp"/>
-        <File Name="../../libraries/USBHost/src/Usb.h"/>
-        <File Name="../../libraries/USBHost/src/usb_ch9.h"/>
-      </VirtualDirectory>
-    </VirtualDirectory>
-  </VirtualDirectory>
+  <VirtualDirectory Name="libraries"/>
   <VirtualDirectory Name="cores">
     <VirtualDirectory Name="arduino">
       <VirtualDirectory Name="arch_arm">
@@ -76,7 +55,6 @@
         <File Name="../../cores/arduino/arch_arm/core_itoa.c"/>
         <File Name="../../cores/arduino/arch_arm/core_itoa.h"/>
         <File Name="../../cores/arduino/arch_arm/core_main.cpp"/>
-        <File Name="../../cores/arduino/arch_arm/core_reset.h"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.c"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.h"/>
         <File Name="../../cores/arduino/arch_arm/IPAddress.cpp"/>
@@ -100,6 +78,7 @@
         <File Name="../../cores/arduino/arch_common/Server.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
         <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
+        <File Name="../../cores/arduino/arch_common/core_reset.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="avr_compat">
         <File Name="../../cores/arduino/avr_compat/core_dtostrf.c"/>
@@ -121,7 +100,6 @@
         <File Name="../../cores/arduino/port_sam/core_interrupts.c"/>
         <File Name="../../cores/arduino/port_sam/core_interrupts.h"/>
         <File Name="../../cores/arduino/port_sam/core_pulse.cpp"/>
-        <File Name="../../cores/arduino/port_sam/core_reset.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_private.c"/>
         <File Name="../../cores/arduino/port_sam/CoreSerial.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_private.h"/>
@@ -132,6 +110,7 @@
         <File Name="../../cores/arduino/port_sam/core_pulse.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_tone.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_tone.hpp"/>
+        <File Name="../../cores/arduino/port_sam/core_reset.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
@@ -172,7 +151,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_samg55_xplained_pro</WorkingDirectory>
+        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_sam4e_xplained_pro</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -210,7 +189,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_samg55_xplained_pro</WorkingDirectory>
+        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_sam4e_xplained_pro</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -225,29 +204,36 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="product headers">
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/samg55j19.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/adc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/chipid.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/cmcc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/crccu.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/efc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/flexcom.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/gpbr.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/matrix.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/mem2mem.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pdc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pio.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pmc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rstc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rtc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rtt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/ssc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/supc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/tc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/udp.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/uhp.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/wdt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/samg55.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/pio/samg55j19.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/sam4e16e.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/system_sam4e.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/acc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/adc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/chipid.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/cmcc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/crccu.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/dacc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/efc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/gpbr.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/hsmci.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/matrix.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/pdc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/pio.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/pmc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/pwm.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/rstc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/rtc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/rtt.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/smc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/spi.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/ssc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/supc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/tc.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/twi.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/uart.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/udp.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/usart.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/component/wdt.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/sam4e.h"/>
+    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam4s/include/pio/sam4e16e.h"/>
   </VirtualDirectory>
 </CodeLite_Project>

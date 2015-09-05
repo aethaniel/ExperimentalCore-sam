@@ -44,18 +44,23 @@ static void banzai()
 
 static int ticks = -1;
 
-void initiateReset(int _ticks) {
+void initiateReset(int _ticks)
+{
   ticks = _ticks;
 }
 
-void cancelReset() {
+void cancelReset(void)
+{
   ticks = -1;
 }
 
-void tickReset() {
+void tickReset(void)
+{
   if (ticks == -1)
     return;
+
   ticks--;
+
   if (ticks == 0)
     banzai();
 }
