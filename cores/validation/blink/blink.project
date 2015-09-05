@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="blink" InternalType="">
-  <Plugins>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }, {
-  "name": "Release",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
+  <Plugins/>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="source">
@@ -31,7 +9,7 @@
   </VirtualDirectory>
   <VirtualDirectory Name="output">
     <File Name="blink.map"/>
-    <File Name="blink_symbols.txt.txt"/>
+    <File Name="blink_symbols.txt"/>
   </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
@@ -106,7 +84,7 @@
       <CustomBuild Enabled="yes">
         <RebuildCommand>make DEBUG=0 clean all</RebuildCommand>
         <CleanCommand>make DEBUG=0 clean</CleanCommand>
-        <BuildCommand>make DEBUG=0 all</BuildCommand>
+        <BuildCommand>make DEBUG=0 upload_edbg</BuildCommand>
         <PreprocessFileCommand/>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
