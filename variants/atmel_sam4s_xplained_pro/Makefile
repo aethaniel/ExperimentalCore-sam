@@ -91,6 +91,7 @@ $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.cpp        \
 $(CORE_COMMON_PATH)/core_new.hpp        \
+$(CORE_COMMON_PATH)/core_watchdog.h     \
 $(CORE_AVR_PATH)/core_dtostrf.c         \
 $(CORE_AVR_PATH)/core_dtostrf.h         \
 $(CORE_AVR_PATH)/core_interrupt.h       \
@@ -106,6 +107,7 @@ $(CORE_SAM_PATH)/core_interrupts.c      \
 $(CORE_SAM_PATH)/core_interrupts.h      \
 $(CORE_SAM_PATH)/core_private.c         \
 $(CORE_SAM_PATH)/core_private.h         \
+$(CORE_SAM_PATH)/core_watchdog.c        \
 $(CORE_SAM_PATH)/core_reset.cpp         \
 $(CORE_SAM_PATH)/core_variant.h         \
 $(CORE_SAM_PATH)/core_pulse.cpp         \
