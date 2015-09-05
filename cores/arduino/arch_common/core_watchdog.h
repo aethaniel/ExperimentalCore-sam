@@ -22,6 +22,9 @@
 #include <stdint.h>
 
 // Watchdog functions
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
 
 /*
  * \brief Enable the watchdog with the specified timeout. Should only be called once.
@@ -47,5 +50,9 @@ void watchdogReset(void);
  * this function, then the default action is to disable watchdog.
  */
 void watchdogSetup(void);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
 
 #endif /* _ARDUINO_CORE_WATCHDOG_H_ */

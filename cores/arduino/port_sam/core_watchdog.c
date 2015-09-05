@@ -18,33 +18,48 @@
 
 #include "Arduino.h"
 
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
 void watchdogEnable(uint32_t timeout)
 {
-	/* this assumes the slow clock is running at 32.768 kHz
-	 * watchdog frequency is therefore 32768 / 128 = 256 Hz
+  /* this assumes the slow clock is running at 32.768 kHz
+   * watchdog frequency is therefore 32768 / 128 = 256 Hz
    */
-	timeout = timeout * 256 / 1000;
-	if (timeout == 0)
-		timeout = 1;
-	else if (timeout > 0xFFF)
-		timeout = 0xFFF;
-	timeout = WDT_MR_WDRSTEN | WDT_MR_WDV(timeout) | WDT_MR_WDD(timeout);
-	WDT_Enable (WDT, timeout);
+  timeout = timeout * 256 / 1000;
+
+  if (timeout == 0)
+  {
+    timeout = 1;
+  }
+  else
+  {
+    if (timeout > 0xFFF)
+    {
+      timeout = 0xFFF;
+    }
+  }
+
+  WDT->WDT_MR = WDT_MR_WDRSTEN | WDT_MR_WDV(timeout) | WDT_MR_WDD(timeout) | WDT_MR_WDDBGHLT;
 }
 
 void watchdogDisable(void)
 {
-	WDT_Disable(WDT);
+  WDT->WDT_MR=WDT_MR_WDDIS;
 }
 
 void watchdogReset(void)
 {
-	WDT_Restart(WDT);
+  WDT->WDT_CR=WDT_CR_KEY_PASSWD|WDT_CR_WDRSTT;
 }
 
-extern "C"
-void _watchdogDefaultSetup(void)
+static void _watchdogDefaultSetup(void)
 {
-	WDT_Disable(WDT);
+  WDT->WDT_MR=WDT_MR_WDDIS;
 }
-void watchdogSetup(void) __attribute__ ((weak, alias(_watchdogDefaultSetup)));
+void watchdogSetup(void) __attribute__ ((weak, alias("_watchdogDefaultSetup")));
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
