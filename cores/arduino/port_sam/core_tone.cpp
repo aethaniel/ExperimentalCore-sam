@@ -1,5 +1,6 @@
 /*
-  Copyright (c) 2015 Thibaut VIARD & Arduino LLC.  All right reserved.
+  Copyright (c) 2011 Arduino LLC.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -15,8 +16,12 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+ * This file needs to be C++ because of default value of 'duration'
+ * parameter in 'tone' function.
+ */
 
-#include "CoreTone.h"
+#include "core_tone.hpp"
 
 void tone(uint32_t pin, uint32_t frequency, uint32_t duration)
 {

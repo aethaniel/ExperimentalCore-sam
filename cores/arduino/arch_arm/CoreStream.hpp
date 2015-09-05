@@ -19,11 +19,11 @@
   parsing functions based on TextFinder library by Michael Margolis
 */
 
-#ifndef Stream_h
-#define Stream_h
+#ifndef _ARDUINO_CORE_STREAM_HPP_
+#define _ARDUINO_CORE_STREAM_HPP_
 
 #include <inttypes.h>
-#include "CorePrint.h"
+#include "CorePrint.hpp"
 
 // compatability macros for testing
 /*
@@ -109,4 +109,4 @@ class Stream : public Print
   int findMulti(struct MultiTarget *targets, int tCount);
 };
 
-#endif
+#endif // _ARDUINO_CORE_STREAM_HPP_

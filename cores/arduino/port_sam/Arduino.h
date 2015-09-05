@@ -17,8 +17,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef Arduino_h
-#define Arduino_h
+#ifndef _ARDUINO_CORE_H_
+#define _ARDUINO_CORE_H_
 
 #include <stdint.h>
 #define __STRICT_ANSI__
@@ -63,11 +63,11 @@ extern void loop( void ) ;
 #ifdef __cplusplus
 } // extern "C"
 
-#include "CoreTone.h"
-#include "core_pulse.h"
-#include "CoreMath.h"
-#include "CoreString.h"
-#include "CoreHardwareSerial.h"
+#include "CoreString.hpp"
+#include "CoreHardwareSerial.hpp"
+#include "core_tone.hpp"
+#include "core_pulse.hpp"
+#include "core_math.hpp"
 
 #endif // __cplusplus
 
@@ -88,4 +88,4 @@ extern void loop( void ) ;
 #include "USB/USBAPI.h"
 */
 
-#endif // Arduino_h
+#endif // _ARDUINO_CORE_H_

@@ -17,8 +17,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _ARDUINO_CORE_CONSTANTS_H__
-#define _ARDUINO_CORE_CONSTANTS_H__
+#ifndef _ARDUINO_CORE_CONSTANTS_H_
+#define _ARDUINO_CORE_CONSTANTS_H_
 
 #include <stdint.h> // for uint?_t types
 #include <stdbool.h> // for boolean type (re)definition, since C99

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011 Arduino.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,8 @@
 #ifndef _SAM_SERIAL_
 #define _SAM_SERIAL_
 
-#include "CoreHardwareSerial.h"
-#include "CoreRingBuffer.h"
+#include "CoreHardwareSerial.hpp"
+#include "CoreRingBuffer.hpp"
 #include "core_variant.h"
 
 // Includes Atmel CMSIS

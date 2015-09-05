@@ -16,16 +16,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#pragma once
+#ifndef _ARDUINO_CORE_RESET_H_
+#define _ARDUINO_CORE_RESET_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 void initiateReset(int ms);
-void tickReset();
-void cancelReset();
+void tickReset(void);
+void cancelReset(void);
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif // _ARDUINO_CORE_RESET_H_

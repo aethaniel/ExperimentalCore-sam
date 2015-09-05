@@ -6,6 +6,8 @@
   <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/atmel_sam4e_xplained_pro.project" Active="No"/>
   <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/atmel_samg55_xplained_pro.project" Active="No"/>
   <Project Name="arduino_due" Path="../variants/arduino_due/arduino_due.project" Active="No"/>
+  <Project Name="logos_arachnio_due" Path="../variants/logos_arachnio_due/logos_arachnio_due.project" Active="No"/>
+  <Project Name="poppy_core" Path="../variants/poppy_core/poppy_core.project" Active="No"/>
   <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="Yes"/>
   <Environment>
     <![CDATA[]]>
@@ -17,6 +19,8 @@
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Debug"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Debug"/>
       <Project Name="arduino_due" ConfigName="Debug"/>
+      <Project Name="logos_arachnio_due" ConfigName="Debug"/>
+      <Project Name="poppy_core" ConfigName="Debug"/>
       <Project Name="blink" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="no">
@@ -25,6 +29,8 @@
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Release"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Release"/>
       <Project Name="arduino_due" ConfigName="Release"/>
+      <Project Name="logos_arachnio_due" ConfigName="Release"/>
+      <Project Name="poppy_core" ConfigName="Release"/>
       <Project Name="blink" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
