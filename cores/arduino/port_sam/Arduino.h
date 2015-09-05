@@ -80,6 +80,7 @@ extern void loop( void ) ;
 #include "core_analog.h"
 #include "core_shift.h"
 #include "core_interrupts.h"
+#include "core_watchdog.h"
 
 // USB Device
 /*

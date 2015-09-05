@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="atmel_sam4s_xplained_pro" InternalType="">
-  <Plugins>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }, {
-  "name": "Release",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
+  <Plugins/>
   <VirtualDirectory Name="variants">
     <File Name="../Makefile.rules"/>
     <File Name="../Makefile.sources"/>
@@ -79,6 +57,7 @@
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
         <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_reset.h"/>
+        <File Name="../../cores/arduino/arch_common/core_watchdog.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="avr_compat">
         <File Name="../../cores/arduino/avr_compat/core_dtostrf.c"/>
@@ -111,6 +90,7 @@
         <File Name="../../cores/arduino/port_sam/core_tone.cpp"/>
         <File Name="../../cores/arduino/port_sam/core_tone.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_reset.c"/>
+        <File Name="../../cores/arduino/port_sam/core_watchdog.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

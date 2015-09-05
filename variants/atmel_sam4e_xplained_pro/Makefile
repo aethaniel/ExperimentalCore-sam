@@ -8,4 +8,3 @@ DEVICE_CORE = cortex-m4
 DEVICE_FREQUENCY = 120000000ul
 
 include ../Makefile.rules
-
