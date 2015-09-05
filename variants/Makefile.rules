@@ -33,8 +33,8 @@ CORE_COMMON_PATH=$(ROOT_PATH)/cores/arduino/arch_common
 CORE_AVR_PATH=$(ROOT_PATH)/cores/arduino/avr_compat
 CORE_SAM_PATH=$(ROOT_PATH)/cores/arduino/port_sam
 
-INCLUDES  = -I$(ROOT_PATH)/../ArduinoModule-CMSIS/CMSIS/CMSIS/Include
-INCLUDES += -I$(ROOT_PATH)/../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL
+INCLUDES  = -I$(ROOT_PATH)/tools/CMSIS_API/Include
+INCLUDES += -I$(ROOT_PATH)/tools/CMSIS_Devices/ATMEL
 INCLUDES += -I$(ROOT_PATH)/cores/arduino
 
 OUTPUT_PATH = $(VARIANT_PATH)/obj
