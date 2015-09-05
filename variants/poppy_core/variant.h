@@ -16,18 +16,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_POPPY_CORE__
-#define _VARIANT_POPPY_CORE__
+#ifndef _VARIANT_POPPY_CORE_H_
+#define _VARIANT_POPPY_CORE_H_
 
 /*----------------------------------------------------------------------------
  *        Definitions
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(32768ul)
+#define VARIANT_MAINOSC   (32768ul) // This system has an on-board 32KHz oscillator
 
 /** Master clock frequency */
-#define VARIANT_MCK			  (120000000ul)
+#define VARIANT_MCK       (F_CPU) //(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreUsart.h"
+#include "CoreSerial.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -50,9 +50,9 @@ extern "C"
 
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           (4ul)
-#define NUM_DIGITAL_PINS     (2u) // TODO
-#define NUM_ANALOG_INPUTS    (0u) // TODO
-#define NUM_ANALOG_OUTPUTS   (0u) // TODO
+#define NUM_DIGITAL_PINS     (4ul) // TODO
+#define NUM_ANALOG_INPUTS    (0ul) // TODO
+#define NUM_ANALOG_OUTPUTS   (0ul) // TODO
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -67,6 +67,8 @@ extern "C"
  */
 // #define portModeRegister(port)   ( &(port->PIO_OSR) )
 
+#define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
+
 /*
  * digitalPinToTimer(..) is AVR-specific and is not defined for SAM
  * architecture. If you need to check if a pin supports PWM you must
@@ -80,7 +82,7 @@ extern "C"
 #define digitalPinToInterrupt(p)  ((p) < NUM_DIGITAL_PINS ? (p) : -1)
 
 // LEDs
-#define PIN_LED_13           (0u)
+#define PIN_LED_13           (2u)
 #define PIN_LED              PIN_LED_13
 #define LED_BUILTIN          PIN_LED_13
 
@@ -127,14 +129,16 @@ static const uint8_t A5  = PIN_A5 ;
 #define SPI_INTERFACE_ID     ID_SPI
 #define SPI_CHANNELS_NUM     2
 
-#define PIN_SPI_MISO         (22u)
-#define PIN_SPI_MOSI         (23u)
-#define PIN_SPI_SCK          (24u)
+#define PIN_SPI_MISO         (ul)
+#define PIN_SPI_MOSI         (ul)
+#define PIN_SPI_SCK          (ul)
+#define PIN_SPI_SS0          (ul)
+#define PIN_SPI_SS1          (ul)
 
-static const uint8_t SS	  = PIN_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
-static const uint8_t MOSI = PIN_SPI_MOSI ;
-static const uint8_t MISO = PIN_SPI_MISO ;
-static const uint8_t SCK  = PIN_SPI_SCK ;
+static const uint8_t SS	  = PIN_SPI_SS0;
+static const uint8_t MOSI = PIN_SPI_MOSI;
+static const uint8_t MISO = PIN_SPI_MISO;
+static const uint8_t SCK  = PIN_SPI_SCK;
 #endif // TODO SPI
 
 #if 0 // TODO Wire
@@ -143,18 +147,9 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
+#define PIN_WIRE_SDA         (ul)
+#define PIN_WIRE_SCL         (ul)
 #endif // TODO Wire
-
-#if 0 // TODO USB
-/*
- * USB
- */
-#define PIN_USB_HOST_ENABLE (27ul)
-#define PIN_USB_DM          (28ul)
-#define PIN_USB_DP          (29ul)
-#endif // TODO USB
 
 #ifdef __cplusplus
 }
@@ -166,8 +161,8 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 
 #ifdef __cplusplus
 
-extern UARTClass Serial;
-extern UARTClass Serial1;
+extern SAMSerial Serial;
+//extern SAMSerial Serial1;
 
 #endif
 
@@ -189,8 +184,8 @@ extern UARTClass Serial1;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-#define SERIAL_PORT_HARDWARE        Serial1
-#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+//#define SERIAL_PORT_HARDWARE        Serial1
+//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
-#endif /* _VARIANT_POPPY_CORE__ */
+#endif /* _VARIANT_POPPY_CORE_H_ */
 
