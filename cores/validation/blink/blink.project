@@ -68,7 +68,7 @@
         <Target Name="Debug">make DEBUG=1 debug</Target>
         <RebuildCommand>make DEBUG=1 clean all</RebuildCommand>
         <CleanCommand>make DEBUG=1 clean</CleanCommand>
-        <BuildCommand>make DEBUG=1 upload2</BuildCommand>
+        <BuildCommand>make DEBUG=1 upload_edbg</BuildCommand>
         <PreprocessFileCommand/>
         <SingleFileCommand/>
         <MakefileGenerationCommand/>

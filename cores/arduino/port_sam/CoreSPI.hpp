@@ -9,8 +9,8 @@
  * published by the Free Software Foundation.
  */
 
-#ifndef _SPI_H_INCLUDED
-#define _SPI_H_INCLUDED
+#ifndef _ARDUINO_CORE_SPI_HPP_
+#define _ARDUINO_CORE_SPI_HPP_
 
 #include "variant.h"
 #include "core_constants.h"
@@ -144,4 +144,4 @@ extern SPIClass SPI;
 #define SPI_CLOCK_DIV64	 255
 #define SPI_CLOCK_DIV128 255
 
-#endif
+#endif // _ARDUINO_CORE_SPI_HPP_

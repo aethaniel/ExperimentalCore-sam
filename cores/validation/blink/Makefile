@@ -70,13 +70,13 @@ VARIANT_LIB_PATH = $(VARIANT_PATH)/lib$(VARIANT_NAME).a
 #|---------------------------------------------------------------------------------------|
 SOURCES=\
 $(CORE_ARM_PATH)/core_init.h            \
-$(CORE_ARM_PATH)/CoreHardwareSerial.h   \
-$(CORE_ARM_PATH)/CoreMath.h             \
-$(CORE_ARM_PATH)/CorePrint.h            \
-$(CORE_ARM_PATH)/CorePrintable.h        \
-$(CORE_ARM_PATH)/CoreRingBuffer.h       \
-$(CORE_ARM_PATH)/CoreStream.h           \
-$(CORE_ARM_PATH)/CoreString.h           \
+$(CORE_ARM_PATH)/CoreHardwareSerial.hpp \
+$(CORE_ARM_PATH)/core_math.hpp          \
+$(CORE_ARM_PATH)/CorePrint.hpp          \
+$(CORE_ARM_PATH)/CorePrintable.hpp      \
+$(CORE_ARM_PATH)/CoreRingBuffer.hpp     \
+$(CORE_ARM_PATH)/CoreStream.hpp         \
+$(CORE_ARM_PATH)/CoreString.hpp         \
 $(CORE_ARM_PATH)/core_character.h       \
 $(CORE_ARM_PATH)/core_itoa.h            \
 $(CORE_ARM_PATH)/core_reset.h           \
@@ -85,20 +85,21 @@ $(CORE_ARM_PATH)/core_hooks.h           \
 $(CORE_ARM_PATH)/core_cortex_vectors.h  \
 $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
-$(CORE_COMMON_PATH)/core_new.h          \
+$(CORE_COMMON_PATH)/core_new.hpp        \
+$(CORE_COMMON_PATH)/core_watchdog.h     \
 $(CORE_AVR_PATH)/core_dtostrf.h         \
 $(CORE_AVR_PATH)/core_interrupt.h       \
 $(CORE_AVR_PATH)/core_pgmspace.h        \
 $(CORE_SAM_PATH)/Arduino.h              \
-$(CORE_SAM_PATH)/CoreSerial.h           \
+$(CORE_SAM_PATH)/CoreSerial.hpp         \
 $(CORE_SAM_PATH)/core_analog.h          \
 $(CORE_SAM_PATH)/core_delay.h           \
 $(CORE_SAM_PATH)/core_digital.h         \
 $(CORE_SAM_PATH)/core_interrupts.h      \
 $(CORE_SAM_PATH)/core_private.h         \
-$(CORE_SAM_PATH)/core_pulse.h           \
+$(CORE_SAM_PATH)/core_pulse.hpp         \
 $(CORE_SAM_PATH)/core_reset.h           \
-$(CORE_SAM_PATH)/CoreTone.h             \
+$(CORE_SAM_PATH)/core_tone.hpp          \
 $(CORE_SAM_PATH)/core_variant.h         \
 $(VARIANT_PATH)/pins_arduino.h          \
 $(VARIANT_PATH)/variant.h               \

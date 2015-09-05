@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014 Arduino.  All right reserved.
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,8 +16,9 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef String_class_h
-#define String_class_h
+#ifndef _ARDUINO_CORE_STRING_HPP_
+#define _ARDUINO_CORE_STRING_HPP_
+
 #ifdef __cplusplus
 
 #define __STRICT_ANSI__
@@ -220,4 +221,5 @@ public:
 };
 
 #endif  // __cplusplus
-#endif  // String_class_h
+
+#endif  // _ARDUINO_CORE_STRING_HPP_

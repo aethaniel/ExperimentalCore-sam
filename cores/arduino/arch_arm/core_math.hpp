@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Thibaut VIARD & Arduino LLC.  All right reserved.
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -15,13 +15,24 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+ * This file needs to be C++ because of overloaded 'random' and 'makeWord'
+ * functions.
+ */
 
-#ifndef _ARDUINO_CORE_TONE_
-#define _ARDUINO_CORE_TONE_
+#ifndef _ARDUINO_CORE_MATH_HPP_
+#define _ARDUINO_CORE_MATH_HPP_
 
-#include <stdint.h>
+extern long random(long);
+extern long random(long, long);
+extern void randomSeed(uint32_t dwSeed);
 
-void tone(uint32_t pin, uint32_t frequency, uint32_t duration = 0);
-void noTone(uint32_t pin);
+extern long map(long, long, long, long, long);
 
-#endif /* _ARDUINO_CORE_TONE_ */
+extern uint16_t makeWord(uint16_t w);
+extern uint16_t makeWord(uint8_t h, uint8_t l);
+
+#define word(...) makeWord(__VA_ARGS__)
+
+
+#endif /* _ARDUINO_CORE_MATH_HPP_ */

@@ -17,14 +17,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef server_h
-#define server_h
+#ifndef _ARDUINO_CORE_NETWORK_SERVER_HPP_
+#define _ARDUINO_CORE_NETWORK_SERVER_HPP_
 
-#include "Print.h"
+#include "CorePrint.hpp"
 
 class Server : public Print {
 public:
   virtual void begin() =0;
 };
 
-#endif
+#endif // _ARDUINO_CORE_NETWORK_SERVER_HPP_

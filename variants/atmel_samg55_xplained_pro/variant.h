@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreSerial.h"
+#include "CoreSerial.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus

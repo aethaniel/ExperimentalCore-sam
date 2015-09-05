@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _CORE_DELAY_H_
-#define _CORE_DELAY_H_
+#ifndef _ARDUINO_CORE_DELAY_H_
+#define _ARDUINO_CORE_DELAY_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -104,4 +104,4 @@ extern void SysTick_DefaultHandler(void);
 }
 #endif
 
-#endif /* _CORE_DELAY_H_ */
+#endif /* _ARDUINO_CORE_DELAY_H_ */

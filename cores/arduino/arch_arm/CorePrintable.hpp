@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011 Arduino.  All right reserved.
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,23 +16,23 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_PULSE_
-#define _WIRING_PULSE_
+#ifndef _ARDUINO_CORE_PRINTABLE_HPP_
+#define _ARDUINO_CORE_PRINTABLE_HPP_
 
-#ifdef __cplusplus
- extern "C" {
-#endif
+#include <stdlib.h>
 
-/*
- * \brief Measures the length (in microseconds) of a pulse on the pin; state is HIGH
- * or LOW, the type of pulse to measure.  Works on pulses from 2-3 microseconds
- * to 3 minutes in length, but must be called at least a few dozen microseconds
- * before the start of the pulse.
- */
-extern uint32_t pulseIn( uint32_t ulPin, uint32_t ulState, uint32_t ulTimeout = 1000000L ) ;
+class Print;
 
-#ifdef __cplusplus
-}
-#endif
+/** The Printable class provides a way for new classes to allow themselves to be printed.
+    By deriving from Printable and implementing the printTo method, it will then be possible
+    for users to print out instances of this class by passing them into the usual
+    Print::print and Print::println methods.
+*/
 
-#endif /* _WIRING_PULSE_ */
+class Printable
+{
+  public:
+    virtual size_t printTo(Print& p) const = 0;
+};
+
+#endif // _ARDUINO_CORE_PRINTABLE_HPP_

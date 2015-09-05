@@ -32,10 +32,10 @@
  * bjoern@cs.stanford.edu 12/30/2008
  */
 
-#ifndef udp_h
-#define udp_h
+#ifndef _ARDUINO_CORE_NETWORK_UDP_H_
+#define _ARDUINO_CORE_NETWORK_UDP_H_
 
-#include "CoreStream.h"
+#include "CoreStream.hpp"
 #include "IPAddress.h"
 
 class UDP : public Stream {
@@ -85,4 +85,4 @@ protected:
   uint8_t* rawIPAddress(IPAddress& addr) { return addr.raw_address(); };
 };
 
-#endif
+#endif // _ARDUINO_CORE_NETWORK_UDP_H_

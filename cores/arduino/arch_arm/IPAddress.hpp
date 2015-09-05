@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014 Arduino.  All right reserved.
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,11 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef IPAddress_h
-#define IPAddress_h
+#ifndef _ARDUINO_CORE_IPADDRESS_HPP_
+#define _ARDUINO_CORE_IPADDRESS_HPP_
 
-#include "Udp.h"
-#include "CorePrintable.h"
+#include "Udp.hpp"
+#include "CorePrintable.hpp"
 
 // A class to make it easier to handle and pass around IP addresses
 
@@ -67,4 +67,4 @@ public:
 const IPAddress INADDR_NONE(0,0,0,0);
 
 
-#endif
+#endif // _ARDUINO_CORE_IPADDRESS_HPP_

@@ -16,14 +16,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef Print_h
-#define Print_h
+#ifndef _ARDUINO_CORE_PRINT_HPP_
+#define _ARDUINO_CORE_PRINT_HPP_
 
 #include <inttypes.h>
 #include <stdio.h> // for size_t
 
-#include "CoreString.h"
-#include "CorePrintable.h"
+#include "CoreString.hpp"
+#include "CorePrintable.hpp"
 
 #define DEC 10
 #define HEX 16
@@ -80,4 +80,4 @@ class Print
     size_t println(void);
 };
 
-#endif
+#endif // _ARDUINO_CORE_PRINT_HPP_

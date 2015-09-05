@@ -1,5 +1,6 @@
 /*
-  Copyright (c) 2015 Arduino LLC & Thibaut VIARD.  All right reserved.
+  Copyright (c) 2011 Arduino LLC.  All right reserved.
+  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -78,7 +79,7 @@ inline void digitalWriteFast( const PinDescription* pPin, uint32_t ulVal )
 #ifdef __cplusplus
 } // extern "C"
 
-#include "CoreHardwareSerial.h"
+#include "CoreHardwareSerial.hpp"
 #endif // __cplusplus
 
 #endif // _ARDUINO_CORE_PRIVATE_H_

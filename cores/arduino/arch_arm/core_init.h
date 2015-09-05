@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _ARDUINO_CORE_
-#define _ARDUINO_CORE_
+#ifndef _ARDUINO_CORE_INIT_H_
+#define _ARDUINO_CORE_INIT_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,4 +33,4 @@ extern void init(void);
 }
 #endif
 
-#endif // _ARDUINO_CORE_
+#endif // _ARDUINO_CORE_INIT_H_

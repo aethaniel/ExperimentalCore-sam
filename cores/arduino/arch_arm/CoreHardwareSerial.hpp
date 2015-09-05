@@ -16,12 +16,12 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef HardwareSerial_h
-#define HardwareSerial_h
+#ifndef _ARDUINO_CORE_HARDWARESERIAL_HPP_
+#define _ARDUINO_CORE_HARDWARESERIAL_HPP_
 
 #include <inttypes.h>
 
-#include "CoreStream.h"
+#include "CoreStream.hpp"
 
 #define HARDSER_PARITY_EVEN            (0x1ul)
 #define HARDSER_PARITY_ODD	           (0x2ul)
@@ -82,4 +82,4 @@ class HardwareSerial : public Stream
 
 extern void serialEventRun(void) __attribute__((weak));
 
-#endif
+#endif // _ARDUINO_CORE_HARDWARESERIAL_HPP_
