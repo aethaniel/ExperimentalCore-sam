@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="arduino_due" InternalType="">
   <Plugins/>
-    </Plugin>
-  </Plugins>
   <VirtualDirectory Name="variants">
     <File Name="../Makefile.rules"/>
     <File Name="../Makefile.sources"/>
@@ -209,26 +207,26 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="product headers">
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/sam3x8e.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/chipid.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/efc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/gpbr.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/hsmci.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/matrix.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/pio.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/pmc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/pwm.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/rstc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/rtc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/rtt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/spi.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/supc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/tc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/twi.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/uart.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/usart.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/component/wdt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/sam3xa.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/sam3xa/include/pio/sam3x8e.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/sam3x8e.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/chipid.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/efc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/gpbr.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/hsmci.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/matrix.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/pio.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/pmc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/pwm.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/rstc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/rtc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/rtt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/spi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/supc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/tc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/twi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/uart.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/usart.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/component/wdt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/sam3xa.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam3xa/include/pio/sam3x8e.h"/>
   </VirtualDirectory>
 </CodeLite_Project>

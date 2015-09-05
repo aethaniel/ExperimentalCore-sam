@@ -53,8 +53,8 @@ TOOL_EDBG = $(ROOT_PATH)/tools/edbg
 #|---------------------------------------------------------------------------------------|
 #| Include paths                                                                         |
 #|---------------------------------------------------------------------------------------|
-INCLUDES  = -I$(ROOT_PATH)/../ArduinoModule-CMSIS/CMSIS/CMSIS/Include
-INCLUDES += -I$(ROOT_PATH)/../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL
+INCLUDES  = -I$(ROOT_PATH)/tools/CMSIS_API/Include
+INCLUDES += -I$(ROOT_PATH)/tools/CMSIS_Devices/ATMEL
 INCLUDES += -I$(ROOT_PATH)/cores/arduino
 
 #|---------------------------------------------------------------------------------------|

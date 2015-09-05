@@ -207,29 +207,29 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="product headers">
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/samg55j19.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/adc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/chipid.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/cmcc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/crccu.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/efc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/flexcom.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/gpbr.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/matrix.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/mem2mem.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pdc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pio.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/pmc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rstc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rtc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/rtt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/ssc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/supc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/tc.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/udp.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/uhp.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/component/wdt.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/samg55.h"/>
-    <File Name="../../../ArduinoModule-CMSIS-Atmel/CMSIS/Device/ATMEL/samg55/include/pio/samg55j19.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55j19.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/adc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/chipid.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/cmcc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/crccu.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/efc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/flexcom.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/gpbr.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/matrix.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/mem2mem.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pio.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pmc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rstc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/ssc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/supc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/tc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/udp.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/uhp.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/wdt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/pio/samg55j19.h"/>
   </VirtualDirectory>
 </CodeLite_Project>
