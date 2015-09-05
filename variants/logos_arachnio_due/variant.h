@@ -24,10 +24,10 @@
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(12000000ul)
+#define VARIANT_MAINOSC   (12000000ul) // This system has an on-board 12MHz oscillator
 
 /** Master clock frequency */
-#define VARIANT_MCK			  (120000000ul)
+#define VARIANT_MCK       (F_CPU) //(120000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -36,7 +36,7 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreUsart.h"
+#include "CoreSerial.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -66,6 +66,8 @@ extern "C"
  * pair PIO_OER/PIO_ODR.
  */
 // #define portModeRegister(port)   ( &(port->PIO_OSR) )
+
+#define digitalPinHasPWM(P)        ( g_aPinMap[P].ulPWMChannel != NOT_ON_PWM || g_aPinMap[P].ulTCChannel != NOT_ON_TIMER )
 
 /*
  * digitalPinToTimer(..) is AVR-specific and is not defined for SAM
@@ -113,15 +115,15 @@ static const uint8_t A7  = PIN_A7 ;
 /*
  * ESP pins
  */
-#define CHIP_EN				(24u)
-#define ESP_RST				(25u)
+#define CHIP_EN	             (24ul)
+#define ESP_RST			     (25ul)
 
 /*
  * Serial interfaces
  */
 // Serial
-#define PIN_SERIAL_RX       (0ul)
-#define PIN_SERIAL_TX       (1ul)
+#define PIN_SERIAL_RX        (0ul)
+#define PIN_SERIAL_TX        (1ul)
 
 #if 0 // TODO Serial1
 // Serial1
@@ -139,12 +141,12 @@ static const uint8_t A7  = PIN_A7 ;
 #define SPI_INTERFACE_ID     ID_SPI
 #define SPI_CHANNELS_NUM     1
 
-#define PIN_SPI_MISO         (20u)
-#define PIN_SPI_MOSI         (21u)
-#define PIN_SPI_SCK          (22u)
-#define PIN_SPI_SS0          (23u)
+#define PIN_SPI_MISO         (20ul)
+#define PIN_SPI_MOSI         (21ul)
+#define PIN_SPI_SCK          (22ul)
+#define PIN_SPI_SS0          (23ul)
 
-static const uint8_t SS	  = PIN_SPI_SS0 ;	
+static const uint8_t SS	  = PIN_SPI_SS0 ;
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
@@ -156,17 +158,9 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (2u)
-#define PIN_WIRE_SCL         (3u)
+#define PIN_WIRE_SDA         (2ul)
+#define PIN_WIRE_SCL         (3ul)
 #endif // TODO Wire
-
-#if 0 // TODO USB
-/*
- * USB
- */
-#define PIN_USB_DM          (28ul)
-#define PIN_USB_DP          (29ul)
-#endif // TODO USB
 
 #ifdef __cplusplus
 }
@@ -178,8 +172,8 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 
 #ifdef __cplusplus
 
-extern UARTClass Serial;
-extern UARTClass Serial1;
+extern SAMSerial Serial;
+//extern SAMSerial Serial1;
 
 #endif
 
@@ -201,8 +195,8 @@ extern UARTClass Serial1;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-#define SERIAL_PORT_HARDWARE        Serial1
-#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+//#define SERIAL_PORT_HARDWARE        Serial1
+//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
 #endif /* _VARIANT_LOGOS_ARACHNIO_DUE_ */
 
