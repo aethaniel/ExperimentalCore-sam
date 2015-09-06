@@ -18,8 +18,9 @@
 
 #include "sam.h"
 #include "variant.h"
-#include "core_delay.h"
-#include "core_hooks.h"
+#include "core_delay.h" /* for Systick handler */
+#include "core_hooks.h" /* for PendSV and SVC handlers */
+#include "core_cortex_vectors.h" /* for vector_halt() */
 
 #define __SYSTEM_CLOCK_8MHZ   (8000000UL)
 #define __SYSTEM_CLOCK_120MHZ (120000000UL)
@@ -30,57 +31,57 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_8MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void __halt()
+static void vector_halt(void)
 {
   // Halts
   while (1);
 }
 
 /* Peripherals handlers */
-void SUPC_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
-void RSTC_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
-void RTC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void RTT_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void WDT_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void PMC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void EFC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void SUPC_Handler      ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RSTC_Handler      ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RTC_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RTT_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void WDT_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PMC_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void EFC_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef FLEXCOM7
-void FLEXCOM7_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void FLEXCOM7_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* FLEXCOM7*/
-void FLEXCOM0_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void PIOA_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
-void PIOB_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
-void PDMIC0_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM2_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void MEM2MEM_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void I2SC0_Handler     ( void ) __attribute__ ((weak, alias("__halt")));
-void I2SC1_Handler     ( void ) __attribute__ ((weak, alias("__halt")));
-void PDMIC1_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM3_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM4_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM5_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void FLEXCOM6_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void TC0_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void TC1_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void TC2_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void TC3_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void TC4_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void TC5_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void ADC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void ARM_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void UHP_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void UDP_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
-void CRCCU_Handler     ( void ) __attribute__ ((weak, alias("__halt")));
+void FLEXCOM0_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PIOA_Handler      ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PIOB_Handler      ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PDMIC0_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM2_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void MEM2MEM_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void I2SC0_Handler     ( void ) __attribute__ ((weak, alias("vector_halt")));
+void I2SC1_Handler     ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PDMIC1_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM3_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM4_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM5_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FLEXCOM6_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC0_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC1_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC2_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC3_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC4_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC5_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void ADC_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void ARM_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void UHP_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void UDP_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void CRCCU_Handler     ( void ) __attribute__ ((weak, alias("vector_halt")));
 
 /* Exception Table */
-//__attribute__ ((section(".isr_vector")))
+__attribute__ ((section(".ram_isr_vector")))
 DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
   .pvStack = 0ul, // not used (void*) (&__StackTop),
 
-  .pfnReset_Handler      = (void*) Reset_Handler,
+  .pfnReset_Handler      = (void*) (0UL),
   .pfnNMI_Handler        = (void*) NMI_Handler,
   .pfnHardFault_Handler  = (void*) HardFault_Handler,
   .pfnMemManage_Handler  = (void*) MemManage_Handler,

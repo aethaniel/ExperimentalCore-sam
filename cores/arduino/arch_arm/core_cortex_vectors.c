@@ -43,7 +43,7 @@ extern void __libc_init_array(void);
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void _halt(void)
+static void vector_halt(void)
 {
   // Halts
   while (1);
@@ -128,12 +128,12 @@ void DebugMon_Handler(void)
 
 #else
 
-void HardFault_Handler (void) __attribute__ ((weak, alias("_halt")));
-void NMI_Handler       (void) __attribute__ ((weak, alias("_halt")));
-void MemManage_Handler (void) __attribute__ ((weak, alias("_halt")));
-void BusFault_Handler  (void) __attribute__ ((weak, alias("_halt")));
-void UsageFault_Handler(void) __attribute__ ((weak, alias("_halt")));
-void DebugMon_Handler  (void) __attribute__ ((weak, alias("_halt")));
+void HardFault_Handler (void) __attribute__ ((weak, alias("vector_halt")));
+void NMI_Handler       (void) __attribute__ ((weak, alias("vector_halt")));
+void MemManage_Handler (void) __attribute__ ((weak, alias("vector_halt")));
+void BusFault_Handler  (void) __attribute__ ((weak, alias("vector_halt")));
+void UsageFault_Handler(void) __attribute__ ((weak, alias("vector_halt")));
+void DebugMon_Handler  (void) __attribute__ ((weak, alias("vector_halt")));
 
 #endif // DEBUG=1
 
@@ -177,6 +177,47 @@ const CoreVectors startup_exception_table=
   .pfnPendSV_Handler     = (void*) PendSV_Handler,
   .pfnSysTick_Handler    = (void*) SysTick_Handler,
  };
+
+void* vectorSetOrigin(DeviceVectors* pBase)
+{
+  void* p=(void*)(SCB->VTOR);
+
+  /* relocate vector table
+   * reference is http://www.keil.com/pack/doc/cmsis/core/html/_using__v_t_o_r_pg.html
+   */
+  __disable_irq();
+  SCB->VTOR = (uint32_t)pBase;
+  __DSB();
+  __enable_irq();
+
+  return p;
+}
+
+void* vectorAssign(IRQn_Type number, void (*isr)(void))
+{
+  uint32_t* pulTable=(uint32_t*)(SCB->VTOR);
+  void *p=(void*)(pulTable+number+16);
+
+  __disable_irq();
+  pulTable[number+16]=(uint32_t)isr ;
+  __DSB();
+  __enable_irq();
+
+  return p;
+}
+
+void* vectorReset(IRQn_Type number)
+{
+  uint32_t* pulTable=(uint32_t*)(SCB->VTOR);
+  void *p=(void*)(pulTable+number+16);
+
+  __disable_irq();
+  pulTable[number+16]=(uint32_t)vector_halt ;
+  __DSB();
+  __enable_irq();
+
+  return p;
+}
 
 #ifdef __cplusplus
 }

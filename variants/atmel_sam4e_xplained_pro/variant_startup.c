@@ -18,8 +18,9 @@
 
 #include "sam.h"
 #include "variant.h"
-#include "core_delay.h"
-#include "core_hooks.h"
+#include "core_delay.h" /* for Systick handler */
+#include "core_hooks.h" /* for PendSV and SVC handlers */
+#include "core_cortex_vectors.h" /* for vector_halt() */
 
 #define __SYSTEM_CLOCK_4MHZ   (4000000UL)
 #define __SYSTEM_CLOCK_120MHZ (120000000UL)
@@ -30,73 +31,73 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_4MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-static void __halt()
+static void vector_halt(void)
 {
   // Halts
   while (1);
 }
 
 /* Peripherals handlers */
-void SUPC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void RSTC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void RTC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void RTT_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void WDT_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void PMC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void EFC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void UART0_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void PIOA_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void PIOB_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void SUPC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RSTC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RTC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void RTT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void WDT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PMC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void EFC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void UART0_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PIOA_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PIOB_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef PIOC
-void PIOC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* PIOC */
-void PIOD_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOD_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef PIOE
-void PIOE_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOE_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* PIOE */
-void USART0_Handler ( void ) __attribute__ ((weak, alias("__halt")));
-void USART1_Handler ( void ) __attribute__ ((weak, alias("__halt")));
-void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void TWI0_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void TWI1_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void SPI_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void DMAC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void TC0_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC1_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC2_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void USART0_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
+void USART1_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
+void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TWI0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TWI1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void SPI_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void DMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC0_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC1_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC2_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef TC1
-void TC3_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC4_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC5_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC3_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC4_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC5_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* TC1 */
 #ifdef TC2
-void TC6_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC7_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void TC8_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
+void TC6_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC7_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void TC8_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* TC2 */
-void AFEC0_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
-void DACC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void ACC_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void ARM_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void UDP_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void PWM_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void CAN0_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void AFEC0_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
+void DACC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void ACC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void ARM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void UDP_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void PWM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void CAN0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef CAN1
-void CAN1_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
+void CAN1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #endif /* CAN1 */
-void AES_Handler    ( void ) __attribute__ ((weak, alias("__halt")));
-void GMAC_Handler   ( void ) __attribute__ ((weak, alias("__halt")));
-void UART1_Handler  ( void ) __attribute__ ((weak, alias("__halt")));
+void AES_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void GMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
+void UART1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
 
 /* Exception Table */
-//__attribute__ ((section(".isr_vector")))
+__attribute__ ((section(".ram_isr_vector")))
 DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
   .pvStack = 0ul, // not used (void*) (&__StackTop),
 
-  .pfnReset_Handler      = (void*) Reset_Handler,
+  .pfnReset_Handler      = (void*) (0UL),
   .pfnNMI_Handler        = (void*) NMI_Handler,
   .pfnHardFault_Handler  = (void*) HardFault_Handler,
   .pfnMemManage_Handler  = (void*) MemManage_Handler,
