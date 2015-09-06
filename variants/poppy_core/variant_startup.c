@@ -69,9 +69,9 @@ void TC3_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
 void TC4_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
 void TC5_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
 void ADC_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
-void ARM_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void FPU_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
 void UHP_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UDP_Handler       ( void ) __attribute__ ((weak, alias("vector_halt")));
+void USBDEV_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 void CRCCU_Handler     ( void ) __attribute__ ((weak, alias("vector_halt")));
 
 /* Exception Table */
@@ -132,7 +132,7 @@ DeviceVectors exception_table=
   .pfnTC4_Handler       = (void*) TC4_Handler,       /* 27 Timer/Counter 4 */
   .pfnTC5_Handler       = (void*) TC5_Handler,       /* 28 Timer/Counter 5 */
   .pfnADC_Handler       = (void*) ADC_Handler,       /* 29 Analog To Digital Converter */
-  .pfnARM_Handler       = (void*) ARM_Handler,       /* 30 FPU */
+  .pfnFPU_Handler       = (void*) FPU_Handler,       /* 30 FPU */
   .pvReserved31         = (void*) (0UL),             /* 31 Reserved */
   .pvReserved32         = (void*) (0UL),             /* 32 Reserved */
   .pvReserved33         = (void*) (0UL),             /* 33 Reserved */
@@ -150,7 +150,7 @@ DeviceVectors exception_table=
   .pvReserved45         = (void*) (0UL),             /* 45 Reserved */
   .pvReserved46         = (void*) (0UL),             /* 46 Reserved */
   .pfnUHP_Handler       = (void*) UHP_Handler,       /* 47 USB OHCI */
-  .pfnUDP_Handler       = (void*) UDP_Handler,       /* 48 USB Device FS */
+  .pfnUSBDEV_Handler    = (void*) USBDEV_Handler,    /* 48 USB Device FS */
   .pfnCRCCU_Handler     = (void*) CRCCU_Handler      /* 49 CRCCU */
 };
 

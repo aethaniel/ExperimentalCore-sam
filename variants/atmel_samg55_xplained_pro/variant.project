@@ -57,7 +57,7 @@
         <File Name="../../cores/arduino/arch_arm/core_main.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.c"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.h"/>
-        <File Name="../../cores/arduino/arch_arm/IPAddress.cpp"/>
+        <File Name="../../cores/arduino/arch_arm/CoreIPAddress.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.c"/>
         <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.h"/>
         <File Name="../../cores/arduino/arch_arm/core_hooks.h"/>
@@ -66,7 +66,7 @@
         <File Name="../../cores/arduino/arch_arm/CorePrintable.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreStream.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreString.hpp"/>
-        <File Name="../../cores/arduino/arch_arm/IPAddress.hpp"/>
+        <File Name="../../cores/arduino/arch_arm/CoreIPAddress.hpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.hpp"/>
       </VirtualDirectory>
@@ -74,10 +74,10 @@
         <File Name="../../cores/arduino/arch_common/core_binary.h"/>
         <File Name="../../cores/arduino/arch_common/core_constants.h"/>
         <File Name="../../cores/arduino/arch_common/core_new.cpp"/>
-        <File Name="../../cores/arduino/arch_common/Client.hpp"/>
-        <File Name="../../cores/arduino/arch_common/Server.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreClient.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreServer.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
-        <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreUdp.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_reset.h"/>
         <File Name="../../cores/arduino/arch_common/core_watchdog.h"/>
       </VirtualDirectory>
@@ -225,7 +225,7 @@
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/ssc.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/supc.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/tc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/udp.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usbdev.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/uhp.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/wdt.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55.h"/>

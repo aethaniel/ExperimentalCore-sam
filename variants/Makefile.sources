@@ -2,11 +2,6 @@
 #| Source files                                                                          |
 #|---------------------------------------------------------------------------------------|
 SRC_DISCARDED=\
-$(CORE_ARM_PATH)/IPAddress.cpp     \
-$(CORE_ARM_PATH)/IPAddress.h       \
-$(CORE_COMMON_PATH)/Server.h       \
-$(CORE_COMMON_PATH)/Udp.h          \
-$(CORE_COMMON_PATH)/Client.h       \
 $(CORE_SAM_PATH)/CoreSerial.cpp
 
 SRC_ARCH_ARM=\
@@ -33,7 +28,9 @@ $(CORE_ARM_PATH)/CoreRingBuffer.hpp     \
 $(CORE_ARM_PATH)/CoreStream.cpp         \
 $(CORE_ARM_PATH)/CoreStream.hpp         \
 $(CORE_ARM_PATH)/CoreString.cpp         \
-$(CORE_ARM_PATH)/CoreString.hpp
+$(CORE_ARM_PATH)/CoreString.hpp         \
+$(CORE_ARM_PATH)/CoreIPAddress.cpp      \
+$(CORE_ARM_PATH)/CoreIPAddress.hpp
 
 SRC_ARCH_COMMON=\
 $(CORE_COMMON_PATH)/core_watchdog.h     \
@@ -41,7 +38,10 @@ $(CORE_COMMON_PATH)/core_reset.h        \
 $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.cpp        \
-$(CORE_COMMON_PATH)/core_new.hpp
+$(CORE_COMMON_PATH)/core_new.hpp        \
+$(CORE_COMMON_PATH)/CoreServer.hpp      \
+$(CORE_COMMON_PATH)/CoreUdp.hpp         \
+$(CORE_COMMON_PATH)/CoreClient.hpp
 
 SRC_ARCH_AVR=\
 $(CORE_AVR_PATH)/core_dtostrf.c         \

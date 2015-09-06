@@ -80,7 +80,7 @@ void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
 void DACC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 void ACC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 void ARM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UDP_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
+void USBDEV_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
 void PWM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
 void CAN0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
 #ifdef CAN1
@@ -169,7 +169,7 @@ DeviceVectors exception_table=
   .pfnDACC_Handler   = (void*) DACC_Handler,   /* 32 Digital To Analog Converter */
   .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
   .pfnARM_Handler    = (void*) ARM_Handler,    /* 34 FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC */
-  .pfnUDP_Handler    = (void*) UDP_Handler,    /* 35 USB DEVICE */
+  .pfnUSBDEV_Handler = (void*) USBDEV_Handler, /* 35 USB DEVICE */
   .pfnPWM_Handler    = (void*) PWM_Handler,    /* 36 PWM */
   .pfnCAN0_Handler   = (void*) CAN0_Handler,   /* 37 CAN0 */
 #ifdef CAN1

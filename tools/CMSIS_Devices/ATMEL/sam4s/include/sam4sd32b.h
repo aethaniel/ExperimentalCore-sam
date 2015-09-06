@@ -41,7 +41,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 #include <stdint.h>
 
@@ -92,7 +92,7 @@ typedef enum IRQn
   PWM_IRQn             = 31, /**< 31 SAM4SD32B Pulse Width Modulation (PWM) */
   CRCCU_IRQn           = 32, /**< 32 SAM4SD32B CRC Calculation Unit (CRCCU) */
   ACC_IRQn             = 33, /**< 33 SAM4SD32B Analog Comparator (ACC) */
-  UDP_IRQn             = 34, /**< 34 SAM4SD32B USB Device Port (UDP) */
+  USBDEV_IRQn          = 34, /**< 34 SAM4SD32B USB Device Port (USBDEV) */
 
   PERIPH_COUNT_IRQn    = 35  /**< Number of peripheral IDs */
 } IRQn_Type;
@@ -101,7 +101,7 @@ typedef struct _DeviceVectors
 {
   /* Stack pointer */
   void* pvStack;
-  
+
   /* Cortex-M handlers */
   void* pfnReset_Handler;
   void* pfnNMI_Handler;
@@ -154,7 +154,7 @@ typedef struct _DeviceVectors
   void* pfnPWM_Handler;    /* 31 Pulse Width Modulation */
   void* pfnCRCCU_Handler;  /* 32 CRC Calculation Unit */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
-  void* pfnUDP_Handler;    /* 34 USB Device Port */
+  void* pfnUSBDEV_Handler; /* 34 USB Device Port */
 } DeviceVectors;
 
 /* Cortex-M4 core handlers */
@@ -194,7 +194,7 @@ void TWI0_Handler       ( void );
 void TWI1_Handler       ( void );
 void UART0_Handler      ( void );
 void UART1_Handler      ( void );
-void UDP_Handler        ( void );
+void USBDEV_Handler     ( void );
 void USART0_Handler     ( void );
 void USART1_Handler     ( void );
 void WDT_Handler        ( void );
@@ -249,7 +249,7 @@ void WDT_Handler        ( void );
 #include "component/tc.h"
 #include "component/twi.h"
 #include "component/uart.h"
-#include "component/udp.h"
+#include "component/usbdev.h"
 #include "component/usart.h"
 #include "component/wdt.h"
 /*@}*/
@@ -287,7 +287,7 @@ void WDT_Handler        ( void );
 #define ID_PWM    (31) /**< \brief Pulse Width Modulation (PWM) */
 #define ID_CRCCU  (32) /**< \brief CRC Calculation Unit (CRCCU) */
 #define ID_ACC    (33) /**< \brief Analog Comparator (ACC) */
-#define ID_UDP    (34) /**< \brief USB Device Port (UDP) */
+#define ID_USBDEV (34) /**< \brief USB Device Port (USBDEV) */
 
 #define ID_PERIPH_COUNT (35) /**< \brief Number of peripheral IDs */
 /*@}*/
@@ -297,6 +297,7 @@ void WDT_Handler        ( void );
 /* ************************************************************************** */
 /** \addtogroup SAM4SD32B_base Peripheral Base Address Definitions */
 /*@{*/
+
 #define HSMCI      ((Hsmci  *)0x40000000U) /**< \brief (HSMCI     ) Base Address */
 #define PDC_HSMCI  ((Pdc    *)0x40000100U) /**< \brief (PDC_HSMCI ) Base Address */
 #define SSC        ((Ssc    *)0x40004000U) /**< \brief (SSC       ) Base Address */
@@ -314,7 +315,7 @@ void WDT_Handler        ( void );
 #define PDC_USART0 ((Pdc    *)0x40024100U) /**< \brief (PDC_USART0) Base Address */
 #define USART1     ((Usart  *)0x40028000U) /**< \brief (USART1    ) Base Address */
 #define PDC_USART1 ((Pdc    *)0x40028100U) /**< \brief (PDC_USART1) Base Address */
-#define UDP        ((Udp    *)0x40034000U) /**< \brief (UDP       ) Base Address */
+#define USBDEV     ((USBDev *)0x40034000U) /**< \brief (USBDEV    ) Base Address */
 #define ADC        ((Adc    *)0x40038000U) /**< \brief (ADC       ) Base Address */
 #define PDC_ADC    ((Pdc    *)0x40038100U) /**< \brief (PDC_ADC   ) Base Address */
 #define DACC       ((Dacc   *)0x4003C000U) /**< \brief (DACC      ) Base Address */
@@ -385,6 +386,7 @@ void WDT_Handler        ( void );
 
 #define CHIP_JTAGID       (0x05B3203FUL)
 #define CHIP_CIDR         (0x29970EE0UL)
+#define CHIP_EXID         (0x0UL)
 #define NB_CH_ADC         (10UL)
 #define NB_CH_DAC         (2UL)
 #define USB_DEVICE_MAX_EP (8UL)
