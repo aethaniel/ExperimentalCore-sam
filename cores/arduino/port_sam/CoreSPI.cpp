@@ -11,14 +11,15 @@
 
 #include "CoreSPI.hpp"
 
-SPIClass::SPIClass(Spi *_spi, uint32_t _id, void(*_initCb)(void)) :
-  spi(_spi), id(_id), initCb(_initCb), initialized(false)
+SPIClass::SPIClass(Spi *_spi, uint32_t _id, uint32_t _defaultSS, void(*_initCb)(void)) :
+  spi(_spi), id(_id), defaultSS(_defaultSS), initCb(_initCb), initialized(false)
 {
   // Empty
 }
 
 void SPIClass::begin()
 {
+#if 0
   init();
   // NPCS control is left to the user
 
@@ -26,10 +27,12 @@ void SPIClass::begin()
   setClockDivider(BOARD_SPI_DEFAULT_SS, 21);
   setDataMode(BOARD_SPI_DEFAULT_SS, SPI_MODE0);
   setBitOrder(BOARD_SPI_DEFAULT_SS, MSBFIRST);
+#endif // 0
 }
 
 void SPIClass::begin(uint8_t _pin)
 {
+#if 0
   init();
 
   uint32_t spiPin = BOARD_PIN_TO_SPI_PIN(_pin);
@@ -43,10 +46,12 @@ void SPIClass::begin(uint8_t _pin)
   setClockDivider(_pin, 21);
   setDataMode(_pin, SPI_MODE0);
   setBitOrder(_pin, MSBFIRST);
+#endif // 0
 }
 
 void SPIClass::init()
 {
+#if 0
   if (initialized)
     return;
   interruptMode = 0;
@@ -59,8 +64,10 @@ void SPIClass::init()
   SPI_Configure(spi, id, SPI_MR_MSTR | SPI_MR_PS | SPI_MR_MODFDIS);
   SPI_Enable(spi);
   initialized = true;
+#endif // 0
 }
 
+#if 0
 #ifndef interruptsStatus
 #define interruptsStatus() __interruptsStatus()
 static inline unsigned char __interruptsStatus(void) __attribute__((always_inline, unused));
@@ -76,10 +83,12 @@ static inline unsigned char __interruptsStatus(void)
 
   return 1;
 }
-#endif
+#endif // interruptsStatus
+#endif // 0
 
 void SPIClass::usingInterrupt(uint8_t interruptNumber)
 {
+#if 0
   uint8_t irestore;
 
   irestore = interruptsStatus();
@@ -112,10 +121,12 @@ void SPIClass::usingInterrupt(uint8_t interruptNumber)
     }
   }
   if (irestore) interrupts();
+#endif // 0
 }
 
 void SPIClass::beginTransaction(uint8_t pin, SPISettings settings)
 {
+#if 0
   uint8_t mode = interruptMode;
   if (mode > 0) {
     if (mode < 16) {
@@ -134,10 +145,12 @@ void SPIClass::beginTransaction(uint8_t pin, SPISettings settings)
   //setBitOrder(pin, settings.border);
   //setDataMode(pin, settings.datamode);
   //setClockDivider(pin, settings.clockdiv);
+#endif // 0
 }
 
 void SPIClass::endTransaction(void)
 {
+#if 0
   uint8_t mode = interruptMode;
   if (mode > 0) {
     if (mode < 16) {
@@ -149,41 +162,59 @@ void SPIClass::endTransaction(void)
       if (interruptSave) interrupts();
     }
   }
+#endif // 0
 }
 
-void SPIClass::end(uint8_t _pin) {
+void SPIClass::end(uint8_t _pin)
+{
+#if 0
   uint32_t spiPin = BOARD_PIN_TO_SPI_PIN(_pin);
   // Setting the pin as INPUT will disconnect it from SPI peripheral
   pinMode(spiPin, INPUT);
+#endif // 0
 }
 
-void SPIClass::end() {
+void SPIClass::end(void)
+{
+#if 0
   SPI_Disable(spi);
   initialized = false;
+#endif // 0
 }
 
-void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder) {
+void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder)
+{
+#if 0
   uint32_t ch = BOARD_PIN_TO_SPI_CHANNEL(_pin);
   bitOrder[ch] = _bitOrder;
+#endif // 0
 }
 
-void SPIClass::setDataMode(uint8_t _pin, uint8_t _mode) {
+void SPIClass::setDataMode(uint8_t _pin, uint8_t _mode)
+{
+#if 0
   uint32_t ch = BOARD_PIN_TO_SPI_CHANNEL(_pin);
   mode[ch] = _mode | SPI_CSR_CSAAT;
   // SPI_CSR_DLYBCT(1) keeps CS enabled for 32 MCLK after a completed
   // transfer. Some device needs that for working properly.
   SPI_ConfigureNPCS(spi, ch, mode[ch] | SPI_CSR_SCBR(divider[ch]) | SPI_CSR_DLYBCT(1));
+#endif // 0
 }
 
-void SPIClass::setClockDivider(uint8_t _pin, uint8_t _divider) {
+void SPIClass::setClockDivider(uint8_t _pin, uint8_t _divider)
+{
+#if 0
   uint32_t ch = BOARD_PIN_TO_SPI_CHANNEL(_pin);
   divider[ch] = _divider;
   // SPI_CSR_DLYBCT(1) keeps CS enabled for 32 MCLK after a completed
   // transfer. Some device needs that for working properly.
   SPI_ConfigureNPCS(spi, ch, mode[ch] | SPI_CSR_SCBR(divider[ch]) | SPI_CSR_DLYBCT(1));
+#endif // 0
 }
 
-byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode) {
+byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode)
+{
+#if 0
   uint32_t ch = BOARD_PIN_TO_SPI_CHANNEL(_pin);
   // Reverse bit order
   if (bitOrder[ch] == LSBFIRST)
@@ -205,9 +236,14 @@ byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode) {
   if (bitOrder[ch] == LSBFIRST)
     d = __REV(__RBIT(d));
   return d & 0xFF;
+#endif // 0
+
+  return 0;
 }
 
-void SPIClass::transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode) {
+void SPIClass::transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode)
+{
+#if 0
   if (_count == 0)
     return;
 
@@ -257,18 +293,23 @@ void SPIClass::transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _m
   if (reverse)
     r = __REV(__RBIT(r));
   *buffer = r;
+#endif // 0
 }
 
-void SPIClass::attachInterrupt(void) {
+void SPIClass::attachInterrupt(void)
+{
   // Should be enableInterrupt()
 }
 
-void SPIClass::detachInterrupt(void) {
+void SPIClass::detachInterrupt(void)
+{
   // Should be disableInterrupt()
 }
 
 #if SPI_INTERFACES_COUNT > 0
-static void SPI_0_Init(void) {
+static void SPI_0_Init(void)
+{
+#if 0
   PIO_Configure(
       g_aPinMap[PIN_SPI_MOSI].pPort,
       g_aPinMap[PIN_SPI_MOSI].ulPinType,
@@ -286,6 +327,7 @@ static void SPI_0_Init(void) {
       g_aPinMap[PIN_SPI_SCK].ulPinConfiguration);
 }
 
-SPIClass SPI(SPI_INTERFACE, SPI_INTERFACE_ID, SPI_0_Init);
+SPIClass SPI(SPI_INTERFACE, SPI_INTERFACE_ID, BOARD_SPI_DEFAULT_SS, SPI_0_Init);
+#endif // 0
 #endif // SPI_INTERFACES_COUNT
 
