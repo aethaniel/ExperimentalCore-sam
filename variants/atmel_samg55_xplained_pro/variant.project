@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="atmel_samg55_xplained_pro" InternalType="">
-  <Plugins/>
   <VirtualDirectory Name="variants">
     <File Name="../Makefile.rules"/>
     <File Name="../Makefile.sources"/>
@@ -92,7 +91,7 @@
         <File Name="../../cores/arduino/port_sam/Arduino.h"/>
         <File Name="../../cores/arduino/port_sam/CoreSPI.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreWire.cpp"/>
-        <File Name="../../cores/arduino/port_sam/CoreWire.h"/>
+        <File Name="../../cores/arduino/port_sam/CoreWire.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_analog.c"/>
         <File Name="../../cores/arduino/port_sam/core_analog.h"/>
         <File Name="../../cores/arduino/port_sam/core_delay.c"/>
@@ -231,5 +230,10 @@
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/wdt.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/pio/samg55j19.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/i2sc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdmic.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/spi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/twi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usart.h"/>
   </VirtualDirectory>
 </CodeLite_Project>

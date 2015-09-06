@@ -92,7 +92,7 @@
         <File Name="../../cores/arduino/port_sam/Arduino.h"/>
         <File Name="../../cores/arduino/port_sam/CoreSPI.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreWire.cpp"/>
-        <File Name="../../cores/arduino/port_sam/CoreWire.h"/>
+        <File Name="../../cores/arduino/port_sam/CoreWire.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_analog.c"/>
         <File Name="../../cores/arduino/port_sam/core_analog.h"/>
         <File Name="../../cores/arduino/port_sam/core_delay.c"/>
