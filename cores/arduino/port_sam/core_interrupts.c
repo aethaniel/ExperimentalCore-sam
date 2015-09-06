@@ -37,7 +37,7 @@ static interruptCB callbacksPioE[32];
 #endif // defined PIOE
 
 /* Configure PIO interrupt sources */
-static void __initialize()
+static void interruptInitialize(void)
 {
   int i;
   for (i=0; i<32; i++)
@@ -104,9 +104,11 @@ static void __initialize()
 void attachInterrupt(uint32_t ulPin, void (*callback)(void), uint32_t mode)
 {
   static int enabled = 0;
+
+  /* TODO: this should be done in libc init() function array */
   if (!enabled)
   {
-    __initialize();
+    interruptInitialize();
     enabled = 1;
   }
 
