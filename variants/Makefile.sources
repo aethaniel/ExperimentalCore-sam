@@ -1,8 +1,7 @@
 #|---------------------------------------------------------------------------------------|
 #| Source files                                                                          |
 #|---------------------------------------------------------------------------------------|
-SRC_DISCARDED=\
-$(CORE_SAM_PATH)/CoreSerial.cpp
+SRC_DISCARDED=
 
 SRC_ARCH_ARM=\
 $(CORE_ARM_PATH)/core_init.h            \
@@ -73,6 +72,7 @@ $(CORE_SAM_PATH)/CoreSerial.hpp         \
 $(CORE_SAM_PATH)/CoreSPI.cpp            \
 $(CORE_SAM_PATH)/CoreSPI.hpp            \
 $(CORE_SAM_PATH)/CoreWire.cpp           \
-$(CORE_SAM_PATH)/CoreWire.hpp
+$(CORE_SAM_PATH)/CoreWire.hpp           \
+$(CORE_SAM_PATH)/CoreSerial.cpp
 
 SOURCES=$(SRC_ARCH_ARM) $(SRC_ARCH_COMMON) $(SRC_ARCH_AVR) $(SRC_PORT_SAM)

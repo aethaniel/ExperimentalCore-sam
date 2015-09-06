@@ -29,7 +29,8 @@
 
 class RingBuffer
 {
-  protected:
+//  protected:
+  public:
     uint8_t _aucBuffer[SERIAL_BUFFER_SIZE] ;
     int _iHead ;
     int _iTail ;
