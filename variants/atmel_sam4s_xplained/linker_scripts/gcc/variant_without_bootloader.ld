@@ -86,11 +86,11 @@ SECTIONS
     *(.ctors)
 
     /* .dtors */
- 		*crtbegin.o(.dtors)
- 		*crtbegin?.o(.dtors)
- 		*(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
- 		*(SORT(.dtors.*))
- 		*(.dtors)
+    *crtbegin.o(.dtors)
+    *crtbegin?.o(.dtors)
+    *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+    *(SORT(.dtors.*))
+    *(.dtors)
 
     *(.rodata*)
 
@@ -148,6 +148,7 @@ SECTIONS
   .data : AT (__etext)
   {
     __data_start__ = .;
+    KEEP(*(.ram_isr_vector))
     *(vtable)
     *(.data*)
 

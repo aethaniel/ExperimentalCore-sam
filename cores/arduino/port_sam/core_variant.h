@@ -28,7 +28,9 @@ extern "C" {
 #include "sam.h"
 #include "core_constants.h"
 
+/* The 2 following symbols must be present into variant_startup.c */
 extern uint32_t SystemCoreClock;
+extern DeviceVectors exception_table;
 
 /* Definitions and types for pins */
 typedef enum _EAnalogChannel

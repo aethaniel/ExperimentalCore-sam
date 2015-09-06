@@ -29,6 +29,9 @@
  */
 int main( void )
 {
+  /* Setup vectors in RAM */
+  vectorSetOrigin( &exception_table );
+
   /* Initialize watchdog */
   watchdogSetup();
 

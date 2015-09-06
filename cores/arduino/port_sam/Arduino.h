@@ -81,6 +81,7 @@ extern void loop( void ) ;
 #include "core_shift.h"
 #include "core_interrupts.h"
 #include "core_watchdog.h"
+#include "core_cortex_vectors.h"
 
 // USB Device
 /*

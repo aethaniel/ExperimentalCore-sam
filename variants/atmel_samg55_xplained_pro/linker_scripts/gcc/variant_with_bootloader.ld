@@ -148,6 +148,7 @@ SECTIONS
   .data : AT (__etext)
   {
     __data_start__ = .;
+    KEEP(*(.ram_isr_vector))
     *(vtable)
     *(.data*)
 
