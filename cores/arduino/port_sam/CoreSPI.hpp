@@ -16,6 +16,15 @@
 #include "core_constants.h"
 //#include <stdio.h>
 
+#ifndef SPI_INTERFACES_COUNT
+#  define SPI_INTERFACES_COUNT 0
+#endif
+
+#if SPI_INTERFACES_COUNT == 0
+#  define SPI_INTERFACES_COUNT 0
+#  define SPI_CHANNELS_NUM     0
+#endif
+
 // SPI_HAS_TRANSACTION means SPI has
 //   - beginTransaction()
 //   - endTransaction()
@@ -39,95 +48,120 @@
 #define SPI_MODE2 0x03
 #define SPI_MODE3 0x01
 
-enum SPITransferMode {
-	SPI_CONTINUE,
-	SPI_LAST
+enum SPITransferMode
+{
+  SPI_CONTINUE,
+  SPI_LAST
 };
 
-class SPISettings {
+class SPISettings
+{
 public:
-	SPISettings(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) {
-		if (__builtin_constant_p(clock)) {
-			init_AlwaysInline(clock, bitOrder, dataMode);
-		} else {
-			init_MightInline(clock, bitOrder, dataMode);
-		}
-	}
-	SPISettings() { init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0); }
+  SPISettings(uint32_t clock, BitOrder bitOrder, uint8_t dataMode)
+  {
+    if (__builtin_constant_p(clock))
+      {
+      init_AlwaysInline(clock, bitOrder, dataMode);
+    }
+    else
+    {
+      init_MightInline(clock, bitOrder, dataMode);
+    }
+  }
+
+  SPISettings() { init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0); }
+
 private:
-	void init_MightInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) {
-		init_AlwaysInline(clock, bitOrder, dataMode);
-	}
-	void init_AlwaysInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) __attribute__((__always_inline__)) {
-		border = bitOrder;
-		uint8_t div;
-		if (clock < (F_CPU / 255)) {
-			div = 255;
-		} else if (clock >= (F_CPU / 2)) {
-			div = 2;
-		} else {
-			div = (F_CPU / (clock + 1)) + 1;
-		}
-		config = (dataMode & 3) | SPI_CSR_CSAAT | SPI_CSR_SCBR(div) | SPI_CSR_DLYBCT(1);
-	}
-	uint32_t config;
-	BitOrder border;
-	friend class SPIClass;
+  void init_MightInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode)
+  {
+    init_AlwaysInline(clock, bitOrder, dataMode);
+  }
+
+  void init_AlwaysInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) __attribute__((__always_inline__))
+  {
+#if 0
+    border = bitOrder;
+    uint8_t div;
+
+    if (clock < (F_CPU / 255))
+    {
+      div = 255;
+    }
+    else
+    {
+      if (clock >= (F_CPU / 2))
+      {
+        div = 2;
+      }
+      else
+      {
+        div = (F_CPU / (clock + 1)) + 1;
+      }
+    }
+    config = (dataMode & 3) | SPI_CSR_CSAAT | SPI_CSR_SCBR(div) | SPI_CSR_DLYBCT(1);
+#endif // 0
+  }
+
+  uint32_t config;
+  BitOrder border;
+  friend class SPIClass;
 };
 
 
 
-class SPIClass {
+class SPIClass
+{
   public:
-	SPIClass(Spi *_spi, uint32_t _id, void(*_initCb)(void));
+  SPIClass(Spi *_spi, uint32_t _id, uint32_t _defaultSS, void(*_initCb)(void));
 
-	// Transfer functions
-	byte transfer(byte _pin, uint8_t _data, SPITransferMode _mode = SPI_LAST);
-	void transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST);
-	// Transfer functions on default pin BOARD_SPI_DEFAULT_SS
-	byte transfer(uint8_t _data, SPITransferMode _mode = SPI_LAST) { return transfer(BOARD_SPI_DEFAULT_SS, _data, _mode); }
-	void transfer(void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST) { transfer(BOARD_SPI_DEFAULT_SS, _buf, _count, _mode); }
+  // Transfer functions
+  byte transfer(byte _pin, uint8_t _data, SPITransferMode _mode = SPI_LAST);
+  void transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST);
+  // Transfer functions on default pin defaultSS
+  byte transfer(uint8_t _data, SPITransferMode _mode = SPI_LAST) { return transfer(defaultSS, _data, _mode); }
+  void transfer(void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST) { transfer(defaultSS, _buf, _count, _mode); }
 
-	// Transaction Functions
-	void usingInterrupt(uint8_t interruptNumber);
-	void beginTransaction(SPISettings settings) { beginTransaction(BOARD_SPI_DEFAULT_SS, settings); }
-	void beginTransaction(uint8_t pin, SPISettings settings);
-	void endTransaction(void);
+  // Transaction Functions
+  void usingInterrupt(uint8_t interruptNumber);
+  void beginTransaction(SPISettings settings) { beginTransaction(defaultSS, settings); }
+  void beginTransaction(uint8_t pin, SPISettings settings);
+  void endTransaction(void);
 
-	// SPI Configuration methods
-	void attachInterrupt(void);
-	void detachInterrupt(void);
+  // SPI Configuration methods
+  void attachInterrupt(void);
+  void detachInterrupt(void);
 
-	void begin(void);
-	void end(void);
+  void begin(void);
+  void end(void);
 
-	// Attach/Detach pin to/from SPI controller
-	void begin(uint8_t _pin);
-	void end(uint8_t _pin);
+  // Attach/Detach pin to/from SPI controller
+  void begin(uint8_t _pin);
+  void end(uint8_t _pin);
 
-	// These methods sets a parameter on a single pin
-	void setBitOrder(uint8_t _pin, BitOrder);
-	void setDataMode(uint8_t _pin, uint8_t);
-	void setClockDivider(uint8_t _pin, uint8_t);
+  // These methods sets a parameter on a single pin
+  void setBitOrder(uint8_t _pin, BitOrder);
+  void setDataMode(uint8_t _pin, uint8_t);
+  void setClockDivider(uint8_t _pin, uint8_t);
 
-	// These methods sets the same parameters but on default pin BOARD_SPI_DEFAULT_SS
-	void setBitOrder(BitOrder _order) { setBitOrder(BOARD_SPI_DEFAULT_SS, _order); };
-	void setDataMode(uint8_t _mode) { setDataMode(BOARD_SPI_DEFAULT_SS, _mode); };
-	void setClockDivider(uint8_t _div) { setClockDivider(BOARD_SPI_DEFAULT_SS, _div); };
+  // These methods sets the same parameters but on default pin defaultSS
+  void setBitOrder(BitOrder _order) { setBitOrder(defaultSS, _order); };
+  void setDataMode(uint8_t _mode) { setDataMode(defaultSS, _mode); };
+  void setClockDivider(uint8_t _div) { setClockDivider(defaultSS, _div); };
 
   private:
-	void init();
+    void init();
 
-	Spi *spi;
-	uint32_t id;
-	BitOrder bitOrder[SPI_CHANNELS_NUM];
-	uint32_t divider[SPI_CHANNELS_NUM];
-	uint32_t mode[SPI_CHANNELS_NUM];
-	void (*initCb)(void);
-	bool initialized;
-	uint8_t interruptMode;    // 0=none, 1-15=mask, 16=global
-	uint8_t interruptSave;    // temp storage, to restore state
-	uint32_t interruptMask[4];
+    Spi *spi;
+    uint32_t id;
+    uint32_t defaultSS;
+    BitOrder bitOrder[SPI_CHANNELS_NUM];
+    uint32_t divider[SPI_CHANNELS_NUM];
+    uint32_t mode[SPI_CHANNELS_NUM];
+    void (*initCb)(void);
+    bool initialized;
+    uint8_t interruptMode;    // 0=none, 1-15=mask, 16=global
+    uint8_t interruptSave;    // temp storage, to restore state
+    uint32_t interruptMask[4];
 };
 
 #if SPI_INTERFACES_COUNT > 0

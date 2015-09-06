@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /*
- * Board initialization
+ * \brief Board initialization.
  *
  * Good to know:
  *   - At reset, Reset_Handler did the system clock configuration. Core is running at F_CPU MHz.

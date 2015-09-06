@@ -43,9 +43,7 @@
  extern "C" {
 #endif
 
-#if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 #include <stdint.h>
-#endif
 
 /* ************************************************************************** */
 /*   CMSIS DEFINITIONS FOR SAMG55G19 */
@@ -95,7 +93,7 @@ typedef enum IRQn
   TC4_IRQn             = 27, /**< 27 SAMG55G19 Timer/Counter 4 (TC4) */
   TC5_IRQn             = 28, /**< 28 SAMG55G19 Timer/Counter 5 (TC5) */
   ADC_IRQn             = 29, /**< 29 SAMG55G19 Analog To Digital Converter (ADC) */
-  ARM_IRQn             = 30, /**< 30 SAMG55G19 FPU (ARM) */
+  FPU_IRQn             = 30, /**< 30 SAMG55G19 FPU (ARM) */
   WKUP0_IRQn           = 31, /**< 31 SAMG55G19 External interrupt 0 (WKUP0) */
   WKUP1_IRQn           = 32, /**< 32 SAMG55G19 External interrupt 1 (WKUP1) */
   WKUP2_IRQn           = 33, /**< 33 SAMG55G19 External interrupt 2 (WKUP2) */
@@ -113,7 +111,7 @@ typedef enum IRQn
   WKUP14_IRQn          = 45, /**< 45 SAMG55G19 External interrupt 14 (WKUP14) */
   WKUP15_IRQn          = 46, /**< 46 SAMG55G19 External interrupt 15 (WKUP15) */
   UHP_IRQn             = 47, /**< 47 SAMG55G19 USB OHCI (UHP) */
-  UDP_IRQn             = 48, /**< 48 SAMG55G19 USB Device FS (UDP) */
+  USBDEV_IRQn          = 48, /**< 48 SAMG55G19 USB Device FS (USBDEV) */
   CRCCU_IRQn           = 49, /**< 49 SAMG55G19 CRCCU */
   PERIPH_COUNT_IRQn    = 50  /**< Number of peripheral IDs */
 } IRQn_Type;
@@ -171,7 +169,7 @@ typedef struct _DeviceVectors
   void* pfnTC4_Handler;       /* 27 Timer/Counter 4 */
   void* pfnTC5_Handler;       /* 28 Timer/Counter 5 */
   void* pfnADC_Handler;       /* 29 Analog To Digital Converter */
-  void* pfnARM_Handler;       /* 30 FPU */
+  void* pfnFPU_Handler;       /* 30 FPU */
   void* pvReserved31;
   void* pvReserved32;
   void* pvReserved33;
@@ -189,24 +187,8 @@ typedef struct _DeviceVectors
   void* pvReserved45;
   void* pvReserved46;
   void* pfnUHP_Handler;       /* 47 USB OHCI */
-  void* pfnUDP_Handler;       /* 48 USB Device FS */
-  void* pfnCRCCU_Handler;     /*49 CRCCU Device  */
-  void* pvReserved50;
-  void* pvReserved51;
-  void* pvReserved52;
-  void* pvReserved53;
-  void* pvReserved54;
-  void* pvReserved55;
-  void* pvReserved56;
-  void* pvReserved57;
-  void* pvReserved58;
-  void* pvReserved59;
-  void* pvReserved60;
-  void* pvReserved61;
-  void* pvReserved62;
-  void* pvReserved63;         /* UHP */
-  void* pvReserved64;         /* UDP */
-  void* pvReserved65;         /* CRCCU */
+  void* pfnUSBDEV_Handler;    /* 48 USB Device FS */
+  void* pfnCRCCU_Handler;     /* 49 CRCCU Device  */
 } DeviceVectors;
 
 /* Cortex-M4 core handlers */
@@ -244,15 +226,15 @@ void TC2_Handler        ( void );
 void TC3_Handler        ( void );
 void TC4_Handler        ( void );
 void TC5_Handler        ( void );
-void UDP_Handler        ( void );
+void USBDEV_Handler     ( void );
 void UHP_Handler        ( void );
-void FLEXCOM0_Handler      ( void );
-void FLEXCOM1_Handler      ( void );
-void FLEXCOM2_Handler      ( void );
-void FLEXCOM3_Handler      ( void );
-void FLEXCOM4_Handler      ( void );
-void FLEXCOM5_Handler      ( void );
-void FLEXCOM6_Handler      ( void );
+void FLEXCOM0_Handler   ( void );
+void FLEXCOM1_Handler   ( void );
+void FLEXCOM2_Handler   ( void );
+void FLEXCOM3_Handler   ( void );
+void FLEXCOM4_Handler   ( void );
+void FLEXCOM5_Handler   ( void );
+void FLEXCOM6_Handler   ( void );
 void WDT_Handler        ( void );
 /**
  * \brief Configuration of the Cortex-M4 Processor and Core Peripherals
@@ -302,7 +284,7 @@ void WDT_Handler        ( void );
 #include "component/supc.h"
 #include "component/tc.h"
 #include "component/twi.h"
-#include "component/udp.h"
+#include "component/usbdev.h"
 #include "component/uhp.h"
 #include "component/usart.h"
 #include "component/wdt.h"
@@ -344,7 +326,7 @@ void WDT_Handler        ( void );
 #define ID_ADC       (29) /**< \brief Analog To Digital Converter (ADC) */
 #define ID_ARM       (30) /**< \brief FPU (ARM) */
 #define ID_UHP       (47) /**< \brief USB OHCI (UHP) */
-#define ID_UDP       (48) /**< \brief USB Device FS (UDP) */
+#define ID_USBDEV    (48) /**< \brief USB Device FS (USBDEV) */
 #define ID_CRCCU     (49) /**< \brief CRCCU (CRCCU) */
 
 #define ID_PERIPH_COUNT (50) /**< \brief Number of peripheral IDs */
@@ -421,7 +403,7 @@ void WDT_Handler        ( void );
 #define PDC_SPI6    ((Pdc      *)0x40040500U) /**< \brief (PDC_SPI6   ) Base Address */
 #define TWI6        ((Twi      *)0x40040600U) /**< \brief (TWI6       ) Base Address */
 #define PDC_TWI6    ((Pdc      *)0x40040700U) /**< \brief (PDC_TWI6   ) Base Address */
-#define UDP         ((Udp      *)0x40044000U) /**< \brief (UDP        ) Base Address */
+#define USBDEV      ((USBDev   *)0x40044000U) /**< \brief (USBDEV     ) Base Address */
 #define CRCCU       ((Crccu    *)0x40048000U) /**< \brief (CRCCU      ) Base Address */
 #define UHP         ((Uhp      *)0x20400000U) /**< \brief (UHP        ) Base Address */
 #define MATRIX      ((Matrix   *)0x400E0200U) /**< \brief (MATRIX     ) Base Address */
@@ -484,7 +466,6 @@ void WDT_Handler        ( void );
 #define CHIP_FREQ_MAINCK_RC_24MHZ       (24000000UL)
 #define CHIP_FREQ_CPU_MAX               (120000000UL)
 #define CHIP_FREQ_XTAL_32K              (32768UL)
-
 
 /* Embedded Flash Write Wait State */
 #define CHIP_FLASH_WRITE_WAIT_STATE     (8U)

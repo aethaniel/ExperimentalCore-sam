@@ -77,12 +77,16 @@ $(CORE_ARM_PATH)/CorePrintable.hpp      \
 $(CORE_ARM_PATH)/CoreRingBuffer.hpp     \
 $(CORE_ARM_PATH)/CoreStream.hpp         \
 $(CORE_ARM_PATH)/CoreString.hpp         \
+$(CORE_ARM_PATH)/CoreIPAddress.hpp      \
 $(CORE_ARM_PATH)/core_character.h       \
 $(CORE_ARM_PATH)/core_itoa.h            \
 $(CORE_ARM_PATH)/core_reset.h           \
 $(CORE_ARM_PATH)/core_shift.h           \
 $(CORE_ARM_PATH)/core_hooks.h           \
 $(CORE_ARM_PATH)/core_cortex_vectors.h  \
+$(CORE_COMMON_PATH)/CoreServer.hpp      \
+$(CORE_COMMON_PATH)/CoreUdp.hpp         \
+$(CORE_COMMON_PATH)/CoreClient.hpp      \
 $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.hpp        \
@@ -101,6 +105,9 @@ $(CORE_SAM_PATH)/core_private.h         \
 $(CORE_SAM_PATH)/core_pulse.hpp         \
 $(CORE_SAM_PATH)/core_tone.hpp          \
 $(CORE_SAM_PATH)/core_variant.h         \
+$(CORE_SAM_PATH)/CoreSerial.hpp         \
+$(CORE_SAM_PATH)/CoreSPI.hpp            \
+$(CORE_SAM_PATH)/CoreWire.hpp           \
 $(VARIANT_PATH)/pins_arduino.h          \
 $(VARIANT_PATH)/variant.h               \
 $(PROJECT_PATH)/$(PROJECT_NAME).cpp

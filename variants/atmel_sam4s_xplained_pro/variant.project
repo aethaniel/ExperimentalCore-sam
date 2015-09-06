@@ -35,7 +35,7 @@
         <File Name="../../cores/arduino/arch_arm/core_main.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.c"/>
         <File Name="../../cores/arduino/arch_arm/core_shift.h"/>
-        <File Name="../../cores/arduino/arch_arm/IPAddress.cpp"/>
+        <File Name="../../cores/arduino/arch_arm/CoreIPAddress.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.c"/>
         <File Name="../../cores/arduino/arch_arm/core_cortex_vectors.h"/>
         <File Name="../../cores/arduino/arch_arm/core_hooks.h"/>
@@ -44,7 +44,7 @@
         <File Name="../../cores/arduino/arch_arm/CorePrintable.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreStream.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreString.hpp"/>
-        <File Name="../../cores/arduino/arch_arm/IPAddress.hpp"/>
+        <File Name="../../cores/arduino/arch_arm/CoreIPAddress.hpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.hpp"/>
       </VirtualDirectory>
@@ -52,10 +52,10 @@
         <File Name="../../cores/arduino/arch_common/core_binary.h"/>
         <File Name="../../cores/arduino/arch_common/core_constants.h"/>
         <File Name="../../cores/arduino/arch_common/core_new.cpp"/>
-        <File Name="../../cores/arduino/arch_common/Client.hpp"/>
-        <File Name="../../cores/arduino/arch_common/Server.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreClient.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreServer.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
-        <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
+        <File Name="../../cores/arduino/arch_common/CoreUdp.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_reset.h"/>
         <File Name="../../cores/arduino/arch_common/core_watchdog.h"/>
       </VirtualDirectory>
@@ -69,7 +69,7 @@
         <File Name="../../cores/arduino/port_sam/Arduino.h"/>
         <File Name="../../cores/arduino/port_sam/CoreSPI.cpp"/>
         <File Name="../../cores/arduino/port_sam/CoreWire.cpp"/>
-        <File Name="../../cores/arduino/port_sam/CoreWire.h"/>
+        <File Name="../../cores/arduino/port_sam/CoreWire.hpp"/>
         <File Name="../../cores/arduino/port_sam/core_analog.c"/>
         <File Name="../../cores/arduino/port_sam/core_analog.h"/>
         <File Name="../../cores/arduino/port_sam/core_delay.c"/>
@@ -185,7 +185,6 @@
   </Settings>
   <VirtualDirectory Name="product headers">
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/sam4sd32c.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/system_sam4s.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/acc.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/adc.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/chipid.h"/>
@@ -210,7 +209,7 @@
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/tc.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/twi.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/uart.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/udp.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/usbdev.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/usart.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/component/wdt.h"/>
     <File Name="../../tools/CMSIS_Devices/ATMEL/sam4s/include/sam4s.h"/>

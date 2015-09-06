@@ -43,9 +43,7 @@
  extern "C" {
 #endif
 
-#if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 #include <stdint.h>
-#endif
 
 /* ************************************************************************** */
 /*   CMSIS DEFINITIONS FOR SAM4E16E */
@@ -101,7 +99,7 @@ typedef enum IRQn
   DACC_IRQn            = 32, /**< 32 SAM4E16E Digital To Analog Converter (DACC) */
   ACC_IRQn             = 33, /**< 33 SAM4E16E Analog Comparator (ACC) */
   ARM_IRQn             = 34, /**< 34 SAM4E16E FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC (ARM) */
-  UDP_IRQn             = 35, /**< 35 SAM4E16E USB DEVICE (UDP) */
+  USBDEV_IRQn          = 35, /**< 35 SAM4E16E USB DEVICE (USBDEV) */
   PWM_IRQn             = 36, /**< 36 SAM4E16E PWM (PWM) */
   CAN0_IRQn            = 37, /**< 37 SAM4E16E CAN0 (CAN0) */
   CAN1_IRQn            = 38, /**< 38 SAM4E16E CAN1 (CAN1) */
@@ -170,7 +168,7 @@ typedef struct _DeviceVectors
   void* pfnDACC_Handler;   /* 32 Digital To Analog Converter */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
   void* pfnARM_Handler;    /* 34 FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC */
-  void* pfnUDP_Handler;    /* 35 USB DEVICE */
+  void* pfnUSBDEV_Handler; /* 35 USB DEVICE */
   void* pfnPWM_Handler;    /* 36 PWM */
   void* pfnCAN0_Handler;   /* 37 CAN0 */
   void* pfnCAN1_Handler;   /* 38 CAN1 */
@@ -233,7 +231,7 @@ void TWI0_Handler       ( void );
 void TWI1_Handler       ( void );
 void UART0_Handler      ( void );
 void UART1_Handler      ( void );
-void UDP_Handler        ( void );
+void USBDEV_Handler     ( void );
 void USART0_Handler     ( void );
 void USART1_Handler     ( void );
 void WDT_Handler        ( void );
@@ -292,7 +290,7 @@ void WDT_Handler        ( void );
 #include "component/tc.h"
 #include "component/twi.h"
 #include "component/uart.h"
-#include "component/udp.h"
+#include "component/usbdev.h"
 #include "component/usart.h"
 #include "component/wdt.h"
 /*@}*/
@@ -309,7 +307,7 @@ void WDT_Handler        ( void );
 #define ID_RTT    ( 3) /**< \brief Real Time Timer (RTT) */
 #define ID_WDT    ( 4) /**< \brief Watchdog/Dual Watchdog Timer (WDT) */
 #define ID_PMC    ( 5) /**< \brief Power Management Controller (PMC) */
-#define ID_EFC0   ( 6) /**< \brief Enhanced Embedded Flash Controller (EFC) */
+#define ID_EFC0   ( 6) /**< \brief Enhanced Embedded Flash Controller (EFC0) */
 #define ID_UART0  ( 7) /**< \brief UART 0 (UART0) */
 #define ID_SMC    ( 8) /**< \brief Static Memory Controller (SMC) */
 #define ID_PIOA   ( 9) /**< \brief Parallel I/O Controller A (PIOA) */
@@ -338,7 +336,7 @@ void WDT_Handler        ( void );
 #define ID_DACC   (32) /**< \brief Digital To Analog Converter (DACC) */
 #define ID_ACC    (33) /**< \brief Analog Comparator (ACC) */
 #define ID_ARM    (34) /**< \brief FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC (ARM) */
-#define ID_UDP    (35) /**< \brief USB DEVICE (UDP) */
+#define ID_USBDEV (35) /**< \brief USB DEVICE (USBDEV) */
 #define ID_PWM    (36) /**< \brief PWM (PWM) */
 #define ID_CAN0   (37) /**< \brief CAN0 (CAN0) */
 #define ID_CAN1   (38) /**< \brief CAN1 (CAN1) */
@@ -366,7 +364,7 @@ void WDT_Handler        ( void );
 #define PDC_UART1  ((Pdc    *)0x40060700U) /**< \brief (PDC_UART1 ) Base Address */
 #define HSMCI      ((Hsmci  *)0x40080000U) /**< \brief (HSMCI     ) Base Address */
 #define PDC_HSMCI  ((Pdc    *)0x40080100U) /**< \brief (PDC_HSMCI ) Base Address */
-#define UDP        ((Udp    *)0x40084000U) /**< \brief (UDP       ) Base Address */
+#define USBDEV     ((USBDev *)0x40084000U) /**< \brief (USBDEV    ) Base Address */
 #define SPI        ((Spi    *)0x40088000U) /**< \brief (SPI       ) Base Address */
 #define PDC_SPI    ((Pdc    *)0x40088100U) /**< \brief (PDC_SPI   ) Base Address */
 #define TC0        ((Tc     *)0x40090000U) /**< \brief (TC0       ) Base Address */
@@ -479,7 +477,7 @@ void WDT_Handler        ( void );
 #define CHIP_FREQ_FWS_5                 (123000000UL) /**< \brief Maximum operating frequency when FWS is 5 */
 
 /* HYSTeresis levels: please refer to Electrical Characteristics */
-#define ACC_ACR_HYST_50MV_MAX	          (0x01UL)
+#define ACC_ACR_HYST_50MV_MAX	        (0x01UL)
 #define ACC_ACR_HYST_90MV_MAX           (0x11UL)
 
 #ifdef __cplusplus
