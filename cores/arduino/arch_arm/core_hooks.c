@@ -25,10 +25,11 @@
  * Its defined as a weak symbol and it can be redefined to implement a
  * real cooperative scheduler.
  */
-static void __empty() {
+static void hook_empty(void)
+{
 	// Empty
 }
-void yield(void) __attribute__ ((weak, alias("__empty")));
+void yield(void) __attribute__ ((weak, alias("hook_empty")));
 
 /**
  * SysTick hook
@@ -36,11 +37,12 @@ void yield(void) __attribute__ ((weak, alias("__empty")));
  * This function is called from SysTick handler, before the default
  * handler provided by Arduino.
  */
-static int __false() {
+static int hook_false(void)
+{
 	// Return false
 	return 0;
 }
-int sysTickHook(void) __attribute__ ((weak, alias("__false")));
+int sysTickHook(void) __attribute__ ((weak, alias("hook_false")));
 
 /**
  * SVC hook
@@ -49,10 +51,10 @@ int sysTickHook(void) __attribute__ ((weak, alias("__false")));
  * These functions are called from SVC handler, and PensSV handler.
  * Default action is halting.
  */
-static void __halt() {
+static void hook_halt(void)
+{
 	// Halts
-	while (1)
-		;
+	while (1);
 }
-void svcHook(void)    __attribute__ ((weak, alias("__halt")));
-void pendSVHook(void) __attribute__ ((weak, alias("__halt")));
+void svcHook(void)    __attribute__ ((weak, alias("hook_halt")));
+void pendSVHook(void) __attribute__ ((weak, alias("hook_halt")));
