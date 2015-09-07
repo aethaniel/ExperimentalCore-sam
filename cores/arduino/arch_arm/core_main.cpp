@@ -42,9 +42,11 @@ int main( void )
   initVariant();
 
   delay(1);
+#if 0
 #if defined(USBCON)
   USBDevice.init();
   USBDevice.attach();
+#endif
 #endif
 
   setup();

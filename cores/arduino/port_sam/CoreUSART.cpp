@@ -15,7 +15,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
+#if 0
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -50,4 +50,4 @@ void USARTClass::begin(const uint32_t dwBaudRate, const USARTModes config)
   modeReg |= US_MR_USART_MODE_NORMAL | US_MR_USCLKS_MCK | US_MR_CHMODE_NORMAL;
   init(dwBaudRate, modeReg);
 }
-
+#endif // TODO
