@@ -142,6 +142,28 @@ atmel_samg55_xplained_pro_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PI
 atmel_samg55_xplained_pro_dbg.bootloader.tool=openocd
 atmel_samg55_xplained_pro_dbg.bootloader.file=openblt/atmel_samg55_xplained_pro.bin
 
+logos_arachnio_due.name=Logos Arachnio Due (Native Port)
+logos_arachnio_due.vid.0=0x1366
+logos_arachnio_due.pid.0=0x0105
+logos_arachnio_due.upload.tool=bossac
+logos_arachnio_due.upload.protocol=sam-ba
+logos_arachnio_due.upload.maximum_size=131072
+logos_arachnio_due.upload.use_1200bps_touch=false
+logos_arachnio_due.upload.wait_for_upload_port=false
+logos_arachnio_due.upload.native_usb=true
+logos_arachnio_due.build.mcu=cortex-m4
+logos_arachnio_due.build.f_cpu=120000000L
+logos_arachnio_due.build.usb_product="Arachnio Due"
+logos_arachnio_due.build.board=SAM_ARACHNIO_DUE
+logos_arachnio_due.build.core=arduino
+logos_arachnio_due.build.extra_flags=-D__SAM4S2A__ -mthumb {build.usb_flags}
+logos_arachnio_due.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
+logos_arachnio_due.build.openocdscript=openocd_scripts/variant.cfg
+logos_arachnio_due.build.variant=logos_arachnio_due
+logos_arachnio_due.build.vid=0x2341
+logos_arachnio_due.build.pid=0x003e
+logos_arachnio_due.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+
 logos_arachnio_due_dbg.name=Logos Arachnio Due (Programming Port)
 logos_arachnio_due_dbg.vid.0=0x1366
 logos_arachnio_due_dbg.pid.0=0x0105
