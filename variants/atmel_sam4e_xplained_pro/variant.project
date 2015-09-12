@@ -44,7 +44,7 @@
         <File Name="../../cores/arduino/arch_arm/CorePrintable.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreStream.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreString.hpp"/>
-        <File Name="../../cores/arduino/arch_arm/CoreIPAddress.hpp"/>
+        <File Name="../../cores/arduino/arch_arm/IPAddress.hpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.hpp"/>
       </VirtualDirectory>
@@ -52,10 +52,10 @@
         <File Name="../../cores/arduino/arch_common/core_binary.h"/>
         <File Name="../../cores/arduino/arch_common/core_constants.h"/>
         <File Name="../../cores/arduino/arch_common/core_new.cpp"/>
-        <File Name="../../cores/arduino/arch_common/CoreClient.hpp"/>
-        <File Name="../../cores/arduino/arch_common/CoreServer.hpp"/>
+        <File Name="../../cores/arduino/arch_common/Client.hpp"/>
+        <File Name="../../cores/arduino/arch_common/Server.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_new.hpp"/>
-        <File Name="../../cores/arduino/arch_common/CoreUdp.hpp"/>
+        <File Name="../../cores/arduino/arch_common/Udp.hpp"/>
         <File Name="../../cores/arduino/arch_common/core_reset.h"/>
         <File Name="../../cores/arduino/arch_common/core_watchdog.h"/>
       </VirtualDirectory>

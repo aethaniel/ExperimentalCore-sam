@@ -17,7 +17,7 @@
 */
 
 #include "Arduino.h"
-#include "CoreIPAddress.hpp"
+#include "IPAddress.hpp"
 
 IPAddress::IPAddress()
 {

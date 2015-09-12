@@ -36,7 +36,7 @@
 #define _ARDUINO_CORE_NETWORK_UDP_H_
 
 #include "CoreStream.hpp"
-#include "CoreIPAddress.hpp"
+#include "IPAddress.hpp"
 
 class UDP : public Stream {
 

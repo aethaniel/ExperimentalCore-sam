@@ -28,8 +28,8 @@ $(CORE_ARM_PATH)/CoreStream.cpp         \
 $(CORE_ARM_PATH)/CoreStream.hpp         \
 $(CORE_ARM_PATH)/CoreString.cpp         \
 $(CORE_ARM_PATH)/CoreString.hpp         \
-$(CORE_ARM_PATH)/CoreIPAddress.cpp      \
-$(CORE_ARM_PATH)/CoreIPAddress.hpp
+$(CORE_ARM_PATH)/IPAddress.cpp          \
+$(CORE_ARM_PATH)/IPAddress.hpp
 
 SRC_ARCH_COMMON=\
 $(CORE_COMMON_PATH)/core_watchdog.h     \
@@ -38,9 +38,9 @@ $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.cpp        \
 $(CORE_COMMON_PATH)/core_new.hpp        \
-$(CORE_COMMON_PATH)/CoreServer.hpp      \
-$(CORE_COMMON_PATH)/CoreUdp.hpp         \
-$(CORE_COMMON_PATH)/CoreClient.hpp
+$(CORE_COMMON_PATH)/Server.hpp          \
+$(CORE_COMMON_PATH)/Udp.hpp             \
+$(CORE_COMMON_PATH)/Client.hpp
 
 SRC_ARCH_AVR=\
 $(CORE_AVR_PATH)/core_dtostrf.c         \
