@@ -1,0 +1,6 @@
+Debug
+Release
+*.o
+*.d
+*.lst
+lib*_symbols.lst
