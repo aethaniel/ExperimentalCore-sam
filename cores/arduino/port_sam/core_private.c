@@ -39,6 +39,7 @@ int pinPeripheral( uint32_t pin, EGPIOType ulPeripheral )
 #if (SAM3XA_SERIES)
       pPort->pGPIO->PIO_ABSR&=~mask & pPort->pGPIO->PIO_ABSR;
 #endif /* (SAM3XA_SERIES) */
+      pPort->pGPIO->PIO_PDR=mask;
     break ;
 
     case GPIO_PERIPH_B:
@@ -50,12 +51,14 @@ int pinPeripheral( uint32_t pin, EGPIOType ulPeripheral )
 #if (SAM3XA_SERIES)
       pPort->pGPIO->PIO_ABSR=mask | pPort->pGPIO->PIO_ABSR;
 #endif /* (SAM3XA_SERIES) */
+      pPort->pGPIO->PIO_PDR=mask;
     break ;
 
 #if !(SAM3XA_SERIES || SAMG55_SERIES)
     case GPIO_PERIPH_C:
       pPort->pGPIO->PIO_ABCDSR[0]&=~mask & pPort->pGPIO->PIO_ABCDSR[0];
       pPort->pGPIO->PIO_ABCDSR[1]=mask | pPort->pGPIO->PIO_ABCDSR[1];
+      pPort->pGPIO->PIO_PDR=mask;
     break ;
 #endif /* (SAM3XA_SERIES) */
 
@@ -63,6 +66,7 @@ int pinPeripheral( uint32_t pin, EGPIOType ulPeripheral )
     case GPIO_PERIPH_D:
       pPort->pGPIO->PIO_ABCDSR[0]=mask | pPort->pGPIO->PIO_ABCDSR[0];
       pPort->pGPIO->PIO_ABCDSR[1]=mask | pPort->pGPIO->PIO_ABCDSR[1];
+      pPort->pGPIO->PIO_PDR=mask;
     break ;
 #endif /* (SAM3XA_SERIES) */
 
