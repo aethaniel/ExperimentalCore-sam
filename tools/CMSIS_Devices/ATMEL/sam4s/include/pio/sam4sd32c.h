@@ -112,11 +112,6 @@
 /* ========== Pio definition for ADC peripheral ========== */
 #define PIO_PA17X1_AD0      (1u << 17) /**< \brief Adc signal: AD0 */
 #define PIO_PA18X1_AD1      (1u << 18) /**< \brief Adc signal: AD1 */
-#define PIO_PC13X1_AD10     (1u << 13) /**< \brief Adc signal: AD10 */
-#define PIO_PC15X1_AD11     (1u << 15) /**< \brief Adc signal: AD11 */
-#define PIO_PC12X1_AD12     (1u << 12) /**< \brief Adc signal: AD12 */
-#define PIO_PC29X1_AD13     (1u << 29) /**< \brief Adc signal: AD13 */
-#define PIO_PC30X1_AD14     (1u << 30) /**< \brief Adc signal: AD14 */
 #define PIO_PA19X1_AD2      (1u << 19) /**< \brief Adc signal: AD2/WKUP9 */
 #define PIO_PA19X1_WKUP9    (1u << 19) /**< \brief Adc signal: AD2/WKUP9 */
 #define PIO_PA20X1_AD3      (1u << 20) /**< \brief Adc signal: AD3/WKUP10 */
@@ -130,6 +125,11 @@
 #define PIO_PB3X1_AD7       (1u << 3)  /**< \brief Adc signal: AD7 */
 #define PIO_PA21X1_AD8      (1u << 21) /**< \brief Adc signal: AD8 */
 #define PIO_PA22X1_AD9      (1u << 22) /**< \brief Adc signal: AD9 */
+#define PIO_PC13X1_AD10     (1u << 13) /**< \brief Adc signal: AD10 */
+#define PIO_PC15X1_AD11     (1u << 15) /**< \brief Adc signal: AD11 */
+#define PIO_PC12X1_AD12     (1u << 12) /**< \brief Adc signal: AD12 */
+#define PIO_PC29X1_AD13     (1u << 29) /**< \brief Adc signal: AD13 */
+#define PIO_PC30X1_AD14     (1u << 30) /**< \brief Adc signal: AD14 */
 #define PIO_PA8B_ADTRG      (1u << 8)  /**< \brief Adc signal: ADTRG */
 /* ========== Pio definition for DACC peripheral ========== */
 #define PIO_PB13X1_DAC0     (1u << 13) /**< \brief Dacc signal: DAC0 */

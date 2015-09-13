@@ -56,6 +56,7 @@ typedef enum IRQn
 {
 /******  Cortex-M4 Processor Exceptions Numbers ******************************/
   NonMaskableInt_IRQn   = -14, /**<  2 Non Maskable Interrupt                */
+  HardFault_IRQn        = -13, /**<  3 HardFault Interrupt                   */
   MemoryManagement_IRQn = -12, /**<  4 Cortex-M4 Memory Management Interrupt */
   BusFault_IRQn         = -11, /**<  5 Cortex-M4 Bus Fault Interrupt         */
   UsageFault_IRQn       = -10, /**<  6 Cortex-M4 Usage Fault Interrupt       */
@@ -64,7 +65,7 @@ typedef enum IRQn
   PendSV_IRQn           = -2,  /**< 14 Cortex-M4 Pend SV Interrupt           */
   SysTick_IRQn          = -1,  /**< 15 Cortex-M4 System Tick Interrupt       */
 /******  SAM4S4B specific Interrupt Numbers *********************************/
-  
+
   SUPC_IRQn            =  0, /**<  0 SAM4S4B Supply Controller (SUPC) */
   RSTC_IRQn            =  1, /**<  1 SAM4S4B Reset Controller (RSTC) */
   RTC_IRQn             =  2, /**<  2 SAM4S4B Real Time Clock (RTC) */
@@ -198,7 +199,7 @@ void USART1_Handler     ( void );
 void WDT_Handler        ( void );
 
 /**
- * \brief Configuration of the Cortex-M4 Processor and Core Peripherals 
+ * \brief Configuration of the Cortex-M4 Processor and Core Peripherals
  */
 
 #define __CM4_REV              0x0001 /**< SAM4S4B core revision number ([15:8] revision number, [7:0] patch number) */
