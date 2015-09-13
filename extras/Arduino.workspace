@@ -4,17 +4,19 @@
   <Project Name="arduino_due" Path="../variants/arduino_due/variant.project" Active="No"/>
   <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_xplained" Path="../variants/atmel_sam4s_xplained/variant.project" Active="No"/>
-  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_wpir_rd" Path="../variants/atmel_sam4s_wpir_rd/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/variant.project" Active="Yes"/>
   <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
   <Project Name="logos_arachnio_due" Path="../variants/logos_arachnio_due/variant.project" Active="No"/>
   <Project Name="poppy_core" Path="../variants/poppy_core/variant.project" Active="No"/>
-  <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="Yes"/>
+  <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="No"/>
   <Environment>
     <![CDATA[]]>
   </Environment>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="atmel_sam4s_xplained" ConfigName="Debug"/>
+      <Project Name="atmel_sam4s_wpir_rd" ConfigName="Debug"/>
       <Project Name="atmel_sam4s_xplained_pro" ConfigName="Debug"/>
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Debug"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Debug"/>
@@ -25,6 +27,7 @@
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="atmel_sam4s_xplained" ConfigName="Release"/>
+      <Project Name="atmel_sam4s_wpir_rd" ConfigName="Release"/>
       <Project Name="atmel_sam4s_xplained_pro" ConfigName="Release"/>
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Release"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Release"/>
