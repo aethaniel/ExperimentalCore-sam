@@ -247,9 +247,9 @@ static const uint8_t CAN1TX = 89;
 #ifdef __cplusplus
 
 extern SAMSerial Serial;
-//extern SAMSerial Serial1;
-//extern SAMSerial Serial2;
-//extern SAMSerial Serial3;
+extern SAMSerial Serial1;
+extern SAMSerial Serial2;
+extern SAMSerial Serial3;
 
 #endif
 

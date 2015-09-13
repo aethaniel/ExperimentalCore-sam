@@ -75,7 +75,7 @@ class SAMSerial : public HardwareSerial
       Mode_7S2 = US_MR_CHRL_7_BIT | US_MR_PAR_SPACE | US_MR_NBSTOP_2_BIT,
       Mode_8S2 = US_MR_CHRL_8_BIT | US_MR_PAR_SPACE | US_MR_NBSTOP_2_BIT,
     };
-    SAMSerial(Usart* pUsart, IRQn_Type irq, uint32_t id, uint32_t isUART);
+    SAMSerial(Usart* pUsart, IRQn_Type irq, void (*irq_handler)(void), uint32_t isUART);
 
     void begin(const uint32_t dwBaudRate);
     void begin(const uint32_t dwBaudRate, const UARTModes config);

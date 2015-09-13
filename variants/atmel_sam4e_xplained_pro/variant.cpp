@@ -15,6 +15,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 #include "variant.h"
 
 #ifdef __cplusplus
@@ -43,8 +44,8 @@ const PinDescription g_aPinMap[]=
  * | 1          |                  |  PB3   | ICE USB Serial  | UTXD0
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // URXD0
-  { PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // UTXD0
+  { PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // URXD0
+  { PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // UTXD0
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | LEDs & button    |        |                 |
@@ -53,35 +54,30 @@ const PinDescription g_aPinMap[]=
  * | 3          | N/A              |  PA2   | SW0             | WKUP2
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTD, PIO_PD22, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },
-  { PORTA, PIO_PA2, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },
+  { PORTD, PIO_PD22, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },
+  { PORTA, PIO_PA2, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },
 } ;
 
 #ifdef __cplusplus
 }
 #endif
 
-#if 0 // TODO Serial
 /*
  * Serialx objects
  */
-SAMSerial Serial( (Usart*)UART0, UART0_IRQn, ID_UART0, 1);
-void serialEvent() __attribute__((weak));
-void serialEvent() { }
-
-// IT handlers
-void UART1_Handler(void)
+// Serial Interrupt handler
+static void Serial_Handler(void)
 {
   Serial.IrqHandler();
 }
 
-// ----------------------------------------------------------------------------
+SAMSerial Serial((Usart*)UART0, UART0_IRQn, Serial_Handler, 1);
+void serialEvent() __attribute__((weak));
+void serialEvent() { }
 
 void serialEventRun(void)
 {
   if (Serial.available()) serialEvent();
 }
-#endif // TODO Serial
 
-// TODO: Serial peripherals Interrupt handlers
 

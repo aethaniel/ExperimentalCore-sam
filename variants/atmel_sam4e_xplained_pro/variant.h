@@ -50,9 +50,9 @@ extern "C"
 
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           (4ul)
-#define NUM_DIGITAL_PINS     (4u)
-#define NUM_ANALOG_INPUTS    (0u)
-#define NUM_ANALOG_OUTPUTS   (0u)
+#define NUM_DIGITAL_PINS     (4ul)
+#define NUM_ANALOG_INPUTS    (0ul)
+#define NUM_ANALOG_OUTPUTS   (0ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -115,8 +115,8 @@ static const uint8_t A5  = PIN_A5 ;
 
 #if 0 // TODO Serial1
 // Serial1
-#define PIN_SERIAL1_RX       (0ul)
-#define PIN_SERIAL1_TX       (1ul)
+#define PIN_SERIAL1_RX       (ul)
+#define PIN_SERIAL1_TX       (ul)
 #endif // TODO Serial1
 
 #if 0 // TODO SPI
@@ -129,11 +129,11 @@ static const uint8_t A5  = PIN_A5 ;
 #define SPI_INTERFACE_ID     ID_SPI
 #define SPI_CHANNELS_NUM     2
 
-#define PIN_SPI_MISO         (22u)
-#define PIN_SPI_MOSI         (23u)
-#define PIN_SPI_SCK          (24u)
-#define PIN_SPI_SS0          (77u)
-#define PIN_SPI_SS1          (87u)
+#define PIN_SPI_MISO         (ul)
+#define PIN_SPI_MOSI         (ul)
+#define PIN_SPI_SCK          (ul)
+#define PIN_SPI_SS0          (ul)
+#define PIN_SPI_SS1          (ul)
 
 static const uint8_t SS	  = PIN_SPI_SS0;
 static const uint8_t MOSI = PIN_SPI_MOSI;
@@ -147,8 +147,8 @@ static const uint8_t SCK  = PIN_SPI_SCK;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
+#define PIN_WIRE_SDA         (ul)
+#define PIN_WIRE_SCL         (ul)
 #endif // TODO Wire
 
 #if 0 // TODO USB

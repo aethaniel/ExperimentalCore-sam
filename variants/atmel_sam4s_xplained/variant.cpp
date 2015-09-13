@@ -44,8 +44,8 @@ const PinDescription g_aPinMap[]=
  * | 1          |                  |  PA10  | ICE USB Serial  | UTXD0
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // URXD0
-  { PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // UTXD0
+  { PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // URXD0
+  { PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // UTXD0
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | LEDs & button    |        |                 |
@@ -55,9 +55,9 @@ const PinDescription g_aPinMap[]=
  * | 4          | N/A              |  PA5   | BP2             | WKUP4
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTC, PIO_PC10, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER },
-  { PORTC, PIO_PC17, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER },
-  { PORTA, PIO_PA5, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM,  NOT_ON_TIMER }, // WKUP4
+  { PORTC, PIO_PC10, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER },
+  { PORTC, PIO_PC17, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER },
+  { PORTA, PIO_PA5, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // WKUP4
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | J1 header        |        |                 |
@@ -132,28 +132,22 @@ const PinDescription g_aPinMap[]=
 }
 #endif
 
-#if 0 // TODO Serial
 /*
  * Serialx objects
  */
-SAMSerial Serial( (Usart*)UART0, UART0_IRQn, ID_UART0, 1);
-void serialEvent() __attribute__((weak));
-void serialEvent() { }
-
-// IT handlers
-void UART0_Handler(void)
+// Serial Interrupt handler
+static void Serial_Handler(void)
 {
   Serial.IrqHandler();
 }
 
-// ----------------------------------------------------------------------------
+SAMSerial Serial( (Usart*)UART0, UART0_IRQn, Serial_Handler, 1);
+void serialEvent() __attribute__((weak));
+void serialEvent() { }
 
 void serialEventRun(void)
 {
   if (Serial.available()) serialEvent();
 }
-#endif // TODO Serial
-
-// ----------------------------------------------------------------------------
 
 

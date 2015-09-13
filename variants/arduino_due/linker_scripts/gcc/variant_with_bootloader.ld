@@ -148,9 +148,10 @@ SECTIONS
   .data : AT (__etext)
   {
     __data_start__ = .;
-    KEEP(*(.ram_isr_vector))
+    *(.data.ram_isr_vector)
     *(vtable)
     *(.data*)
+    *(.ramfunc*)
 
     . = ALIGN(4);
     /* preinit data */

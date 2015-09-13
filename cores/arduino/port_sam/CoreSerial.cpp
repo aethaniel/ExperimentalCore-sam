@@ -16,29 +16,35 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "CoreSerial.hpp"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "CoreSerial.hpp"
+#include "core_cortex_vectors.h"
 
 // Constructors ////////////////////////////////////////////////////////////////
 
-SAMSerial::SAMSerial(Usart *pUsart, IRQn_Type irq, uint32_t id, uint32_t isUART)
+SAMSerial::SAMSerial(Usart *pUsart, IRQn_Type irq, void (*irq_handler)(void), uint32_t isUART)
 {
   _pUsart=pUsart;
   _dwIrq=irq;
-  _dwId=id;
+  _dwId=(uint32_t)irq;
+
+  // Dynamic assignment of IRQ handler
+  vectorAssign(irq, irq_handler);
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-void SAMSerial::begin(const uint32_t dwBaudRate)
+void SAMSerial::begin(const uint32_t ulBaudrate)
 {
-  init(dwBaudRate, SERIAL_8N1);
+  init(ulBaudrate, SERIAL_8N1);
 }
 
-void SAMSerial::init(const uint32_t dwBaudRate, const uint32_t modeReg)
+void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
 {
+  uint32_t ulRegister=0;
+
   /* Activate Serial peripheral clock
    * All UART/USART peripheral ids are below 32, so on PCER0
    */
@@ -51,10 +57,64 @@ void SAMSerial::init(const uint32_t dwBaudRate, const uint32_t modeReg)
   _pUsart->US_CR = US_CR_RSTRX | US_CR_RSTTX | US_CR_RXDIS | US_CR_TXDIS;
 
   // Configure mode
-  _pUsart->US_MR = modeReg;
+  switch ( ulMode & HARDSER_PARITY_MASK)
+  {
+    case HARDSER_PARITY_EVEN:
+      ulRegister|=US_MR_PAR_EVEN;
+    break;
+
+    case HARDSER_PARITY_ODD:
+      ulRegister|=US_MR_PAR_ODD;
+    break;
+
+    case HARDSER_PARITY_NONE:
+      ulRegister|=US_MR_PAR_NO;
+   break;
+  }
+
+  switch ( ulMode & HARDSER_STOP_BIT_MASK)
+  {
+    case HARDSER_STOP_BIT_1:
+      ulRegister|=US_MR_NBSTOP_1_BIT;
+    break;
+
+    case HARDSER_STOP_BIT_1_5:
+      ulRegister|=US_MR_NBSTOP_1_5_BIT;
+    break;
+
+    case HARDSER_STOP_BIT_2:
+      ulRegister|=US_MR_NBSTOP_2_BIT;
+    break;
+  }
+
+  /* UART has CHaracter Length fixed to 8bits */
+  if ( _isUART == 0)
+  {
+    switch ( ulMode & HARDSER_DATA_MASK)
+    {
+      case HARDSER_DATA_5:
+        ulRegister|=US_MR_CHRL_5_BIT;
+      break;
+
+      case HARDSER_DATA_6:
+        ulRegister|=US_MR_CHRL_6_BIT;
+      break;
+
+      case HARDSER_DATA_7:
+        ulRegister|=US_MR_CHRL_7_BIT;
+      break;
+
+      case HARDSER_DATA_8:
+        ulRegister|=US_MR_CHRL_8_BIT;
+      break;
+    }
+  }
+
+  _pUsart->US_MR = ulRegister;
 
   // Configure baudrate (asynchronous, no oversampling)
-  _pUsart->US_BRGR = (SystemCoreClock / dwBaudRate) >> 4;
+  // CD = (Peripheral clock) / (baudrate * 16)
+  _pUsart->US_BRGR = (SystemCoreClock / ulBaudrate) >> 4;
 
   // Configure interrupts
   _pUsart->US_IDR = 0xFFFFFFFF;
@@ -178,7 +238,8 @@ void SAMSerial::IrqHandler( void )
   // Do we need to keep sending data?
   if ((status & US_CSR_TXRDY) == US_CSR_TXRDY)
   {
-    if (_tx_buffer._iTail != _tx_buffer._iHead) {
+    if (_tx_buffer._iTail != _tx_buffer._iHead)
+    {
       _pUsart->US_THR = _tx_buffer._aucBuffer[_tx_buffer._iTail];
       _tx_buffer._iTail = (unsigned int)(_tx_buffer._iTail + 1) % SERIAL_BUFFER_SIZE;
     }
