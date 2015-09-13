@@ -23,8 +23,6 @@
 extern "C" {
 #endif
 
-#include "Arduino.h"
-
 typedef struct _CoreVectors
 {
   /* Stack pointer */
@@ -48,6 +46,11 @@ typedef struct _CoreVectors
   void* pfnSysTick_Handler;
 } CoreVectors;
 
+/**
+ * \brief Default interrupt handler for unused IRQs.
+ */
+extern void vector_halt(void);
+
 /*
  * \brief Set new core vectors base.
  *
@@ -55,7 +58,7 @@ typedef struct _CoreVectors
  *
  * \return Previous vector table address.
  */
-void* vectorSetOrigin(DeviceVectors* pBase);
+extern void* vectorSetOrigin(DeviceVectors* pBase);
 
 /*
  * \brief Assign a new handler to the given vector.
@@ -65,7 +68,7 @@ void* vectorSetOrigin(DeviceVectors* pBase);
  *
  * \return Previous vector handler.
  */
-void* vectorAssign(IRQn_Type number, void (*isr)(void));
+extern void* vectorAssign(IRQn_Type number, void (*isr)(void));
 
 /*
  * \brief Reset handler of the given vector to default.
@@ -74,7 +77,7 @@ void* vectorAssign(IRQn_Type number, void (*isr)(void));
  *
  * \return Previous vector handler.
  */
-void* vectorReset(IRQn_Type number);
+extern void* vectorReset(IRQn_Type number);
 
 #ifdef __cplusplus
 }

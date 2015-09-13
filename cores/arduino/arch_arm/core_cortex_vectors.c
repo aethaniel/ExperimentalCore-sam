@@ -39,13 +39,10 @@ extern int main( void ) ;
 /* symbols from libc */
 extern void __libc_init_array(void);
 
-
-/**
- * \brief Default interrupt handler for unused IRQs.
- */
-static void vector_halt(void)
+void vector_halt(void)
 {
   // Halts
+  __BKPT(0);
   while (1);
 }
 
@@ -78,8 +75,11 @@ void Reset_Handler( void )
     }
   }
 
-  /* Initialize the C library */
-//  __libc_init_array();
+  /* exception_table being initialized, setup vectors in RAM */
+  vectorSetOrigin( &exception_table );
+
+  /* calls _init() functions, C++ constructors included */
+  __libc_init_array();
 
   /* Initialize the system */
   SystemInit() ;
@@ -96,33 +96,39 @@ void Reset_Handler( void )
 #if defined DEBUG && (DEBUG == 1)
 #warning "DEBUG handlers activated"
 
-void HardFault_Handler (void)
+void HardFault_Handler(void)
 {
+  __BKPT(13);
   while (1);
 }
 
 void NMI_Handler(void)
 {
+  __BKPT(14);
   while (1);
 }
 
 void MemManage_Handler(void)
 {
+  __BKPT(12);
   while (1);
 }
 
 void BusFault_Handler(void)
 {
+  __BKPT(11);
   while (1);
 }
 
 void UsageFault_Handler(void)
 {
+  __BKPT(10);
   while (1);
 }
 
 void DebugMon_Handler(void)
 {
+  __BKPT(4);
   while (1);
 }
 
@@ -149,8 +155,11 @@ void PendSV_Handler(void)
 
 void SysTick_Handler(void)
 {
-  if (sysTickHook())
+  if (sysTickHook() != 0)
+  {
     return;
+  }
+
   SysTick_DefaultHandler();
 }
 
@@ -162,7 +171,7 @@ const CoreVectors startup_exception_table=
   .pvStack = (void*) (&__StackTop),
 
   .pfnReset_Handler      = (void*) Reset_Handler,
-  .pfnNMI_Handler        = (void*) NMI_Handler,
+  .pfnNMI_Handler        = (void*) (0UL),
   .pfnHardFault_Handler  = (void*) HardFault_Handler,
   .pfnMemManage_Handler  = (void*) MemManage_Handler,
   .pfnBusFault_Handler   = (void*) BusFault_Handler,
@@ -171,22 +180,20 @@ const CoreVectors startup_exception_table=
   .pfnReserved2_Handler  = (void*) (0UL),          /* Reserved */
   .pfnReserved3_Handler  = (void*) (0UL),          /* Reserved */
   .pfnReserved4_Handler  = (void*) (0UL),          /* Reserved */
-  .pfnSVC_Handler        = (void*) SVC_Handler,
-  .pfnDebugMon_Handler   = (void*) DebugMon_Handler,
+  .pfnSVC_Handler        = (void*) (0UL),
+  .pfnDebugMon_Handler   = (void*) (0UL),
   .pfnReserved5_Handler  = (void*) (0UL),          /* Reserved */
-  .pfnPendSV_Handler     = (void*) PendSV_Handler,
-  .pfnSysTick_Handler    = (void*) SysTick_Handler,
+  .pfnPendSV_Handler     = (void*) (0UL),
+  .pfnSysTick_Handler    = (void*) (0UL),
  };
 
 void* vectorSetOrigin(DeviceVectors* pBase)
 {
   void* p=(void*)(SCB->VTOR);
 
-  /* relocate vector table
-   * reference is http://www.keil.com/pack/doc/cmsis/core/html/_using__v_t_o_r_pg.html
-   */
+  /* relocate vector table */
   __disable_irq();
-  SCB->VTOR = (uint32_t)pBase;
+  SCB->VTOR = ((uint32_t)pBase)&SCB_VTOR_TBLOFF_Msk;
   __DSB();
   __enable_irq();
 
