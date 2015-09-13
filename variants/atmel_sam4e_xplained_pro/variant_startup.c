@@ -37,61 +37,8 @@ static void vector_halt(void)
   while (1);
 }
 
-/* Peripherals handlers */
-void SUPC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RSTC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RTC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RTT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void WDT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PMC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void EFC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UART0_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PIOA_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PIOB_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef PIOC
-void PIOC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* PIOC */
-void PIOD_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef PIOE
-void PIOE_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* PIOE */
-void USART0_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void USART1_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TWI0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TWI1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void SPI_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void DMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC0_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC1_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC2_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef TC1
-void TC3_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC4_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC5_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* TC1 */
-#ifdef TC2
-void TC6_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC7_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC8_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* TC2 */
-void AFEC0_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-void DACC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void ACC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void ARM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void USBDEV_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PWM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void CAN0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef CAN1
-void CAN1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* CAN1 */
-void AES_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void GMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UART1_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-
 /* Exception Table */
-__attribute__ ((section(".ram_isr_vector")))
+__attribute__ ((section(".data.ram_isr_vector")))
 DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
@@ -114,87 +61,87 @@ DeviceVectors exception_table=
   .pfnSysTick_Handler    = (void*) SysTick_Handler,
 
   /* Configurable interrupts */
-  .pfnSUPC_Handler   = (void*) SUPC_Handler,   /* 0  Supply Controller */
-  .pfnRSTC_Handler   = (void*) RSTC_Handler,   /* 1  Reset Controller */
-  .pfnRTC_Handler    = (void*) RTC_Handler,    /* 2  Real Time Clock */
-  .pfnRTT_Handler    = (void*) RTT_Handler,    /* 3  Real Time Timer */
-  .pfnWDT_Handler    = (void*) WDT_Handler,    /* 4  Watchdog/Dual Watchdog Timer */
-  .pfnPMC_Handler    = (void*) PMC_Handler,    /* 5  Power Management Controller */
-  .pfnEFC0_Handler   = (void*) EFC0_Handler,   /* 6  Enhanced Embedded Flash Controller */
-  .pfnUART0_Handler  = (void*) UART0_Handler,  /* 7  UART 0 */
-  .pvReserved8       = (void*) (0UL),          /* 8  Reserved */
-  .pfnPIOA_Handler   = (void*) PIOA_Handler,   /* 9  Parallel I/O Controller A */
-  .pfnPIOB_Handler   = (void*) PIOB_Handler,   /* 10 Parallel I/O Controller B */
+  .pfnSUPC_Handler   = (void*) vector_halt,  /* 0  Supply Controller */
+  .pfnRSTC_Handler   = (void*) vector_halt,  /* 1  Reset Controller */
+  .pfnRTC_Handler    = (void*) vector_halt,  /* 2  Real Time Clock */
+  .pfnRTT_Handler    = (void*) vector_halt,  /* 3  Real Time Timer */
+  .pfnWDT_Handler    = (void*) vector_halt,  /* 4  Watchdog/Dual Watchdog Timer */
+  .pfnPMC_Handler    = (void*) vector_halt,  /* 5  Power Management Controller */
+  .pfnEFC0_Handler   = (void*) vector_halt,  /* 6  Enhanced Embedded Flash Controller */
+  .pfnUART0_Handler  = (void*) vector_halt,  /* 7  UART 0 */
+  .pvReserved8       = (void*) (0UL),        /* 8  Reserved */
+  .pfnPIOA_Handler   = (void*) vector_halt,  /* 9  Parallel I/O Controller A */
+  .pfnPIOB_Handler   = (void*) vector_halt,  /* 10 Parallel I/O Controller B */
 #ifdef PIOC
-  .pfnPIOC_Handler   = (void*) PIOC_Handler,   /* 11 Parallel I/O Controller C */
+  .pfnPIOC_Handler   = (void*) vector_halt,  /* 11 Parallel I/O Controller C */
 #else
-  .pvReserved11      = (void*) (0UL),          /* 11 Reserved */
+  .pvReserved11      = (void*) (0UL),        /* 11 Reserved */
 #endif /* PIOC */
-  .pfnPIOD_Handler   = (void*) PIOD_Handler,   /* 12 Parallel I/O Controller D */
+  .pfnPIOD_Handler   = (void*) vector_halt,  /* 12 Parallel I/O Controller D */
 #ifdef PIOE
-  .pfnPIOE_Handler   = (void*) PIOE_Handler,   /* 13 Parallel I/O Controller E */
+  .pfnPIOE_Handler   = (void*) vector_halt,  /* 13 Parallel I/O Controller E */
 #else
-  .pvReserved13      = (void*) (0UL),          /* 13 Reserved */
+  .pvReserved13      = (void*) (0UL),        /* 13 Reserved */
 #endif /* PIOE */
-  .pfnUSART0_Handler = (void*) USART0_Handler, /* 14 USART 0 */
-  .pfnUSART1_Handler = (void*) USART1_Handler, /* 15 USART 1 */
-  .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 16 Multimedia Card Interface */
-  .pfnTWI0_Handler   = (void*) TWI0_Handler,   /* 17 Two Wire Interface 0 */
-  .pfnTWI1_Handler   = (void*) TWI1_Handler,   /* 18 Two Wire Interface 1 */
-  .pfnSPI_Handler    = (void*) SPI_Handler,    /* 19 Serial Peripheral Interface */
-  .pfnDMAC_Handler   = (void*) DMAC_Handler,   /* 20 DMAC */
-  .pfnTC0_Handler    = (void*) TC0_Handler,    /* 21 Timer/Counter 0 */
-  .pfnTC1_Handler    = (void*) TC1_Handler,    /* 22 Timer/Counter 1 */
-  .pfnTC2_Handler    = (void*) TC2_Handler,    /* 23 Timer/Counter 2 */
+  .pfnUSART0_Handler = (void*) vector_halt,  /* 14 USART 0 */
+  .pfnUSART1_Handler = (void*) vector_halt,  /* 15 USART 1 */
+  .pfnHSMCI_Handler  = (void*) vector_halt,  /* 16 Multimedia Card Interface */
+  .pfnTWI0_Handler   = (void*) vector_halt,  /* 17 Two Wire Interface 0 */
+  .pfnTWI1_Handler   = (void*) vector_halt,  /* 18 Two Wire Interface 1 */
+  .pfnSPI_Handler    = (void*) vector_halt,  /* 19 Serial Peripheral Interface */
+  .pfnDMAC_Handler   = (void*) vector_halt,  /* 20 DMAC */
+  .pfnTC0_Handler    = (void*) vector_halt,  /* 21 Timer/Counter 0 */
+  .pfnTC1_Handler    = (void*) vector_halt,  /* 22 Timer/Counter 1 */
+  .pfnTC2_Handler    = (void*) vector_halt,  /* 23 Timer/Counter 2 */
 #ifdef TC1
-  .pfnTC3_Handler    = (void*) TC3_Handler,    /* 24 Timer/Counter 3 */
-  .pfnTC4_Handler    = (void*) TC4_Handler,    /* 25 Timer/Counter 4 */
-  .pfnTC5_Handler    = (void*) TC5_Handler,    /* 26 Timer/Counter 5 */
+  .pfnTC3_Handler    = (void*) vector_halt,  /* 24 Timer/Counter 3 */
+  .pfnTC4_Handler    = (void*) vector_halt,  /* 25 Timer/Counter 4 */
+  .pfnTC5_Handler    = (void*) vector_halt,  /* 26 Timer/Counter 5 */
 #else
-  .pvReserved24      = (void*) (0UL),          /* 24 Reserved */
-  .pvReserved25      = (void*) (0UL),          /* 25 Reserved */
-  .pvReserved26      = (void*) (0UL),          /* 26 Reserved */
+  .pvReserved24      = (void*) (0UL),        /* 24 Reserved */
+  .pvReserved25      = (void*) (0UL),        /* 25 Reserved */
+  .pvReserved26      = (void*) (0UL),        /* 26 Reserved */
 #endif /* TC1 */
 #ifdef TC2
-  .pfnTC6_Handler    = (void*) TC6_Handler,    /* 27 Timer/Counter 6 */
-  .pfnTC7_Handler    = (void*) TC7_Handler,    /* 28 Timer/Counter 7 */
-  .pfnTC8_Handler    = (void*) TC8_Handler,    /* 29 Timer/Counter 8 */
+  .pfnTC6_Handler    = (void*) vector_halt,  /* 27 Timer/Counter 6 */
+  .pfnTC7_Handler    = (void*) vector_halt,  /* 28 Timer/Counter 7 */
+  .pfnTC8_Handler    = (void*) vector_halt,  /* 29 Timer/Counter 8 */
 #else
-  .pvReserved27      = (void*) (0UL),          /* 27 Reserved */
-  .pvReserved28      = (void*) (0UL),          /* 28 Reserved */
-  .pvReserved29      = (void*) (0UL),          /* 29 Reserved */
+  .pvReserved27      = (void*) (0UL),        /* 27 Reserved */
+  .pvReserved28      = (void*) (0UL),        /* 28 Reserved */
+  .pvReserved29      = (void*) (0UL),        /* 29 Reserved */
 #endif /* TC2 */
-  .pfnAFEC0_Handler  = (void*) AFEC0_Handler,  /* 30 Analog Front End 0 */
-  .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 31 Analog Front End 1 */
-  .pfnDACC_Handler   = (void*) DACC_Handler,   /* 32 Digital To Analog Converter */
-  .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
-  .pfnARM_Handler    = (void*) ARM_Handler,    /* 34 FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC */
-  .pfnUSBDEV_Handler = (void*) USBDEV_Handler, /* 35 USB DEVICE */
-  .pfnPWM_Handler    = (void*) PWM_Handler,    /* 36 PWM */
-  .pfnCAN0_Handler   = (void*) CAN0_Handler,   /* 37 CAN0 */
+  .pfnAFEC0_Handler  = (void*) vector_halt,  /* 30 Analog Front End 0 */
+  .pfnAFEC1_Handler  = (void*) vector_halt,  /* 31 Analog Front End 1 */
+  .pfnDACC_Handler   = (void*) vector_halt,  /* 32 Digital To Analog Converter */
+  .pfnACC_Handler    = (void*) vector_halt,  /* 33 Analog Comparator */
+  .pfnARM_Handler    = (void*) vector_halt,  /* 34 FPU signals : FPIXC, FPOFC, FPUFC, FPIOC, FPDZC, FPIDC, FPIXC */
+  .pfnUSBDEV_Handler = (void*) vector_halt,  /* 35 USB DEVICE */
+  .pfnPWM_Handler    = (void*) vector_halt,  /* 36 PWM */
+  .pfnCAN0_Handler   = (void*) vector_halt,  /* 37 CAN0 */
 #ifdef CAN1
-  .pfnCAN1_Handler   = (void*) CAN1_Handler,   /* 38 CAN1 */
+  .pfnCAN1_Handler   = (void*) vector_halt,  /* 38 CAN1 */
 #else
-  .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
+  .pvReserved38      = (void*) (0UL),        /* 38 Reserved */
 #endif /* CAN1 */
-  .pfnAES_Handler    = (void*) AES_Handler,    /* 39 AES */
-  .pvReserved40      = (void*) (0UL),          /* 40 Reserved */
-  .pvReserved41      = (void*) (0UL),          /* 41 Reserved */
-  .pvReserved42      = (void*) (0UL),          /* 42 Reserved */
-  .pvReserved43      = (void*) (0UL),          /* 43 Reserved */
-  .pfnGMAC_Handler   = (void*) GMAC_Handler,   /* 44 EMAC */
-  .pfnUART1_Handler  = (void*) UART1_Handler   /* 45 UART */
+  .pfnAES_Handler    = (void*) vector_halt,  /* 39 AES */
+  .pvReserved40      = (void*) (0UL),        /* 40 Reserved */
+  .pvReserved41      = (void*) (0UL),        /* 41 Reserved */
+  .pvReserved42      = (void*) (0UL),        /* 42 Reserved */
+  .pvReserved43      = (void*) (0UL),        /* 43 Reserved */
+  .pfnGMAC_Handler   = (void*) vector_halt,  /* 44 EMAC */
+  .pfnUART1_Handler  = (void*) vector_halt   /* 45 UART */
 };
 
 /**
  * \brief Setup the microcontroller system.
  *
- * Initialize the System and update the SystemFrequency variable.
+ * Initialize the System and update the System Frequency variable.
  */
 void SystemInit( void )
 {
-  /* Set 6 FWS for Embedded Flash Access */
-  EFC0->EEFC_FMR = EEFC_FMR_FWS(5) | EEFC_FMR_CLOE ;
+  /* Set 6 FWS for Embedded Flash Access according to 120MHz configuration */
+  EFC0->EEFC_FMR = EEFC_FMR_FWS(5)|EEFC_FMR_CLOE;
 
   /* Initialize main oscillator */
   if ( !(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL) )
@@ -207,19 +154,19 @@ void SystemInit( void )
   PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
   for ( ; !(PMC->PMC_SR & PMC_SR_MOSCSELS) ; );
 
-  PMC->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK ;
-  while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
+  PMC->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
   /* Initialize PLLA */
   PMC->CKGR_PLLAR = CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x13ul) | CKGR_PLLAR_PLLACOUNT(0x3ful) | CKGR_PLLAR_DIVA(0x1ul) ;
   for ( ; !(PMC->PMC_SR & PMC_SR_LOCKA) ; );
 
   /* Switch to main clock */
-  PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) |	PMC_MCKR_CSS_MAIN_CLK ;
+  PMC->PMC_MCKR = ((PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK) & ~PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
-	/* Switch to PLLA */
-  PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK ;
+  /* Switch to PLLA */
+  PMC->PMC_MCKR = PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 
   SystemCoreClock=__SYSTEM_CLOCK_120MHZ;

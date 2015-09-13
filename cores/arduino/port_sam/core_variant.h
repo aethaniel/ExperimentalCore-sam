@@ -35,26 +35,26 @@ extern DeviceVectors exception_table;
 /* Definitions and types for pins */
 typedef enum _EAnalogChannel
 {
-  No_Analog_Channel=-1,
-  ADC_Channel0=0,
-  ADC_Channel1=1,
-  ADC_Channel2=2,
-  ADC_Channel3=3,
-  ADC_Channel4=4,
-  ADC_Channel5=5,
-  ADC_Channel6=6,
-  ADC_Channel7=7,
-  ADC_Channel8=8,
-  ADC_Channel9=9,
-  ADC_Channel10=10,
-  ADC_Channel11=11,
-  ADC_Channel12=12,
-  ADC_Channel13=13,
-  ADC_Channel14=14,
-  ADC_Channel15=15,
+  NOT_ON_ANALOG=-1,
+  ADC_CHL0=0,
+  ADC_CHL1=1,
+  ADC_CHL2=2,
+  ADC_CHL3=3,
+  ADC_CHL4=4,
+  ADC_CHL5=5,
+  ADC_CHL6=6,
+  ADC_CHL7=7,
+  ADC_CHL8=8,
+  ADC_CHL9=9,
+  ADC_CHL10=10,
+  ADC_CHL11=11,
+  ADC_CHL12=12,
+  ADC_CHL13=13,
+  ADC_CHL14=14,
+  ADC_CHL15=15,
 
-  DAC_Channel0,
-  DAC_Channel1
+  DAC_CHL0,
+  DAC_CHL1
 } EAnalogChannel ;
 
 // Definitions for TC channels
@@ -91,14 +91,14 @@ typedef enum _ETimerChannel
 typedef enum _EPWMChannel
 {
   NOT_ON_PWM=-1,
-  PWM_CH0=0,
-  PWM_CH1,
-  PWM_CH2,
-  PWM_CH3,
-  PWM_CH4,
-  PWM_CH5,
-  PWM_CH6,
-  PWM_CH7
+  PWM_CHL0=0,
+  PWM_CHL1,
+  PWM_CHL2,
+  PWM_CHL3,
+  PWM_CHL4,
+  PWM_CHL5,
+  PWM_CHL6,
+  PWM_CHL7
 } EPWMChannel ;
 
 // I/O controllers indexes, should be affined to device packages instead of product series

@@ -151,6 +151,15 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #define PIN_WIRE_SCL         (ul)
 #endif // TODO Wire
 
+#if 0 // TODO USB
+/*
+ * USB
+ */
+#define PIN_USB_HOST_ENABLE  (ul)
+#define PIN_USB_DM           (ul)
+#define PIN_USB_DP           (ul)
+#endif // TODO USB
+
 #ifdef __cplusplus
 }
 #endif

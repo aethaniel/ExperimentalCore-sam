@@ -29,6 +29,10 @@ DEVICE = __SAM4SD32C__
 VARIANT_NAME = atmel_sam4s_xplained_pro
 VARIANT_FREQUENCY = 120000000ul
 
+#DEVICE = __SAM4S16C__
+#VARIANT_NAME = atmel_sam4s_wpir_rd
+#VARIANT_FREQUENCY = 120000000ul
+
 PROJECT_NAME=blink
 
 ROOT_PATH=../../..
@@ -77,16 +81,16 @@ $(CORE_ARM_PATH)/CorePrintable.hpp      \
 $(CORE_ARM_PATH)/CoreRingBuffer.hpp     \
 $(CORE_ARM_PATH)/CoreStream.hpp         \
 $(CORE_ARM_PATH)/CoreString.hpp         \
-$(CORE_ARM_PATH)/CoreIPAddress.hpp      \
+$(CORE_ARM_PATH)/IPAddress.hpp          \
 $(CORE_ARM_PATH)/core_character.h       \
 $(CORE_ARM_PATH)/core_itoa.h            \
 $(CORE_ARM_PATH)/core_reset.h           \
 $(CORE_ARM_PATH)/core_shift.h           \
 $(CORE_ARM_PATH)/core_hooks.h           \
 $(CORE_ARM_PATH)/core_cortex_vectors.h  \
-$(CORE_COMMON_PATH)/CoreServer.hpp      \
-$(CORE_COMMON_PATH)/CoreUdp.hpp         \
-$(CORE_COMMON_PATH)/CoreClient.hpp      \
+$(CORE_COMMON_PATH)/Server.hpp          \
+$(CORE_COMMON_PATH)/Udp.hpp             \
+$(CORE_COMMON_PATH)/Client.hpp          \
 $(CORE_COMMON_PATH)/core_binary.h       \
 $(CORE_COMMON_PATH)/core_constants.h    \
 $(CORE_COMMON_PATH)/core_new.hpp        \
@@ -166,8 +170,8 @@ CPPFLAGS = $(COMMON_FLAGS) -std=gnu++11 -fno-rtti -fno-exceptions
 
 LDFLAGS = -mcpu=$(CORE) -mthumb $(LIB_PATH)
 LDFLAGS += -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
-LDFLAGS += -nostartfiles
-#-std=c++11 --param max-inline-insns-single=100 -fno-rtti -nostdlib -fno-exceptions -fno-threadsafe-statics -nostdlib
+#LDFLAGS += -nostartfiles
+#-std=c++11 --param max-inline-insns-single=100 -fno-rtti -fno-exceptions -fno-threadsafe-statics
 
 #|---------------------------------------------------------------------------------------|
 #| Define targets                                                                        |

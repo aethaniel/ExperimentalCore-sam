@@ -38,69 +38,8 @@ static void vector_halt(void)
   while (1);
 }
 
-/* Peripherals handlers */
-void SUPC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RSTC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RTC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void RTT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void WDT_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PMC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void EFC0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void EFC1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UART_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef SMC
-void SMC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* SMC */
-void PIOA_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void PIOB_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef PIOC
-void PIOC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* PIOC */
-#ifdef PIOD
-void PIOD_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* PIOD */
-#ifdef PIOE
-void PIOE_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* PIOE */
-void USART0_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void USART1_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void USART2_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef USART3
-void USART3_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* USART3 */
-void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TWI0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TWI1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void SPI0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef SPI1
-void SPI1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* SPI1 */
-void SSC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC0_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC1_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC2_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC3_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC4_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC5_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef TC2
-void TC6_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC7_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TC8_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* TC2 */
-void PWM_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void ADC_Handler    ( void ) __attribute__ ((weak, alias("vector_halt")));
-void DACC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void DMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void UOTGHS_Handler ( void ) __attribute__ ((weak, alias("vector_halt")));
-void TRNG_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#ifdef EMAC
-void EMAC_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-#endif /* EMAC */
-void CAN0_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-void CAN1_Handler   ( void ) __attribute__ ((weak, alias("vector_halt")));
-
 /* Exception Table */
-__attribute__ ((section(".ram_isr_vector")))
+__attribute__ ((section(".data.ram_isr_vector")))
 DeviceVectors exception_table=
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
@@ -123,85 +62,85 @@ DeviceVectors exception_table=
   .pfnSysTick_Handler    = (void*) SysTick_Handler,
 
   /* Configurable interrupts */
-  .pfnSUPC_Handler   = (void*) SUPC_Handler,   /* 0  Supply Controller */
-  .pfnRSTC_Handler   = (void*) RSTC_Handler,   /* 1  Reset Controller */
-  .pfnRTC_Handler    = (void*) RTC_Handler,    /* 2  Real Time Clock */
-  .pfnRTT_Handler    = (void*) RTT_Handler,    /* 3  Real Time Timer */
-  .pfnWDT_Handler    = (void*) WDT_Handler,    /* 4  Watchdog Timer */
-  .pfnPMC_Handler    = (void*) PMC_Handler,    /* 5  Power Management Controller */
-  .pfnEFC0_Handler   = (void*) EFC0_Handler,   /* 6  Enhanced Embedded Flash Controller 0 */
-  .pfnEFC1_Handler   = (void*) EFC1_Handler,   /* 7  Enhanced Embedded Flash Controller 1 */
-  .pfnUART_Handler   = (void*) UART_Handler,   /* 8  Universal Asynchronous Receiver Transceiver */
+  .pfnSUPC_Handler   = (void*) vector_halt,  /* 0  Supply Controller */
+  .pfnRSTC_Handler   = (void*) vector_halt,  /* 1  Reset Controller */
+  .pfnRTC_Handler    = (void*) vector_halt,  /* 2  Real Time Clock */
+  .pfnRTT_Handler    = (void*) vector_halt,  /* 3  Real Time Timer */
+  .pfnWDT_Handler    = (void*) vector_halt,  /* 4  Watchdog Timer */
+  .pfnPMC_Handler    = (void*) vector_halt,  /* 5  Power Management Controller */
+  .pfnEFC0_Handler   = (void*) vector_halt,  /* 6  Enhanced Embedded Flash Controller 0 */
+  .pfnEFC1_Handler   = (void*) vector_halt,  /* 7  Enhanced Embedded Flash Controller 1 */
+  .pfnUART_Handler   = (void*) vector_halt,  /* 8  Universal Asynchronous Receiver Transceiver */
 #ifdef SMC
-  .pfnSMC_Handler    = (void*) SMC_Handler,    /* 9  Static Memory Controller */
+  .pfnSMC_Handler    = (void*) vector_halt,  /* 9  Static Memory Controller */
 #else
-  .pvReserved9       = (void*) (0UL),          /* 9  Reserved */
+  .pvReserved9       = (void*) (0UL),        /* 9  Reserved */
 #endif /* SMC */
-  .pvReserved10      = (void*) (0UL),          /* 10 Reserved */
-  .pfnPIOA_Handler   = (void*) PIOA_Handler,   /* 11 Parallel I/O Controller A, */
-  .pfnPIOB_Handler   = (void*) PIOB_Handler,   /* 12 Parallel I/O Controller B */
+  .pvReserved10      = (void*) (0UL),        /* 10 Reserved */
+  .pfnPIOA_Handler   = (void*) vector_halt,  /* 11 Parallel I/O Controller A, */
+  .pfnPIOB_Handler   = (void*) vector_halt,  /* 12 Parallel I/O Controller B */
 #ifdef PIOC
-  .pfnPIOC_Handler   = (void*) PIOC_Handler,   /* 13 Parallel I/O Controller C */
+  .pfnPIOC_Handler   = (void*) vector_halt,  /* 13 Parallel I/O Controller C */
 #else
-  .pvReserved13      = (void*) (0UL),          /* 13 Reserved */
+  .pvReserved13      = (void*) (0UL),        /* 13 Reserved */
 #endif /* PIOC */
 #ifdef PIOD
-  .pfnPIOD_Handler   = (void*) PIOD_Handler,   /* 14 Parallel I/O Controller D */
+  .pfnPIOD_Handler   = (void*) vector_halt,  /* 14 Parallel I/O Controller D */
 #else
-  .pvReserved14      = (void*) (0UL),          /* 14 Reserved */
+  .pvReserved14      = (void*) (0UL),        /* 14 Reserved */
 #endif /* PIOD */
 #ifdef PIOE
-  .pfnPIOE_Handler   = (void*) PIOE_Handler,   /* 15 Parallel I/O Controller E */
+  .pfnPIOE_Handler   = (void*) vector_halt,  /* 15 Parallel I/O Controller E */
 #else
-  .pvReserved15      = (void*) (0UL),          /* 15 Reserved */
+  .pvReserved15      = (void*) (0UL),        /* 15 Reserved */
 #endif /* PIOE */
-  .pvReserved16      = (void*) (0UL),          /* 16 Reserved */
-  .pfnUSART0_Handler = (void*) USART0_Handler, /* 17 USART 0 */
-  .pfnUSART1_Handler = (void*) USART1_Handler, /* 18 USART 1 */
-  .pfnUSART2_Handler = (void*) USART2_Handler, /* 19 USART 2 */
+  .pvReserved16      = (void*) (0UL),        /* 16 Reserved */
+  .pfnUSART0_Handler = (void*) vector_halt,  /* 17 USART 0 */
+  .pfnUSART1_Handler = (void*) vector_halt,  /* 18 USART 1 */
+  .pfnUSART2_Handler = (void*) vector_halt,  /* 19 USART 2 */
 #ifdef USART3
-  .pfnUSART3_Handler = (void*) USART3_Handler, /* 20 USART 3 */
+  .pfnUSART3_Handler = (void*) vector_halt,  /* 20 USART 3 */
 #else
-  .pvReserved20      = (void*) (0UL),          /* 20 Reserved */
+  .pvReserved20      = (void*) (0UL),        /* 20 Reserved */
 #endif /* USART3 */
-  .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 21 Multimedia Card Interface */
-  .pfnTWI0_Handler   = (void*) TWI0_Handler,   /* 22 Two-Wire Interface 0 */
-  .pfnTWI1_Handler   = (void*) TWI1_Handler,   /* 23 Two-Wire Interface 1 */
-  .pfnSPI0_Handler   = (void*) SPI0_Handler,   /* 24 Serial Peripheral Interface */
+  .pfnHSMCI_Handler  = (void*) vector_halt,  /* 21 Multimedia Card Interface */
+  .pfnTWI0_Handler   = (void*) vector_halt,  /* 22 Two-Wire Interface 0 */
+  .pfnTWI1_Handler   = (void*) vector_halt,  /* 23 Two-Wire Interface 1 */
+  .pfnSPI0_Handler   = (void*) vector_halt,  /* 24 Serial Peripheral Interface */
 #ifdef SPI1
-  .pfnSPI1_Handler   = (void*) SPI1_Handler,   /* 25 Serial Peripheral Interface */
+  .pfnSPI1_Handler   = (void*) vector_halt,  /* 25 Serial Peripheral Interface */
 #else
-  .pvReserved25      = (void*) (0UL),          /* 25 Reserved */
+  .pvReserved25      = (void*) (0UL),        /* 25 Reserved */
 #endif /* SPI1 */
-  .pfnSSC_Handler    = (void*) SSC_Handler,    /* 26 Synchronous Serial Controller */
-  .pfnTC0_Handler    = (void*) TC0_Handler,    /* 27 Timer Counter 0 */
-  .pfnTC1_Handler    = (void*) TC1_Handler,    /* 28 Timer Counter 1 */
-  .pfnTC2_Handler    = (void*) TC2_Handler,    /* 29 Timer Counter 2 */
-  .pfnTC3_Handler    = (void*) TC3_Handler,    /* 30 Timer Counter 3 */
-  .pfnTC4_Handler    = (void*) TC4_Handler,    /* 31 Timer Counter 4 */
-  .pfnTC5_Handler    = (void*) TC5_Handler,    /* 32 Timer Counter 5 */
+  .pfnSSC_Handler    = (void*) vector_halt,  /* 26 Synchronous Serial Controller */
+  .pfnTC0_Handler    = (void*) vector_halt,  /* 27 Timer Counter 0 */
+  .pfnTC1_Handler    = (void*) vector_halt,  /* 28 Timer Counter 1 */
+  .pfnTC2_Handler    = (void*) vector_halt,  /* 29 Timer Counter 2 */
+  .pfnTC3_Handler    = (void*) vector_halt,  /* 30 Timer Counter 3 */
+  .pfnTC4_Handler    = (void*) vector_halt,  /* 31 Timer Counter 4 */
+  .pfnTC5_Handler    = (void*) vector_halt,  /* 32 Timer Counter 5 */
 #ifdef TC2
-  .pfnTC6_Handler    = (void*) TC6_Handler,    /* 33 Timer Counter 6 */
-  .pfnTC7_Handler    = (void*) TC7_Handler,    /* 34 Timer Counter 7 */
-  .pfnTC8_Handler    = (void*) TC8_Handler,    /* 35 Timer Counter 8 */
+  .pfnTC6_Handler    = (void*) vector_halt,  /* 33 Timer Counter 6 */
+  .pfnTC7_Handler    = (void*) vector_halt,  /* 34 Timer Counter 7 */
+  .pfnTC8_Handler    = (void*) vector_halt,  /* 35 Timer Counter 8 */
 #else
-  .pvReserved33      = (void*) (0UL),          /* 33 Reserved */
-  .pvReserved34      = (void*) (0UL),          /* 34 Reserved */
-  .pvReserved35      = (void*) (0UL),          /* 35 Reserved */
+  .pvReserved33      = (void*) (0UL),        /* 33 Reserved */
+  .pvReserved34      = (void*) (0UL),        /* 34 Reserved */
+  .pvReserved35      = (void*) (0UL),        /* 35 Reserved */
 #endif /* TC2 */
-  .pfnPWM_Handler    = (void*) PWM_Handler,    /* 36 Pulse Width Modulation Controller */
-  .pfnADC_Handler    = (void*) ADC_Handler,    /* 37 ADC Controller */
-  .pfnDACC_Handler   = (void*) DACC_Handler,   /* 38 DAC Controller */
-  .pfnDMAC_Handler   = (void*) DMAC_Handler,   /* 39 DMA Controller */
-  .pfnUOTGHS_Handler = (void*) UOTGHS_Handler, /* 40 USB OTG High Speed */
-  .pfnTRNG_Handler   = (void*) TRNG_Handler,   /* 41 True Random Number Generator */
+  .pfnPWM_Handler    = (void*) vector_halt,  /* 36 Pulse Width Modulation Controller */
+  .pfnADC_Handler    = (void*) vector_halt,  /* 37 ADC Controller */
+  .pfnDACC_Handler   = (void*) vector_halt,  /* 38 DAC Controller */
+  .pfnDMAC_Handler   = (void*) vector_halt,  /* 39 DMA Controller */
+  .pfnUOTGHS_Handler = (void*) vector_halt,  /* 40 USB OTG High Speed */
+  .pfnTRNG_Handler   = (void*) vector_halt,  /* 41 True Random Number Generator */
 #ifdef EMAC
-  .pfnEMAC_Handler   = (void*) EMAC_Handler,   /* 42 Ethernet MAC */
+  .pfnEMAC_Handler   = (void*) vector_halt,  /* 42 Ethernet MAC */
 #else
-  .pvReserved42      = (void*) (0UL),          /* 42 Reserved */
+  .pvReserved42      = (void*) (0UL),        /* 42 Reserved */
 #endif /* EMAC */
-  .pfnCAN0_Handler   = (void*) CAN0_Handler,   /* 43 CAN Controller 0 */
-  .pfnCAN1_Handler   = (void*) CAN1_Handler    /* 44 CAN Controller 1 */
+  .pfnCAN0_Handler   = (void*) vector_halt,  /* 43 CAN Controller 0 */
+  .pfnCAN1_Handler   = (void*) vector_halt   /* 44 CAN Controller 1 */
 } ;
 
 /**
@@ -224,8 +163,8 @@ void SystemInit( void )
 
   /* Switch to 3-20MHz Xtal oscillator */
   PMC->CKGR_MOR = CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCXTST(0x8ul) | CKGR_MOR_MOSCRCEN | CKGR_MOR_MOSCXTEN | CKGR_MOR_MOSCSEL;
-
   for ( ; !(PMC->PMC_SR & PMC_SR_MOSCSELS) ; );
+
   PMC->PMC_MCKR = (PMC->PMC_MCKR & ~(uint32_t)PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK;
   for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY) ; );
 

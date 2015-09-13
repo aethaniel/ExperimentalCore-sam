@@ -15,6 +15,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 #include "variant.h"
 
 #ifdef __cplusplus
@@ -24,8 +25,7 @@ extern "C" {
 const Port Ports[NUM_PORTS]=
 {
   { .pGPIO=PIOA, .ulId=ID_PIOA },
-  { .pGPIO=PIOB, .ulId=ID_PIOB },
-  { .pGPIO=NULL, .ulId=NULL }
+  { .pGPIO=PIOB, .ulId=ID_PIOB }
 };
 
 /*
@@ -65,61 +65,54 @@ const Port Ports[NUM_PORTS]=
  */
 const PinDescription g_aPinMap[]=
 {
-	{ PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, 		// D0/URXD0
-	{ PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, 	// D1/UTXD0
-	{ PORTA, PIO_PA3A_TWD0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, 		// D2/SDA
-	{ PORTA, PIO_PA4A_TWCK0, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER }, 		// D3/SCL
-	{ PORTB, PIO_PB3A_UTXD1, GPIO_PERIPH_A, ADC_Channel7, NOT_ON_PWM, NOT_ON_TIMER },			// D4
-	{ PORTB, PIO_PB4, GPIO_NOMUX, ADC_Channel7, NOT_ON_PWM, NOT_ON_TIMER },						// D5
-	{ PORTB, PIO_PB2A_URXD1, GPIO_PERIPH_A, ADC_Channel6, NOT_ON_PWM, NOT_ON_TIMER },			// D6
-	{ PORTB, PIO_PB6, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D7
-	{ PORTB, PIO_PB7, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D8
-	{ PORTA, PIO_PA5, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D9
-	{ PORTA, PIO_PA2, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D10
-	{ PORTA, PIO_PA1, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D11
-	{ PORTA, PIO_PA11, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D12
-	{ PORTA, PIO_PA0, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// D13
-	{ PORTA, PIO_PA17, GPIO_NOMUX, ADC_Channel0, NOT_ON_PWM, NOT_ON_TIMER },					// A0
-	{ PORTA, PIO_PA18, GPIO_NOMUX, ADC_Channel1, NOT_ON_PWM, NOT_ON_TIMER },					// A1
-	{ PORTA, PIO_PA19, GPIO_NOMUX, ADC_Channel2, NOT_ON_PWM, NOT_ON_TIMER },					// A2
-	{ PORTA, PIO_PA20, GPIO_NOMUX, ADC_Channel3, NOT_ON_PWM, NOT_ON_TIMER },					// A3
-	{ PORTB, PIO_PB0, GPIO_NOMUX, ADC_Channel4, NOT_ON_PWM, NOT_ON_TIMER },						// A4
-	{ PORTB, PIO_PB1, GPIO_NOMUX, ADC_Channel5, NOT_ON_PWM, NOT_ON_TIMER },						// A5
-	{ PORTA, PIO_PA12A_MISO, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },		// MISO
-	{ PORTA, PIO_PA13A_MOSI, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },		// MOSI
-	{ PORTA, PIO_PA14A_SPCK, GPIO_PERIPH_A, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },		// SCK
-	{ PORTA, PIO_PA16, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// SS, RXTXLED
-	{ PORTA, PIO_PA15, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// CHIP_EN
-	{ PORTB, PIO_PB5, GPIO_NOMUX, No_Analog_Channel, NOT_ON_PWM, NOT_ON_TIMER },				// ESP_RST
+	{ PORTA, PIO_PA9A_URXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },  // D0/URXD0
+	{ PORTA, PIO_PA10A_UTXD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // D1/UTXD0
+	{ PORTA, PIO_PA3A_TWD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },   // D2/SDA
+	{ PORTA, PIO_PA4A_TWCK0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },  // D3/SCL
+	{ PORTB, PIO_PB3A_UTXD1, GPIO_PERIPH_A, ADC_CHL7, NOT_ON_PWM, NOT_ON_TIMER },       // D4
+	{ PORTB, PIO_PB4, GPIO_NOMUX, ADC_CHL7, NOT_ON_PWM, NOT_ON_TIMER },                 // D5
+	{ PORTB, PIO_PB2A_URXD1, GPIO_PERIPH_A, ADC_CHL6, NOT_ON_PWM, NOT_ON_TIMER },       // D6
+	{ PORTB, PIO_PB6, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D7
+	{ PORTB, PIO_PB7, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D8
+	{ PORTA, PIO_PA5, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D9
+	{ PORTA, PIO_PA2, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D10
+	{ PORTA, PIO_PA1, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D11
+	{ PORTA, PIO_PA11, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },           // D12
+	{ PORTA, PIO_PA0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // D13
+	{ PORTA, PIO_PA17, GPIO_NOMUX, ADC_CHL0, NOT_ON_PWM, NOT_ON_TIMER },                // A0
+	{ PORTA, PIO_PA18, GPIO_NOMUX, ADC_CHL1, NOT_ON_PWM, NOT_ON_TIMER },                // A1
+	{ PORTA, PIO_PA19, GPIO_NOMUX, ADC_CHL2, NOT_ON_PWM, NOT_ON_TIMER },                // A2
+	{ PORTA, PIO_PA20, GPIO_NOMUX, ADC_CHL3, NOT_ON_PWM, NOT_ON_TIMER },                // A3
+	{ PORTB, PIO_PB0, GPIO_NOMUX, ADC_CHL4, NOT_ON_PWM, NOT_ON_TIMER },                 // A4
+	{ PORTB, PIO_PB1, GPIO_NOMUX, ADC_CHL5, NOT_ON_PWM, NOT_ON_TIMER },                 // A5
+	{ PORTA, PIO_PA12A_MISO, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },  // MISO
+	{ PORTA, PIO_PA13A_MOSI, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },  // MOSI
+	{ PORTA, PIO_PA14A_SPCK, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },  // SCK
+	{ PORTA, PIO_PA16, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },           // SS, RXTXLED
+	{ PORTA, PIO_PA15, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },           // CHIP_EN
+	{ PORTB, PIO_PB5, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },            // ESP_RST
 } ;
-
 
 #ifdef __cplusplus
 }
 #endif
 
-#if 0 // TODO Serial
 /*
- * UART objects
+ * Serialx objects
  */
-UARTClass Serial( (Usart*)UART0, UART0_IRQn, ID_UART0, 1);
-void serialEvent() __attribute__((weak));
-void serialEvent() { }
-
-// IT handlers
-void UART0_Handler(void)
+// Serial Interrupt handler
+static void Serial_Handler(void)
 {
   Serial.IrqHandler();
 }
 
-// ----------------------------------------------------------------------------
+SAMSerial Serial((Usart*)UART0, UART0_IRQn, Serial_Handler, 1);
+void serialEvent() __attribute__((weak));
+void serialEvent() { }
 
 void serialEventRun(void)
 {
   if (Serial.available()) serialEvent();
 }
-#endif // TODO Serial
-
-// TODO: Serial peripherals Interrupt handlers
 
 

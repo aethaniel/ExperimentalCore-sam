@@ -22,7 +22,7 @@
 void initVariant( void )
 {
   // Initialize Serial port UART0 pins
-  pinPeripheral(0, GPIO_PERIPH_A);
-  digitalWrite(0, HIGH); // Enable pullup for URXD0
-  pinPeripheral(1, GPIO_PERIPH_A);
+  pinPeripheral(PIN_SERIAL_RX, GPIO_PERIPH_A);
+//  digitalWrite(PIN_SERIAL_RX, HIGH); // Enable pullup for URXD0
+  pinPeripheral(PIN_SERIAL_TX, GPIO_PERIPH_A);
 }
