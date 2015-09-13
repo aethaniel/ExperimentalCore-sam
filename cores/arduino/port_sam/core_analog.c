@@ -376,7 +376,7 @@ static void analogWriteTimer(uint32_t ulPin, uint32_t ulValue)
 // to digital output.
 void analogWrite(uint32_t ulPin, uint32_t ulValue)
 {
-  if (g_aPinMap[ulPin].ulADCChannelNumber == No_Analog_Channel)
+  if (g_aPinMap[ulPin].ulADCChannelNumber == NOT_ON_ANALOG)
   {
     analogWriteDAC(ulPin, ulValue);
   }
