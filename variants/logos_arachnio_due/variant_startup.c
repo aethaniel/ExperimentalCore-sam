@@ -31,11 +31,11 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK_4MHZ ;
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
-/* static */ void vector_halt(void)
+/* static void vector_halt(void)
 {
   // Halts
   while (1);
-}
+} */
 
 /* Exception Table */
 __attribute__ ((section(".data.ram_isr_vector")))
