@@ -6,3 +6,4 @@ atmel_samg55_xplained_pro | Debug
 logos_arachnio_due | Debug
 poppy_core | Debug
 blink | Debug
+atmel_sam4s_wpir_rd | Debug
