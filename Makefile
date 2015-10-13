@@ -1,11 +1,24 @@
-SHELL = /bin/sh
+SHELL := /bin/sh
 
-EXAMPLES_PATH = cores/validation
+ROOT_PATH := $(CURDIR)
+EXAMPLES_PATH := $(ROOT_PATH)/cores/validation
 
-all:
-	cd $(EXAMPLES_PATH)/blink
-	make --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME)
+all: print_info
+	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
 
 clean:
-	cd $(EXAMPLES_PATH)/blink
-	make --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean
+	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/blink
+
+.phony: print_info clean
+
+print_info:
+	@echo ----------------------------------------------------------
+	@echo Compiling bootloader using
+	@echo CURDIR    = $(CURDIR)
+	@echo OS        = $(OS)
+	@echo SHELL     = $(SHELL)
+	@echo TERM      = $(TERM)
+	@echo TRAVIS OS = $(TRAVIS_OS_NAME)
+#	"$(CC)" -v
+	env
+
