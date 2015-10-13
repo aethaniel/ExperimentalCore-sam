@@ -19,24 +19,14 @@ OBJCOPY = $(CROSS_COMPILE)objcopy
 GDB = $(CROSS_COMPILE)gdb
 NM = $(CROSS_COMPILE)nm
 
-CORE = cortex-m4
+ROOT_PATH=../../..
 
-#DEVICE = __SAM4S16C__
-#VARIANT_NAME = atmel_sam4s_xplained
-#VARIANT_FREQUENCY = 120000000ul
-
-DEVICE = __SAM4SD32C__
-VARIANT_NAME = atmel_sam4s_xplained_pro
-VARIANT_FREQUENCY = 120000000ul
-
-#DEVICE = __SAM4S16C__
-#VARIANT_NAME = atmel_sam4s_wpir_rd
-#VARIANT_FREQUENCY = 120000000ul
+VARIANT_NAME ?= atmel_sam4s_xplained
+VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
+include $(VARIANT_PATH)/variant.mk
 
 PROJECT_NAME=blink
 
-ROOT_PATH=../../..
-VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
 RESOURCES_OPENOCD_UPLOAD = $(VARIANT_PATH)/openocd_scripts/variant_upload.cfg
 RESOURCES_OPENOCD_START = $(VARIANT_PATH)/openocd_scripts/variant_debug_start.cfg
 RESOURCES_GDB = $(VARIANT_PATH)/debug_scripts/variant.gdb
@@ -146,10 +136,10 @@ COMMON_FLAGS += -Wmissing-format-attribute -Wno-deprecated-declarations
 COMMON_FLAGS += -Wpacked -Wredundant-decls -Wlong-long
 COMMON_FLAGS += -Wunreachable-code -Wcast-align
 # -Wmissing-noreturn -Wconversion
-COMMON_FLAGS += --param max-inline-insns-single=500 -mcpu=$(CORE) -mthumb -ffunction-sections -fdata-sections
-COMMON_FLAGS += -D$(DEVICE) -DDONT_USE_CMSIS_INIT -fdiagnostics-color=always
+COMMON_FLAGS += --param max-inline-insns-single=500 -mcpu=$(DEVICE_CORE) -mthumb -ffunction-sections -fdata-sections
+COMMON_FLAGS += -D$(DEVICE_PART) -DDONT_USE_CMSIS_INIT -fdiagnostics-color=always
 COMMON_FLAGS += -Wa,-adhlns="$(OUTPUT_PATH)/$(subst .o,.lst,$@)"
-COMMON_FLAGS += $(INC_PATH) -DF_CPU=$(VARIANT_FREQUENCY)
+COMMON_FLAGS += $(INC_PATH) -DF_CPU=$(DEVICE_FREQUENCY)
 COMMON_FLAGS += -nostdlib --param max-inline-insns-single=500
 
 ifeq ($(DEBUG),0)
@@ -168,7 +158,7 @@ endif
 CPPFLAGS = $(COMMON_FLAGS) -std=gnu++11 -fno-rtti -fno-exceptions
 #-fno-optional-diags -fno-threadsafe-statics
 
-LDFLAGS = -mcpu=$(CORE) -mthumb $(LIB_PATH)
+LDFLAGS = -mcpu=$(DEVICE_CORE) -mthumb $(LIB_PATH)
 LDFLAGS += -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
 #LDFLAGS += -nostartfiles
 #-std=c++11 --param max-inline-insns-single=100 -fno-rtti -fno-exceptions -fno-threadsafe-statics
@@ -200,19 +190,19 @@ $(VARIANT_LIB_PATH):
 #|---------------------------------------------------------------------------------------|
 $(AOBJS): %.o: %.s $(PROJ_CHDRS)
 	@echo +++ Assembling [$(notdir $<)]
-	@$(AS) $(AFLAGS) $< -o $(OUTPUT_PATH)/$(@F)
+	$(AS) $(AFLAGS) $< -o $(OUTPUT_PATH)/$(@F)
 
 $(COBJS): %.o: %.c $(PROJ_CHDRS)
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
+	$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
 
 $(CPPOBJS): %.o: %.cpp $(PROJ_CHDRS) $(PROJ_CPPHDRS)
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CPPFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
+	$(CC) $(CPPFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
 #	echo $(NM) $(OUTPUT_PATH)/$(@F)
 
 $(OUTPUT_PATH):
-	@-mkdir $(OUTPUT_PATH)
+	-mkdir $(OUTPUT_PATH)
 
 clean:
 	-rm -f $(OUTPUT_PATH)/* $(OUTPUT_PATH)/*.*

@@ -44,7 +44,7 @@ OUTPUT_FILE_PATH = $(VARIANT_PATH)/$(OUTPUT_NAME).a
 #|---------------------------------------------------------------------------------------|
 #| Source files                                                                          |
 #|---------------------------------------------------------------------------------------|
-include ../Makefile.sources
+include ../sources.mk
 
 SRC_VARIANT=\
 $(VARIANT_PATH)/pins_arduino.h          \
