@@ -3,7 +3,7 @@ SHELL := /bin/sh
 ROOT_PATH := $(CURDIR)
 EXAMPLES_PATH := $(ROOT_PATH)/cores/validation
 
-ifeq "TRAVIS" "true"
+ifeq ($(TRAVIS),true)
 PRINT_INFO_TRAVIS=print_info_travis
 else
 PRINT_INFO_TRAVIS=
