@@ -78,11 +78,11 @@ void Reset_Handler( void )
   /* exception_table being initialized, setup vectors in RAM */
   vectorSetOrigin( &exception_table );
 
-  /* calls _init() functions, C++ constructors included */
-  __libc_init_array();
-
   /* Initialize the system */
   SystemInit() ;
+
+  /* calls _init() functions, C++ constructors included */
+  __libc_init_array();
 
   /* Branch to main function */
   main() ;
