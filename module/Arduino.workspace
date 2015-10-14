@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="Arduino" Database="" SWTLW="Yes">
+  <WorkspaceParserMacros/>
+  <WorkspaceParserPaths/>
+  <Project Name="arduino_due" Path="variants/arduino_due/variant.project" Active="No"/>
+  <Project Name="atmel_sam4e_xplained_pro" Path="variants/atmel_sam4e_xplained_pro/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained" Path="variants/atmel_sam4s_xplained/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_wpir_rd" Path="variants/atmel_sam4s_wpir_rd/variant.project" Active="No"/>
+  <Project Name="atmel_sam4s_xplained_pro" Path="variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
+  <Project Name="atmel_samg55_xplained_pro" Path="variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
+  <Project Name="logos_arachnio_due" Path="variants/logos_arachnio_due/variant.project" Active="No"/>
+  <Project Name="poppy_core" Path="variants/poppy_core/variant.project" Active="No"/>
+  <Project Name="blink" Path="libraries/tests/examples/blink/blink.project" Active="Yes"/>
+  <Environment>
+    <![CDATA[]]>
+  </Environment>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="atmel_sam4s_xplained" ConfigName="Debug"/>
+      <Project Name="atmel_sam4s_wpir_rd" ConfigName="Debug"/>
+      <Project Name="atmel_sam4s_xplained_pro" ConfigName="Debug"/>
+      <Project Name="atmel_sam4e_xplained_pro" ConfigName="Debug"/>
+      <Project Name="atmel_samg55_xplained_pro" ConfigName="Debug"/>
+      <Project Name="arduino_due" ConfigName="Debug"/>
+      <Project Name="logos_arachnio_due" ConfigName="Debug"/>
+      <Project Name="poppy_core" ConfigName="Debug"/>
+      <Project Name="blink" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="no">
+      <Project Name="atmel_sam4s_xplained" ConfigName="Release"/>
+      <Project Name="atmel_sam4s_wpir_rd" ConfigName="Release"/>
+      <Project Name="atmel_sam4s_xplained_pro" ConfigName="Release"/>
+      <Project Name="atmel_sam4e_xplained_pro" ConfigName="Release"/>
+      <Project Name="atmel_samg55_xplained_pro" ConfigName="Release"/>
+      <Project Name="arduino_due" ConfigName="Release"/>
+      <Project Name="logos_arachnio_due" ConfigName="Release"/>
+      <Project Name="poppy_core" ConfigName="Release"/>
+      <Project Name="blink" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
