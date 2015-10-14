@@ -1,5 +1,8 @@
 Debug
 Release
+obj
+.clang
+.codelite
 *.o
 *.d
 *.lst
