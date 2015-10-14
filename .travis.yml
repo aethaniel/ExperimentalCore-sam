@@ -22,3 +22,19 @@ env:
     - VARIANT_NAME=atmel_samg55_xplained_pro
     - VARIANT_NAME=logos_arachnio_due
     - VARIANT_NAME=poppy_core
+
+#addons:
+#  apt:
+#    sources:
+#      - gcc-arm-embedded
+#    packages:
+#      - gcc-arm-none-eabi
+
+#deploy:
+#  provider: releases
+#  user: "GITHUB USERNAME"
+#  password: "GITHUB PASSWORD"
+#  file: "FILE TO UPLOAD"
+#  skip_cleanup: true
+#  on:
+#    tags: true
