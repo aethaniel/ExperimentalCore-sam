@@ -1,4 +1,3 @@
-#include "core_digital.h"
 #include "Arduino.h"
 
 /*

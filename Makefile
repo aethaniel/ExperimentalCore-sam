@@ -1,7 +1,7 @@
 SHELL := /bin/sh
 
 ROOT_PATH := $(CURDIR)
-EXAMPLES_PATH := $(ROOT_PATH)/cores/validation
+EXAMPLES_PATH := $(ROOT_PATH)/libraries/tests/examples
 
 ifeq ($(TRAVIS),true)
 PRINT_INFO_TRAVIS=print_info_travis
