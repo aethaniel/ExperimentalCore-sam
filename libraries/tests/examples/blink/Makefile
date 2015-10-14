@@ -19,7 +19,7 @@ OBJCOPY = $(CROSS_COMPILE)objcopy
 GDB = $(CROSS_COMPILE)gdb
 NM = $(CROSS_COMPILE)nm
 
-ROOT_PATH=../../..
+ROOT_PATH=../../../..
 
 VARIANT_NAME ?= atmel_sam4s_xplained
 VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
@@ -35,7 +35,8 @@ CORE_ARM_PATH=$(ROOT_PATH)/cores/arduino/arch_arm
 CORE_COMMON_PATH=$(ROOT_PATH)/cores/arduino/arch_common
 CORE_AVR_PATH=$(ROOT_PATH)/cores/arduino/avr_compat
 CORE_SAM_PATH=$(ROOT_PATH)/cores/arduino/port_sam
-PROJECT_PATH=$(ROOT_PATH)/cores/validation/$(PROJECT_NAME)
+#PROJECT_PATH=$(ROOT_PATH)/cores/validation/$(PROJECT_NAME)
+PROJECT_PATH=$(CURDIR)
 
 #|---------------------------------------------------------------------------------------|
 #| Tools                                                                                 |

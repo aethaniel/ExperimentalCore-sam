@@ -5,11 +5,11 @@
   <Project Name="atmel_sam4e_xplained_pro" Path="../variants/atmel_sam4e_xplained_pro/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_xplained" Path="../variants/atmel_sam4s_xplained/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_wpir_rd" Path="../variants/atmel_sam4s_wpir_rd/variant.project" Active="No"/>
-  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/variant.project" Active="Yes"/>
+  <Project Name="atmel_sam4s_xplained_pro" Path="../variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
   <Project Name="atmel_samg55_xplained_pro" Path="../variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
   <Project Name="logos_arachnio_due" Path="../variants/logos_arachnio_due/variant.project" Active="No"/>
   <Project Name="poppy_core" Path="../variants/poppy_core/variant.project" Active="No"/>
-  <Project Name="blink" Path="../cores/validation/blink/blink.project" Active="No"/>
+  <Project Name="blink" Path="../libraries/tests/examples/blink/blink.project" Active="Yes"/>
   <Environment>
     <![CDATA[]]>
   </Environment>
