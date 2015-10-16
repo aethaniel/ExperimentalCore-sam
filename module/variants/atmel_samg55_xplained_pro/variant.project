@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="atmel_samg55_xplained_pro" InternalType="">
+  <Plugins>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="variants">
     <File Name="../Makefile.rules"/>
     <File Name="../Makefile.sources"/>
@@ -118,6 +132,37 @@
   </VirtualDirectory>
   <Description/>
   <Dependencies/>
+  <VirtualDirectory Name="product headers">
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55j19.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/adc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/chipid.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/cmcc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/crccu.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/efc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/flexcom.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/gpbr.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/matrix.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/mem2mem.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pio.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pmc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rstc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/ssc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/supc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/tc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usbdev.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/uhp.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/wdt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/pio/samg55j19.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/i2sc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdmic.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/spi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/twi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usart.h"/>
+  </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -153,7 +198,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_samg55_xplained_pro</WorkingDirectory>
+        <WorkingDirectory>$(WorkspacePath)/variants/atmel_samg55_xplained_pro</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -205,35 +250,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="product headers">
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55j19.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/adc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/chipid.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/cmcc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/crccu.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/efc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/flexcom.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/gpbr.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/matrix.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/mem2mem.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pio.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pmc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rstc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/rtt.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/ssc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/supc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/tc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usbdev.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/uhp.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/wdt.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/samg55.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/pio/samg55j19.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/i2sc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/pdmic.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/spi.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/twi.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/samg55/include/component/usart.h"/>
-  </VirtualDirectory>
 </CodeLite_Project>

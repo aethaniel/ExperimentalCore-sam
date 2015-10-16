@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="atmel_sam4e_xplained_pro" InternalType="">
-  <Plugins/>
+  <Plugins>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <VirtualDirectory Name="variants">
     <File Name="../Makefile.rules"/>
     <File Name="../Makefile.sources"/>
@@ -96,6 +109,38 @@
   </VirtualDirectory>
   <Description/>
   <Dependencies/>
+  <VirtualDirectory Name="product headers">
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/sam4e16e.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/acc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/adc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/chipid.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/cmcc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/crccu.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/dacc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/efc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/gpbr.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/hsmci.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/matrix.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pdc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pio.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pmc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pwm.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rstc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rtc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rtt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/smc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/spi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/ssc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/supc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/tc.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/twi.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/uart.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/usbdev.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/usart.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/wdt.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/sam4e.h"/>
+    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/pio/sam4e16e.h"/>
+  </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -131,7 +176,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_sam4e_xplained_pro</WorkingDirectory>
+        <WorkingDirectory>$(WorkspacePath)/variants/atmel_sam4e_xplained_pro</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -183,36 +228,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="product headers">
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/sam4e16e.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/acc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/adc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/chipid.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/cmcc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/crccu.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/dacc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/efc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/gpbr.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/hsmci.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/matrix.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pdc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pio.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pmc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/pwm.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rstc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rtc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/rtt.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/smc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/spi.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/ssc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/supc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/tc.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/twi.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/uart.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/usbdev.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/usart.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/component/wdt.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/sam4e.h"/>
-    <File Name="../../tools/CMSIS_Devices/ATMEL/sam4e/include/pio/sam4e16e.h"/>
-  </VirtualDirectory>
 </CodeLite_Project>
