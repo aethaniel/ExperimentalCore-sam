@@ -189,16 +189,6 @@ uint32_t analogRead(uint32_t ulPin)
   return ulValue;
 }
 
-static void TC_SetCMR_ChannelA(Tc *tc, uint32_t chan, uint32_t v)
-{
-//	tc->TC_CHANNEL[chan].TC_CMR = (tc->TC_CHANNEL[chan].TC_CMR & 0xFFF0FFFF) | v;
-}
-
-static void TC_SetCMR_ChannelB(Tc *tc, uint32_t chan, uint32_t v)
-{
-//	tc->TC_CHANNEL[chan].TC_CMR = (tc->TC_CHANNEL[chan].TC_CMR & 0xF0FFFFFF) | v;
-}
-
 void analogOutputInit(void)
 {
   uint8_t i;
@@ -335,21 +325,21 @@ static void analogWriteTimer(uint32_t ulPin, uint32_t ulValue)
   if (ulValue == 0)
   {
     if (chA)
-      TC_SetCMR_ChannelA(chTC, chNo, TC_CMR_ACPA_CLEAR | TC_CMR_ACPC_CLEAR);
+      chTC->TC_CHANNEL[chNo].TC_CMR = (chTC->TC_CHANNEL[chNo].TC_CMR & 0xFFF0FFFF) | TC_CMR_ACPA_CLEAR | TC_CMR_ACPC_CLEAR;
     else
-      TC_SetCMR_ChannelB(chTC, chNo, TC_CMR_BCPB_CLEAR | TC_CMR_BCPC_CLEAR);
+      chTC->TC_CHANNEL[chNo].TC_CMR = (chTC->TC_CHANNEL[chNo].TC_CMR & 0xF0FFFFFF) | TC_CMR_BCPB_CLEAR | TC_CMR_BCPC_CLEAR;
   }
   else
   {
     if (chA)
     {
       TC_SetRA(chTC, chNo, ulValue);
-      TC_SetCMR_ChannelA(chTC, chNo, TC_CMR_ACPA_CLEAR | TC_CMR_ACPC_SET);
+      chTC->TC_CHANNEL[chNo].TC_CMR = (chTC->TC_CHANNEL[chNo].TC_CMR & 0xFFF0FFFF) | TC_CMR_ACPA_CLEAR | TC_CMR_ACPC_SET;
     }
     else
     {
       TC_SetRB(chTC, chNo, ulValue);
-      TC_SetCMR_ChannelB(chTC, chNo, TC_CMR_BCPB_CLEAR | TC_CMR_BCPC_SET);
+      chTC->TC_CHANNEL[chNo].TC_CMR = (chTC->TC_CHANNEL[chNo].TC_CMR & 0xF0FFFFFF) | TC_CMR_BCPB_CLEAR | TC_CMR_BCPC_SET;
     }
   }
 
@@ -370,25 +360,25 @@ static void analogWriteTimer(uint32_t ulPin, uint32_t ulValue)
 #endif // 0
 }
 
-// Right now, PWM output only works on the pins with
-// hardware support.  These are defined in the appropriate
-// pins_*.c file.  For the rest of the pins, we default
-// to digital output.
+/* PWM output only works on the pins with hardware support.
+ * These are defined in the appropriate variant.cpp file.
+ * For the rest of the pins, we default to digital output.
+ */
 void analogWrite(uint32_t ulPin, uint32_t ulValue)
 {
-  if (g_aPinMap[ulPin].ulADCChannelNumber == NOT_ON_ANALOG)
+  if (g_aPinMap[ulPin].ulADCChannelNumber != NOT_ON_ANALOG)
   {
     analogWriteDAC(ulPin, ulValue);
   }
   else
   {
-    if (g_aPinMap[ulPin].ulPWMChannel == NOT_ON_PWM)
+    if (g_aPinMap[ulPin].ulPWMChannel != NOT_ON_PWM)
     {
       analogWritePWM(ulPin, ulValue);
     }
     else
     {
-      if (g_aPinMap[ulPin].ulTimerChannel == NOT_ON_TIMER)
+      if (g_aPinMap[ulPin].ulTimerChannel != NOT_ON_TIMER)
       {
         analogWriteTimer(ulPin, ulValue);
       }
