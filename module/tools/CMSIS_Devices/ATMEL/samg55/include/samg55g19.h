@@ -406,7 +406,7 @@ void WDT_Handler        ( void );
 #define PDC_TWI6    ((Pdc      *)0x40040700U) /**< \brief (PDC_TWI6   ) Base Address */
 #define USBDEV      ((USBDev   *)0x40044000U) /**< \brief (USBDEV     ) Base Address */
 #define CRCCU       ((Crccu    *)0x40048000U) /**< \brief (CRCCU      ) Base Address */
-#define UHP         ((Uhp      *)0x20400000U) /**< \brief (UHP        ) Base Address */
+#define UHP         ((Uhp      *)0x4004C000U) /**< \brief (UHP        ) Base Address */
 #define MATRIX      ((Matrix   *)0x400E0200U) /**< \brief (MATRIX     ) Base Address */
 #define PMC         ((Pmc      *)0x400E0400U) /**< \brief (PMC        ) Base Address */
 #define CHIPID      ((Chipid   *)0x400E0740U) /**< \brief (CHIPID     ) Base Address */
@@ -453,6 +453,7 @@ void WDT_Handler        ( void );
 #define CHIP_CIDR   (0x24470AE0UL)
 #define CHIP_EXID   (0x0UL)
 #define NB_CH_ADC   (8UL)
+#define UHP_DPRAM   ((uint32_t*)0x20400000U) /**< \brief OHCI DPRAM */
 
 /* ************************************************************************** */
 /*   ELECTRICAL DEFINITIONS FOR SAMG55G19 */
