@@ -1,10 +1,14 @@
+SHELL := /bin/sh
+
+.SUFFIXES: .d .o .c .h .cpp .hpp .s .S
+
 #-------------------------------------------------------------------------------
 #		Tools
 #-------------------------------------------------------------------------------
 
 # Set DEBUG variable for once if not coming from command line
 ifndef DEBUG
-DEBUG=0
+DEBUG = 0
 endif
 
 # Tool suffix when cross-compiling
@@ -22,22 +26,22 @@ NM = $(CROSS_COMPILE)nm
 # change this value if openocd isn't in the user/system PATH
 OPENOCD = openocd
 
-ROOT_PATH=../..
+ROOT_PATH = ../..
 VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
 RESOURCES_OPENOCD_UPLOAD = $(VARIANT_PATH)/openocd_scripts/variant_upload.cfg
 RESOURCES_OPENOCD_START = $(VARIANT_PATH)/openocd_scripts/variant_debug_start.cfg
 RESOURCES_GDB = $(VARIANT_PATH)/debug_scripts/variant.gdb
 RESOURCES_LINKER = $(VARIANT_PATH)/linker_scripts/gcc/variant_without_bootloader.ld
-CORE_ARM_PATH=$(ROOT_PATH)/cores/arduino/arch_arm
-CORE_COMMON_PATH=$(ROOT_PATH)/cores/arduino/arch_common
-CORE_AVR_PATH=$(ROOT_PATH)/cores/arduino/avr_compat
-CORE_SAM_PATH=$(ROOT_PATH)/cores/arduino/port_sam
+CORE_ARM_PATH = $(ROOT_PATH)/cores/arduino/arch_arm
+CORE_COMMON_PATH = $(ROOT_PATH)/cores/arduino/arch_common
+CORE_AVR_PATH = $(ROOT_PATH)/cores/arduino/avr_compat
+CORE_SAM_PATH = $(ROOT_PATH)/cores/arduino/port_sam
 
 INCLUDES  = -I$(ROOT_PATH)/tools/CMSIS_API/Include
 INCLUDES += -I$(ROOT_PATH)/tools/CMSIS_Devices/ATMEL
 INCLUDES += -I$(ROOT_PATH)/cores/arduino
 
-OUTPUT_PATH = $(VARIANT_PATH)/obj
+OBJ_PATH = $(VARIANT_PATH)/obj
 OUTPUT_NAME = lib$(VARIANT_NAME)
 OUTPUT_FILE_PATH = $(VARIANT_PATH)/$(OUTPUT_NAME).a
 
@@ -52,25 +56,24 @@ $(VARIANT_PATH)/variant.h               \
 $(VARIANT_PATH)/variant.cpp             \
 $(VARIANT_PATH)/variant_startup.c       \
 $(VARIANT_PATH)/variant_init.cpp
+INCLUDES += -I$(VARIANT_PATH)
 
 SOURCES+=$(SRC_VARIANT)
 
 #|---------------------------------------------------------------------------------------|
 #| Extract file names and path                                                           |
 #|---------------------------------------------------------------------------------------|
-PROJ_ASRCS  = $(filter %.s,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CSRCS  = $(filter %.c,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CPPSRCS  = $(filter %.cpp,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CHDRS  = $(filter %.h,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CPPHDRS  = $(filter %.hpp,$(foreach file,$(SOURCES),$(notdir $(file))))
+PROJ_ASRCS   = $(filter %.s,$(foreach file,$(SOURCES),$(file)))
+PROJ_ASRCS  += $(filter %.S,$(foreach file,$(SOURCES),$(file)))
+PROJ_CSRCS   = $(filter %.c,$(foreach file,$(SOURCES),$(file)))
+PROJ_CPPSRCS = $(filter %.cpp,$(foreach file,$(SOURCES),$(file)))
 
 #|---------------------------------------------------------------------------------------|
 #| Set important path variables                                                          |
 #|---------------------------------------------------------------------------------------|
-VPATH    = $(foreach path,$(sort $(foreach file,$(SOURCES),$(dir $(file)))) $(subst \,/,$(OUTPUT_PATH)),$(path) :)
-INC_PATH = $(patsubst %,-I%,$(sort $(foreach file,$(filter %.h,$(SOURCES)),$(dir $(file)))))
-INC_PATH += $(INCLUDES)
-LIB_PATH  = -L$(dir $(RESOURCES_LINKER))
+VPATH    = $(foreach path,$(sort $(foreach file,$(SOURCES),$(dir $(file)))),$(path) :)
+INC_PATH = $(INCLUDES)
+LIB_PATH = -L$(dir $(RESOURCES_LINKER))
 
 #|---------------------------------------------------------------------------------------|
 #| Options for compiler binaries                                                         |
@@ -87,7 +90,7 @@ COMMON_FLAGS += -Wunreachable-code -Wcast-align
 # -Wmissing-noreturn -Wconversion
 COMMON_FLAGS += --param max-inline-insns-single=500 -mcpu=$(DEVICE_CORE) -mthumb -ffunction-sections -fdata-sections
 COMMON_FLAGS += -D$(DEVICE_PART) -DDONT_USE_CMSIS_INIT -fdiagnostics-color=always
-COMMON_FLAGS += -Wa,-adhlns="$(OUTPUT_PATH)/$(subst .o,.lst,$@)"
+COMMON_FLAGS += -Wa,-adhlns="$(subst .o,.lst,$@)"
 COMMON_FLAGS += $(INC_PATH) -DF_CPU=$(DEVICE_FREQUENCY)
 COMMON_FLAGS += --param max-inline-insns-single=500
 
@@ -110,64 +113,105 @@ CPPFLAGS = $(COMMON_FLAGS) -std=gnu++11 -fno-rtti -fno-exceptions
 #|---------------------------------------------------------------------------------------|
 #| Define targets                                                                        |
 #|---------------------------------------------------------------------------------------|
-AOBJS = $(patsubst %.s,%.o,$(PROJ_ASRCS))
-COBJS = $(patsubst %.c,%.o,$(PROJ_CSRCS))
-CPPOBJS = $(patsubst %.cpp,%.o,$(PROJ_CPPSRCS))
+#AOBJS += $(patsubst %.S,%.o,$(PROJ_ASRCS))
+AOBJS = $(patsubst %.s,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_ASRCS))))
+COBJS = $(patsubst %.c,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_CSRCS))))
+CPPOBJS = $(patsubst %.cpp,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_CPPSRCS))))
+
+.PHONY: all clean print_info packaging
 
 all: $(OUTPUT_FILE_PATH)
 
-test:
-	@echo VPATH ---------------------------------------------------------------------------------------
+print_info:
+	@echo VPATH ---------------------------------------------------------------------------------
 	@echo $(VPATH)
-	@echo SOURCES -------------------------------------------------------------------------------------
+	@echo SOURCES -------------------------------------------------------------------------------
 	@echo $(SOURCES)
-	@echo PROJ_CHDRS ----------------------------------------------------------------------------------
-	@echo $(PROJ_CHDRS)
-	@echo PROJ_CPPHDRS --------------------------------------------------------------------------------
-	@echo $(PROJ_CPPHDRS)
-	@echo AOBJS ---------------------------------------------------------------------------------------
-	@echo $(AOBJS)
-	@echo PROJ_CSRCS ----------------------------------------------------------------------------------
+#	@echo PROJ_ASRCS ----------------------------------------------------------------------------
+#	@echo $(PROJ_ASRCS)
+#	@echo AOBJS ---------------------------------------------------------------------------------
+#	@echo $(AOBJS)
+	@echo PROJ_CSRCS ----------------------------------------------------------------------------
 	@echo $(PROJ_CSRCS)
-	@echo COBJS ---------------------------------------------------------------------------------------
+	@echo COBJS ---------------------------------------------------------------------------------
 	@echo $(COBJS)
-	@echo PROJ_CPPSRCS --------------------------------------------------------------------------------
+	@echo PROJ_CPPSRCS --------------------------------------------------------------------------
 	@echo $(PROJ_CPPSRCS)
-	@echo CPPOBJS -------------------------------------------------------------------------------------
+	@echo CPPOBJS -------------------------------------------------------------------------------
 	@echo $(CPPOBJS)
 	@echo ---------------------------------------------------------------------------------------
-	@echo $(PWD)
+	@echo $(CURDIR)
+	@echo $(OUTPUT_FILE_PATH)
+	@echo ---------------------------------------------------------------------------------------
 
-$(OUTPUT_FILE_PATH): $(VARIANT_PATH)/Makefile $(OUTPUT_PATH) $(AOBJS) $(COBJS) $(CPPOBJS)
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(AOBJS))
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(COBJS))
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(addprefix $(OUTPUT_PATH)/,$(CPPOBJS))
+$(OUTPUT_FILE_PATH): ../rules.mk ../sources.mk $(VARIANT_PATH)/Makefile $(OBJ_PATH) $(AOBJS) $(COBJS) $(CPPOBJS)
+	$(AR) -rv $(OUTPUT_FILE_PATH) $(AOBJS)
+	$(AR) -rv $(OUTPUT_FILE_PATH) $(COBJS)
+	$(AR) -rv $(OUTPUT_FILE_PATH) $(CPPOBJS)
 	$(NM) $(OUTPUT_FILE_PATH) > $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
 
 #|---------------------------------------------------------------------------------------|
-#| Compile and assemble                                                                  |
+#| Compile or assemble                                                                   |
 #|---------------------------------------------------------------------------------------|
-$(AOBJS): %.o: %.s $(PROJ_CHDRS)
+$(AOBJS): $(OBJ_PATH)/%.o: %.s
 	@echo +++ Assembling [$(notdir $<)]
-	@$(AS) $(AFLAGS) $< -o $(OUTPUT_PATH)/$(@F)
+	@$(AS) $(AFLAGS) $< -o $@
 
-$(COBJS): %.o: %.c $(PROJ_CHDRS)
+$(AOBJS): $(OBJ_PATH)/%.o: %.S
+	@echo +++ Assembling [$(notdir $<)]
+	@$(AS) $(AFLAGS) $< -o $@
+
+$(COBJS): $(OBJ_PATH)/%.o: %.c
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(CPPOBJS): %.o: %.cpp $(PROJ_CPPHDRS) $(PROJ_CHDRS)
+$(CPPOBJS): $(OBJ_PATH)/%.o: %.cpp
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CPPFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
+	@$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(OUTPUT_PATH):
-	@-mkdir $(OUTPUT_PATH)
+#|---------------------------------------------------------------------------------------|
+#| Output folder                                                                         |
+#|---------------------------------------------------------------------------------------|
+$(OBJ_PATH):
+	@echo +++ Creation of [$@]
+	@-mkdir $(OBJ_PATH)
 
+#|---------------------------------------------------------------------------------------|
+#| Cleanup                                                                               |
+#|---------------------------------------------------------------------------------------|
 clean:
-	-rm -f $(OUTPUT_PATH)/* $(OUTPUT_PATH)/*.*
+	-rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
+	-rmdir $(OBJ_PATH)
 	-rm -f $(OUTPUT_FILE_PATH)
-	-rm -f $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
+#-rm -f $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
 
-$(OUTPUT_PATH)/%.o : %.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+#|---------------------------------------------------------------------------------------|
+#| Dependencies                                                                          |
+#|---------------------------------------------------------------------------------------|
+$(OBJ_PATH)/%.d: %.s $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
 
-.phony: $(OUTPUT_PATH) clean test
+$(OBJ_PATH)/%.d: %.S $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+$(OBJ_PATH)/%.d: %.c $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(CFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+$(OBJ_PATH)/%.d: %.cpp $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(CPPFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+#|---------------------------------------------------------------------------------------|
+#| Include dependencies, if existing                                                     |
+#|---------------------------------------------------------------------------------------|
+-include $(AOBJS:%.o=%.d)
+-include $(COBJS:%.o=%.d)
+-include $(CPPOBJS:%.o=%.d)
+
+#|---------------------------------------------------------------------------------------|
+#| Module packaging for Arduino IDE Board Manager                                        |
+#|---------------------------------------------------------------------------------------|
+packaging: $(OUTPUT_FILE_PATH)

@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="atmel_sam4s_wpir_rd" InternalType="">
-  <Plugins>
-    <Plugin Name="CMakePlugin">
-      <![CDATA[[{
-  "name": "Debug",
-  "enabled": false,
-  "buildDirectory": "build",
-  "sourceDirectory": "$(ProjectPath)",
-  "generator": "",
-  "buildType": "",
-  "arguments": [],
-  "parentProject": ""
- }]]]>
-    </Plugin>
-  </Plugins>
   <VirtualDirectory Name="variants">
-    <File Name="../Makefile.rules"/>
-    <File Name="../Makefile.sources"/>
+    <File Name="../rules.mk"/>
+    <File Name="../sources.mk"/>
     <VirtualDirectory Name="atmel_sam4s_wpir_rd">
       <VirtualDirectory Name="linker_scripts">
         <File Name="linker_scripts/gcc/variant_with_bootloader.ld"/>
@@ -28,6 +14,7 @@
       <File Name="pins_arduino.h"/>
       <File Name="variant.cpp"/>
       <File Name="variant.h"/>
+      <File Name="variant.mk"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="libraries"/>
@@ -157,7 +144,7 @@
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/../variants/atmel_sam4s_wpir_rd" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/variants/atmel_sam4s_wpir_rd" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -195,7 +182,7 @@
       </Compiler>
       <Linker Options="-O2" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/../variants/atmel_sam4s_wpir_rd" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="" IntermediateDirectory="./Release" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/variants/atmel_sam4s_wpir_rd" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -214,7 +201,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>$(WorkspacePath)/../variants/atmel_sam4s_wpir_rd</WorkingDirectory>
+        <WorkingDirectory>$(WorkspacePath)/variants/atmel_sam4s_wpir_rd</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>

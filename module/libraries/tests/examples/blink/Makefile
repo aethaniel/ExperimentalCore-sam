@@ -1,128 +1,97 @@
+SHELL := /bin/sh
+
+.SUFFIXES: .d .o .c .h .cpp .hpp .s .S
+
 #-------------------------------------------------------------------------------
-#		Tools
+# Tools and definitions
 #-------------------------------------------------------------------------------
 
 # Set DEBUG variable for once if not coming from command line
 ifndef DEBUG
-DEBUG=0
+DEBUG := 0
 endif
 
 # Tool suffix when cross-compiling
-CROSS_COMPILE = arm-none-eabi-
+CROSS_COMPILE := arm-none-eabi-
 
 # Compilation tools
-CC = $(CROSS_COMPILE)gcc
-AR = $(CROSS_COMPILE)ar
-SIZE = $(CROSS_COMPILE)size
-STRIP = $(CROSS_COMPILE)strip
-OBJCOPY = $(CROSS_COMPILE)objcopy
-GDB = $(CROSS_COMPILE)gdb
-NM = $(CROSS_COMPILE)nm
+CC := $(CROSS_COMPILE)gcc
+AR := $(CROSS_COMPILE)ar
+SIZE := $(CROSS_COMPILE)size
+STRIP := $(CROSS_COMPILE)strip
+OBJCOPY := $(CROSS_COMPILE)objcopy
+GDB := $(CROSS_COMPILE)gdb
+NM := $(CROSS_COMPILE)nm
 
-ROOT_PATH=../../../..
+ROOT_PATH = ../../../..
 
-VARIANT_NAME ?= atmel_sam4s_xplained
+#VARIANT_NAME ?= atmel_sam4s_xplained
+VARIANT_NAME ?= atmel_sam4s_xplained_pro
+#VARIANT_NAME ?= atmel_samg55_xplained_pro
 VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
 include $(VARIANT_PATH)/variant.mk
 
-PROJECT_NAME=blink
+PROJECT_NAME := blink
 
-RESOURCES_OPENOCD_UPLOAD = $(VARIANT_PATH)/openocd_scripts/variant_upload.cfg
-RESOURCES_OPENOCD_START = $(VARIANT_PATH)/openocd_scripts/variant_debug_start.cfg
-RESOURCES_GDB = $(VARIANT_PATH)/debug_scripts/variant.gdb
-RESOURCES_LINKER = $(VARIANT_PATH)/linker_scripts/gcc/variant_without_bootloader.ld
-CORE_ARM_PATH=$(ROOT_PATH)/cores/arduino/arch_arm
-CORE_COMMON_PATH=$(ROOT_PATH)/cores/arduino/arch_common
-CORE_AVR_PATH=$(ROOT_PATH)/cores/arduino/avr_compat
-CORE_SAM_PATH=$(ROOT_PATH)/cores/arduino/port_sam
-#PROJECT_PATH=$(ROOT_PATH)/cores/validation/$(PROJECT_NAME)
-PROJECT_PATH=$(CURDIR)
+RESOURCES_OPENOCD_UPLOAD:= $(VARIANT_PATH)/openocd_scripts/variant_upload.cfg
+RESOURCES_OPENOCD_START := $(VARIANT_PATH)/openocd_scripts/variant_debug_start.cfg
+RESOURCES_GDB := $(VARIANT_PATH)/debug_scripts/variant.gdb
+RESOURCES_LINKER := $(VARIANT_PATH)/linker_scripts/gcc/variant_without_bootloader.ld
+CORE_ROOT_PATH := $(ROOT_PATH)/cores/arduino
+CORE_ARM_PATH := $(ROOT_PATH)/cores/arduino/arch_arm
+CORE_COMMON_PATH := $(ROOT_PATH)/cores/arduino/arch_common
+CORE_AVR_PATH := $(ROOT_PATH)/cores/arduino/avr_compat
+CORE_SAM_PATH := $(ROOT_PATH)/cores/arduino/port_sam
+PROJECT_PATH := $(ROOT_PATH)/libraries/tests/examples/$(PROJECT_NAME)
 
 #|---------------------------------------------------------------------------------------|
-#| Tools                                                                                 |
+#| Upload tools                                                                          |
 #|---------------------------------------------------------------------------------------|
 # change this value if openocd isn't in the user/system PATH
-TOOL_OPENOCD = openocd
-TOOL_EDBG = $(ROOT_PATH)/tools/edbg
+TOOL_OPENOCD := openocd
+TOOL_EDBG := $(ROOT_PATH)/tools/edbg
 
 #|---------------------------------------------------------------------------------------|
 #| Include paths                                                                         |
 #|---------------------------------------------------------------------------------------|
 INCLUDES  = -I$(ROOT_PATH)/tools/CMSIS_API/Include
 INCLUDES += -I$(ROOT_PATH)/tools/CMSIS_Devices/ATMEL
-INCLUDES += -I$(ROOT_PATH)/cores/arduino
+INCLUDES += -I$(VARIANT_PATH)
+INCLUDES += -I$(CORE_ROOT_PATH)
+INCLUDES += -I$(CORE_ARM_PATH)
+INCLUDES += -I$(CORE_COMMON_PATH)
+INCLUDES += -I$(CORE_AVR_PATH)
+INCLUDES += -I$(CORE_SAM_PATH)
+INCLUDES += -I$(PROJECT_PATH)
 
 #|---------------------------------------------------------------------------------------|
 #| Output paths                                                                          |
 #|---------------------------------------------------------------------------------------|
-OUTPUT_PATH = $(PROJECT_PATH)/obj
-OUTPUT_NAME = $(PROJECT_NAME)
-OUTPUT_FILE_PATH = $(PROJECT_PATH)/$(PROJECT_NAME)
-VARIANT_LIB_PATH = $(VARIANT_PATH)/lib$(VARIANT_NAME).a
+OBJ_PATH := $(PROJECT_PATH)/obj
+OUTPUT_NAME := $(PROJECT_NAME)
+OUTPUT_FILE_PATH := $(PROJECT_PATH)/$(PROJECT_NAME)
+VARIANT_LIB_PATH := $(VARIANT_PATH)/lib$(VARIANT_NAME).a
 
 #|---------------------------------------------------------------------------------------|
 #| Source files                                                                          |
 #|---------------------------------------------------------------------------------------|
-SOURCES=\
-$(CORE_ARM_PATH)/core_init.h            \
-$(CORE_ARM_PATH)/CoreHardwareSerial.hpp \
-$(CORE_ARM_PATH)/core_math.hpp          \
-$(CORE_ARM_PATH)/CorePrint.hpp          \
-$(CORE_ARM_PATH)/CorePrintable.hpp      \
-$(CORE_ARM_PATH)/CoreRingBuffer.hpp     \
-$(CORE_ARM_PATH)/CoreStream.hpp         \
-$(CORE_ARM_PATH)/CoreString.hpp         \
-$(CORE_ARM_PATH)/IPAddress.hpp          \
-$(CORE_ARM_PATH)/core_character.h       \
-$(CORE_ARM_PATH)/core_itoa.h            \
-$(CORE_ARM_PATH)/core_reset.h           \
-$(CORE_ARM_PATH)/core_shift.h           \
-$(CORE_ARM_PATH)/core_hooks.h           \
-$(CORE_ARM_PATH)/core_cortex_vectors.h  \
-$(CORE_COMMON_PATH)/Server.hpp          \
-$(CORE_COMMON_PATH)/Udp.hpp             \
-$(CORE_COMMON_PATH)/Client.hpp          \
-$(CORE_COMMON_PATH)/core_binary.h       \
-$(CORE_COMMON_PATH)/core_constants.h    \
-$(CORE_COMMON_PATH)/core_new.hpp        \
-$(CORE_COMMON_PATH)/core_reset.h        \
-$(CORE_COMMON_PATH)/core_watchdog.h     \
-$(CORE_AVR_PATH)/core_dtostrf.h         \
-$(CORE_AVR_PATH)/core_interrupt.h       \
-$(CORE_AVR_PATH)/core_pgmspace.h        \
-$(CORE_SAM_PATH)/Arduino.h              \
-$(CORE_SAM_PATH)/CoreSerial.hpp         \
-$(CORE_SAM_PATH)/core_analog.h          \
-$(CORE_SAM_PATH)/core_delay.h           \
-$(CORE_SAM_PATH)/core_digital.h         \
-$(CORE_SAM_PATH)/core_interrupts.h      \
-$(CORE_SAM_PATH)/core_private.h         \
-$(CORE_SAM_PATH)/core_pulse.hpp         \
-$(CORE_SAM_PATH)/core_tone.hpp          \
-$(CORE_SAM_PATH)/core_variant.h         \
-$(CORE_SAM_PATH)/CoreSerial.hpp         \
-$(CORE_SAM_PATH)/CoreSPI.hpp            \
-$(CORE_SAM_PATH)/CoreWire.hpp           \
-$(VARIANT_PATH)/pins_arduino.h          \
-$(VARIANT_PATH)/variant.h               \
+SOURCES =\
 $(PROJECT_PATH)/$(PROJECT_NAME).cpp
 
 #|---------------------------------------------------------------------------------------|
 #| Extract file names and path                                                           |
 #|---------------------------------------------------------------------------------------|
-PROJ_ASRCS  = $(filter %.s,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CSRCS  = $(filter %.c,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CPPSRCS  = $(filter %.cpp,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CHDRS  = $(filter %.h,$(foreach file,$(SOURCES),$(notdir $(file))))
-PROJ_CPPHDRS  = $(filter %.hpp,$(foreach file,$(SOURCES),$(notdir $(file))))
+PROJ_ASRCS   = $(filter %.s,$(foreach file,$(SOURCES),$(file)))
+PROJ_CSRCS   = $(filter %.c,$(foreach file,$(SOURCES),$(file)))
+PROJ_CPPSRCS = $(filter %.cpp,$(foreach file,$(SOURCES),$(file)))
 
 #|---------------------------------------------------------------------------------------|
 #| Set important path variables                                                          |
 #|---------------------------------------------------------------------------------------|
-VPATH    = $(foreach path,$(sort $(foreach file,$(SOURCES),$(dir $(file)))) $(subst \,/,$(OUTPUT_PATH)),$(path) :)
+VPATH    = $(foreach path,$(sort $(foreach file,$(SOURCES),$(dir $(file)))),$(path) :)
 INC_PATH = $(patsubst %,-I%,$(sort $(foreach file,$(filter %.h,$(SOURCES)),$(dir $(file)))))
 INC_PATH += $(INCLUDES)
-LIB_PATH  = -L$(dir $(RESOURCES_LINKER)) -L$(dir $(VARIANT_LIB_PATH))
+LIB_PATH = -L$(dir $(RESOURCES_LINKER)) -L$(dir $(VARIANT_LIB_PATH))
 
 #|---------------------------------------------------------------------------------------|
 #| Options for compiler binaries                                                         |
@@ -139,7 +108,7 @@ COMMON_FLAGS += -Wunreachable-code -Wcast-align
 # -Wmissing-noreturn -Wconversion
 COMMON_FLAGS += --param max-inline-insns-single=500 -mcpu=$(DEVICE_CORE) -mthumb -ffunction-sections -fdata-sections
 COMMON_FLAGS += -D$(DEVICE_PART) -DDONT_USE_CMSIS_INIT -fdiagnostics-color=always
-COMMON_FLAGS += -Wa,-adhlns="$(OUTPUT_PATH)/$(subst .o,.lst,$@)"
+COMMON_FLAGS += -Wa,-adhlns="$(subst .o,.lst,$@)"
 COMMON_FLAGS += $(INC_PATH) -DF_CPU=$(DEVICE_FREQUENCY)
 COMMON_FLAGS += -nostdlib --param max-inline-insns-single=500
 
@@ -167,66 +136,143 @@ LDFLAGS += -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-sy
 #|---------------------------------------------------------------------------------------|
 #| Define targets                                                                        |
 #|---------------------------------------------------------------------------------------|
-AOBJS = $(patsubst %.s,%.o,$(PROJ_ASRCS))
-COBJS = $(patsubst %.c,%.o,$(PROJ_CSRCS))
-CPPOBJS = $(patsubst %.cpp,%.o,$(PROJ_CPPSRCS))
+AOBJS := $(patsubst %.s,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_ASRCS))))
+COBJS := $(patsubst %.c,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_CSRCS))))
+CPPOBJS := $(patsubst %.cpp,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_CPPSRCS))))
+
+# Declare as phony all rules not based on files
+# $(VARIANT_LIB_PATH) is here also to force checking its dependencies and eventually rebuild
+.PHONY: all print_info clean packaging upload_openocd upload_edbg openocd debug $(VARIANT_LIB_PATH)
 
 all: $(OUTPUT_FILE_PATH).bin
+
+print_info:
+	@echo VPATH ---------------------------------------------------------------------------------
+	@echo $(VPATH)
+	@echo SOURCES -------------------------------------------------------------------------------
+	@echo $(SOURCES)
+#	@echo PROJ_ASRCS ----------------------------------------------------------------------------
+#	@echo $(PROJ_ASRCS)
+#	@echo AOBJS ---------------------------------------------------------------------------------
+#	@echo $(AOBJS)
+	@echo PROJ_CSRCS ----------------------------------------------------------------------------
+	@echo $(PROJ_CSRCS)
+	@echo COBJS ---------------------------------------------------------------------------------
+	@echo $(COBJS)
+	@echo PROJ_CPPSRCS --------------------------------------------------------------------------
+	@echo $(PROJ_CPPSRCS)
+	@echo CPPOBJS -------------------------------------------------------------------------------
+	@echo $(CPPOBJS)
+	@echo CURDIR --------------------------------------------------------------------------------
+	@echo $(CURDIR)
+	@echo OBJ_PATH ---------------------------------------------------------------------------
+	@echo $(OBJ_PATH)
+	@echo ---------------------------------------------------------------------------------------
 
 $(OUTPUT_FILE_PATH).bin: $(OUTPUT_FILE_PATH).elf
 	$(OBJCOPY) -O binary $(OUTPUT_FILE_PATH).elf $(OUTPUT_FILE_PATH).bin
 
-$(OUTPUT_FILE_PATH).elf: $(OUTPUT_PATH) $(VARIANT_LIB_PATH) $(PROJECT_PATH)/Makefile $(RESOURCES_LINKER) $(AOBJS) $(COBJS) $(CPPOBJS)
-	$(CC) $(LDFLAGS) "-T$(notdir $(RESOURCES_LINKER))" "-Wl,-Map,$(OUTPUT_FILE_PATH).map" --specs=nano.specs --specs=nosys.specs -o "$(OUTPUT_FILE_PATH).elf" -Wl,--start-group $(addprefix $(OUTPUT_PATH)/,$(AOBJS)) $(addprefix $(OUTPUT_PATH)/,$(COBJS)) $(addprefix $(OUTPUT_PATH)/,$(CPPOBJS)) -lm -lgcc -l$(VARIANT_NAME) -Wl,--end-group
+$(OUTPUT_FILE_PATH).elf: $(OBJ_PATH) $(VARIANT_LIB_PATH) $(PROJECT_PATH)/Makefile $(RESOURCES_LINKER) $(AOBJS) $(COBJS) $(CPPOBJS)
+	$(CC) $(LDFLAGS) "-T$(notdir $(RESOURCES_LINKER))" "-Wl,-Map,$(OUTPUT_FILE_PATH).map" --specs=nano.specs --specs=nosys.specs -o "$(OUTPUT_FILE_PATH).elf" -Wl,--start-group $(AOBJS) $(COBJS) $(CPPOBJS) -lm -lgcc -l$(VARIANT_NAME) -Wl,--end-group
 	$(NM) $(OUTPUT_FILE_PATH).elf >$(OUTPUT_FILE_PATH)_symbols.txt
 	$(SIZE) --format=sysv -t -x $(OUTPUT_FILE_PATH).elf
 
-.phony: $(VARIANT_LIB_PATH)
 $(VARIANT_LIB_PATH):
-#	make --no-builtin-rules --print-directory -C $(dir $(VARIANT_LIB_PATH))
+	@echo +++ Checking if library needs to be built [$(notdir $@)]
 	make --no-builtin-rules -C $(dir $(VARIANT_LIB_PATH)) DEBUG=$(DEBUG)
 
 #|---------------------------------------------------------------------------------------|
-#| Compile and assemble                                                                  |
+#| Compile or assemble                                                                  |
 #|---------------------------------------------------------------------------------------|
-$(AOBJS): %.o: %.s $(PROJ_CHDRS)
+$(AOBJS): $(OBJ_PATH)/%.o: %.s $(OBJ_PATH)
 	@echo +++ Assembling [$(notdir $<)]
-	$(AS) $(AFLAGS) $< -o $(OUTPUT_PATH)/$(@F)
+	$(AS) $(AFLAGS) $< -o $@
 
-$(COBJS): %.o: %.c $(PROJ_CHDRS)
+$(COBJS): $(OBJ_PATH)/%.o: %.c $(OBJ_PATH)
 	@echo +++ Compiling [$(notdir $<)]
-	$(CC) $(CFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(CPPOBJS): %.o: %.cpp $(PROJ_CHDRS) $(PROJ_CPPHDRS)
+$(CPPOBJS): $(OBJ_PATH)/%.o: %.cpp $(OBJ_PATH)
 	@echo +++ Compiling [$(notdir $<)]
-	$(CC) $(CPPFLAGS) -c $< -o $(OUTPUT_PATH)/$(@F)
-#	echo $(NM) $(OUTPUT_PATH)/$(@F)
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(OUTPUT_PATH):
-	-mkdir $(OUTPUT_PATH)
+#|---------------------------------------------------------------------------------------|
+#| Output folder                                                                         |
+#|---------------------------------------------------------------------------------------|
+$(OBJ_PATH):
+	@echo +++ Creation of [$@]
+	@-mkdir $(OBJ_PATH)
 
+#|---------------------------------------------------------------------------------------|
+#| Dependencies                                                                          |
+#|---------------------------------------------------------------------------------------|
+$(OBJ_PATH)/%.d : %.s $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+$(OBJ_PATH)/%.d : %.S $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+$(OBJ_PATH)/%.d : %.c $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(CFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+$(OBJ_PATH)/%.d : %.cpp $(OBJ_PATH)
+	@echo +++ Dependencies of [$(notdir $<)]
+	@$(CC) $(CPPFLAGS) -MM -c $< -MT $(basename $@).o -o $@
+
+#|---------------------------------------------------------------------------------------|
+#| Cleanup                                                                               |
+#|---------------------------------------------------------------------------------------|
 clean:
-	-rm -f $(OUTPUT_PATH)/* $(OUTPUT_PATH)/*.*
-	-rmdir $(OUTPUT_PATH)
+	-rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
+	-rmdir $(OBJ_PATH)
 	-rm -f $(OUTPUT_FILE_PATH).elf
 	-rm -f $(OUTPUT_FILE_PATH).bin
 	-rm -f $(OUTPUT_FILE_PATH).map
 	-rm -f $(OUTPUT_FILE_PATH)_symbols.txt
 
-$(OUTPUT_PATH)/%.o : %.c
+$(OBJ_PATH)/%.o : %.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-.phony: $(OUTPUT_PATH) clean test
-
+#|---------------------------------------------------------------------------------------|
+#| Upload example binary using openocd software tool                                     |
+#|---------------------------------------------------------------------------------------|
 upload_openocd: $(OUTPUT_FILE_PATH).elf
 	$(TOOL_OPENOCD) -f "$(RESOURCES_OPENOCD_UPLOAD)" -c "program $(OUTPUT_FILE_PATH).elf verify reset"
 
+#|---------------------------------------------------------------------------------------|
+#| Upload example binary using edbg software tool                                        |
+#|---------------------------------------------------------------------------------------|
 upload_edbg: $(OUTPUT_FILE_PATH).bin
 	$(TOOL_EDBG) -l
 	$(TOOL_EDBG) -bepvf $(OUTPUT_FILE_PATH).bin
 
+#|---------------------------------------------------------------------------------------|
+#| Start openocd GDB server (in a separate shell) in order to prepare a debug session    |
+#| Must be called before 'debug' rule                                                    |
+#|---------------------------------------------------------------------------------------|
 openocd: $(OUTPUT_FILE_PATH).elf
 	$(TOOL_OPENOCD) -f "$(RESOURCES_OPENOCD_START)" -c "init" -c "halt"
 
+#|---------------------------------------------------------------------------------------|
+#| Debug session start                                                                   |
+#| Must be called after 'openocd' rule                                                   |
+#|---------------------------------------------------------------------------------------|
 debug: $(OUTPUT_FILE_PATH).elf
 	$(GDB) -x "$(RESOURCES_GDB)" -readnow -se $(OUTPUT_FILE_PATH).elf
+
+#|---------------------------------------------------------------------------------------|
+#| Module packaging for Arduino IDE Board Manager                                        |
+#| This rule is added in case of                                                         |
+#|---------------------------------------------------------------------------------------|
+packaging:
+
+#|---------------------------------------------------------------------------------------|
+#| Include dependencies, if existing                                                     |
+#|---------------------------------------------------------------------------------------|
+-include $(AOBJS:%.o=%.d)
+-include $(COBJS:%.o=%.d)
+-include $(CPPOBJS:%.o=%.d)
+
