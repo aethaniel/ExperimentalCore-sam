@@ -115,5 +115,57 @@ DeviceVectors exception_table=
  */
 void SystemInit( void )
 {
-}
+  /* Set 6 FWS for Embedded Flash Access according to 120MHz configuration */
+  EFC0->EEFC_FMR = EEFC_FMR_FWS(5)|EEFC_FMR_CLOE;
 
+  /*
+   * We are coming from a Hard Reset or Backup mode.
+   * The core is clocked by Internal Fast RC @ 8MHz.
+   * We intend to use the device @120MHz from external 32kHz oscillator.
+   * Steps are:
+   * 1- Activation of external 32kHz oscillator
+   * 2- Set PLLA configuration
+   * 3- Select the master clock and processor clock
+   * 4- Select the programmable clocks (optional)
+   */
+
+  /* Step 1 - Activation of external 32kHz oscillator
+   * Then, we wait the startup time to be finished by checking PMC_SR_MOSCXTS in PMC_SR.
+   */
+  SUPC->SUPC_CR = SUPC_CR_KEY_PASSWD | SUPC_CR_XTALSEL;
+  while (!(SUPC->SUPC_SR & SUPC_SR_OSCSEL) && (PMC->PMC_SR & PMC_SR_OSCSELS)) ;
+
+  /* Step 2 - Set PLLA configuration
+   * The external oscillator is 32kHz. As we intend to clock the system @120MHz,
+   * we need to multiply the oscillator frequency by 3662 (120000000/32768).
+   * This can be done by setting CKGR_PLLAR_MULA to value 0xe4d (3662 - 1).
+   * We set the maximum PLL Lock time to maximum in CKGR_PLLAR_PLLACOUNT.
+   * Reference is product datasheet at 18.19.9 PMC Clock Generator PLLA Register.
+   *
+   * In case of, we could check first if PLLA is already active and put CKGR_PLLAR_MULA
+   * prior to set new configuration (not done here).
+   */
+  PMC->CKGR_PLLAR = CKGR_PLLAR_PLLAEN(1ul) | CKGR_PLLAR_MULA(0xe4dul) | CKGR_PLLAR_PLLACOUNT(0x3ful);
+  for ( ; (PMC->PMC_SR & PMC_SR_LOCKA) != PMC_SR_LOCKA ; );
+
+  /* Step 3 - Select the master clock and processor clock
+   * Source clock will be PLLA, instead of MAINCK from startup (8MHz Fast-RC).
+   * We first update the prescaler value to one and then switch source to PLLA.
+   */
+  PMC->PMC_MCKR = (PMC->PMC_MCKR & (~PMC_MCKR_PRES_Msk)) | PMC_MCKR_PRES_CLK_1;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY););
+
+  PMC->PMC_MCKR = (PMC->PMC_MCKR & (~PMC_MCKR_CSS_Msk)) | PMC_MCKR_CSS_PLLA_CLK;
+  for ( ; !(PMC->PMC_SR & PMC_SR_MCKRDY); );
+
+  /*
+   * Step 4 - Select the programmable clocks
+   *
+   * Output MCK on PCK1/pins PA17/PA21/PA30
+   * Used to validate Master Clock settings
+   */
+//  PMC->PMC_SCER = PMC_SCER_PCK1 ;
+
+
+  SystemCoreClock=__SYSTEM_CLOCK_120MHZ;
+}

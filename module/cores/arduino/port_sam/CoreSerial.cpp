@@ -50,6 +50,10 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
    */
   PMC->PMC_PCER0 = 1 << _dwId;
 
+#if SAMG55_SERIES
+  ((Flexcom*)((uint32_t)_pUsart-(0x200)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_USART;
+#endif
+
   // Disable PDC channel
   _pUsart->US_PTCR = US_PTCR_RXTDIS | US_PTCR_TXTDIS;
 

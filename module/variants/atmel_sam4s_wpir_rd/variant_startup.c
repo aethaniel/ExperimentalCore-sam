@@ -179,7 +179,7 @@ void SystemInit( void )
 
   /*
    * Step 7 - Select the programmable clocks
-   * *
+   *
    * Output MCK on PCK1/pin PA17
    * Used to validate Master Clock settings
    */

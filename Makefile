@@ -17,13 +17,13 @@ FOLDER2ARCHIVE := module
 # specify default variant, if not provided
 VARIANT_NAME ?= atmel_sam4s_xplained
 
+.PHONY: all clean print_info clean print_info_travis packaging
+
 all: print_info $(PRINT_INFO_TRAVIS)
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
 
 clean:
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/blink
-
-.phony: print_info clean print_info_travis packaging
 
 print_info:
 	@echo ----------------------------------------------------------
