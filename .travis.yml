@@ -24,7 +24,8 @@ script:
   - make
 
 env:
-  PATH=/home/travis/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/travis/gcc-arm-none-eabi-4_9-2015q3/bin
+  global:
+    - PATH=/home/travis/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/travis/gcc-arm-none-eabi-4_9-2015q3/bin
 
   matrix:
     - VARIANT_NAME=arduino_due
