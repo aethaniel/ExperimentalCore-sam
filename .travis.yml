@@ -5,14 +5,10 @@ compiler: gcc
 # use containers
 sudo: false
 
-#
-#before_install:
-#  - sudo add-apt-repository -y ppa:terry.guo/gcc-arm-embedded
-
 install:
   - wget --output-document=extras/toolchain.tar.bz2 https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2
   - cd extras
-  - tar -xvf toolchain.tar.bz2
+  - tar -xf toolchain.tar.bz2
   - cd ..
 
 addons:
@@ -38,13 +34,6 @@ env:
     - VARIANT_NAME=atmel_samg55_xplained_pro
     - VARIANT_NAME=logos_arachnio_due
     - VARIANT_NAME=poppy_core
-
-#addons:
-#  apt:
-#    sources:
-#      - gcc-arm-embedded
-#    packages:
-#      - gcc-arm-none-eabi
 
 #deploy:
 #  provider: releases
