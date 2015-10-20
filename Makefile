@@ -12,7 +12,6 @@ endif
 CORE_VERSION := $(shell grep version= $(ROOT_PATH)/module/platform.txt | sed 's/version=//g')
 PACKAGE_NAME := $(basename $(notdir $(ROOT_PATH)))
 FOLDER2ARCHIVE := module
-#../$(basename $(notdir $(ROOT_PATH)))
 
 # specify default variant, if not provided
 VARIANT_NAME ?= atmel_sam4s_xplained
@@ -42,6 +41,7 @@ print_info:
 print_info_travis:
 	@echo ----------------------------------------------------------
 	@echo Travis-CI envvars
+	@echo PATH                = $(PATH)
 	@echo TRAVIS_OS_NAME      = $(TRAVIS_OS_NAME)
 	@echo TRAVIS_LANGUAGE     = $(TRAVIS_LANGUAGE)
 	@echo TRAVIS_REPO_SLUG    = $(TRAVIS_REPO_SLUG)
