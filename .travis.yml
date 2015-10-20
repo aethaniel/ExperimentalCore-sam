@@ -10,8 +10,10 @@ sudo: false
 #  - sudo add-apt-repository -y ppa:terry.guo/gcc-arm-embedded
 
 install:
-  - wget https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2
-  - tar -xvf gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2 ..
+  - wget --output-document=extras/toolchain.tar.bz2 https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2
+  - cd extras
+  - tar -xvf extras/toolchain.tar.bz2
+  - cd ..
 
 addons:
   apt_packages:
@@ -25,7 +27,7 @@ script:
 
 env:
   global:
-    - PATH=/home/travis/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/travis/gcc-arm-none-eabi-4_9-2015q3/bin
+    - PATH=/home/travis/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:"$(TRAVIS_BUILD_DIR)/extras/gcc-arm-none-eabi-4_9-2015q3/bin"
 
   matrix:
     - VARIANT_NAME=arduino_due
