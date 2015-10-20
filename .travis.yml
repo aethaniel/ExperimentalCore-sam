@@ -12,7 +12,7 @@ sudo: false
 install:
   - wget --output-document=extras/toolchain.tar.bz2 https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update/+download/gcc-arm-none-eabi-4_9-2015q3-20150921-linux.tar.bz2
   - cd extras
-  - tar -xvf extras/toolchain.tar.bz2
+  - tar -xvf toolchain.tar.bz2
   - cd ..
 
 addons:
