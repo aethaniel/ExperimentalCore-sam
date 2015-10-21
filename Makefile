@@ -1,7 +1,34 @@
+#
+#  SAM Arduino IDE Module makefile.
+#
+#  Copyright (c) 2015 Thibaut VIARD. All right reserved.
+#
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Lesser General Public
+#  License as published by the Free Software Foundation; either
+#  version 2.1 of the License, or (at your option) any later version.
+#
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#  See the GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with this library; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+
 SHELL := /bin/sh
 
-ROOT_PATH := $(CURDIR)
+.SUFFIXES: .d .o .c .h .cpp .hpp .s .S
+
+#ROOT_PATH := $(CURDIR)
+ROOT_PATH := .
 EXAMPLES_PATH := $(ROOT_PATH)/module/libraries/tests/examples
+VARIANTS_PATH := $(ROOT_PATH)/module/variants
+
+# Variant list can be overriden via command line or ENV
+VARIANTS?=$(shell ls --hide=*.mk $(VARIANTS_PATH))
 
 ifeq ($(TRAVIS),true)
 PRINT_INFO_TRAVIS=print_info_travis
@@ -10,14 +37,43 @@ PRINT_INFO_TRAVIS=
 endif
 
 CORE_VERSION := $(shell grep version= $(ROOT_PATH)/module/platform.txt | sed 's/version=//g')
-PACKAGE_NAME := $(basename $(notdir $(ROOT_PATH)))
+PACKAGE_NAME := $(basename $(notdir $(CURDIR)))
 FOLDER2ARCHIVE := module
 #../$(basename $(notdir $(ROOT_PATH)))
 
+# -----------------------------------------------------------------------------
+# packaging specific
+PACKAGE_OS_VALID=win32 win64 lin32 lin64 osx
+
+# handle non-packaging request (normal build)
+ifeq ($(PACKAGE_OS),)
+# we are not requested to build the release package
 # specify default variant, if not provided
 VARIANT_NAME ?= atmel_sam4s_xplained
+define PACKAGE_PROCESS=
+@echo "Packaging won't be fully processed."
+endef
+else
+  ifeq (,$(findstring $(PACKAGE_OS), $(PACKAGE_OS_VALID)))
+    define PACKAGE_PROCESS=
+@echo "Wrong OS specified for Packaging."
+		endef
+  else
+		define PACKAGE_PROCESS=
+@echo "Packaging for OS $(PACKAGE_OS)."
+tar --transform "s|module|$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS)|g" --exclude=.gitattributes --exclude=.travis.yml --exclude-vcs \
+--exclude-vcs-ignores --exclude=.clang --exclude=.codelite --exclude=obj --exclude=CMSIS_SVD \
+-cvjf $(PACKAGE_NAME)-$(CORE_VERSION).tar.bz2 "$(FOLDER2ARCHIVE)"
+    endef
+  endif
+endif
+#		--transform "s/" \
 
-.PHONY: all clean print_info clean print_info_travis packaging
+# end of packaging specific
+# -----------------------------------------------------------------------------
+
+
+.PHONY: all clean print_info clean print_info_travis packaging packaging_clean
 
 all: print_info $(PRINT_INFO_TRAVIS)
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
@@ -28,14 +84,18 @@ clean:
 print_info:
 	@echo ----------------------------------------------------------
 	@echo Building ExperimentalCore-SAM using
-	@echo CURDIR       = $(CURDIR)
-	@echo OS           = $(OS)
-	@echo SHELL        = $(SHELL)
-	@echo TERM         = $(TERM)
-	@echo VARIANT_NAME = $(VARIANT_NAME)
-	@echo CORE_VERSION = $(CORE_VERSION)
-	@echo PACKAGE_NAME = $(PACKAGE_NAME)
-
+	@echo CURDIR        = $(CURDIR)
+	@echo OS            = $(OS)
+	@echo SHELL         = $(SHELL)
+	@echo TERM          = $(TERM)
+	@echo VARIANTS_PATH = $(VARIANTS_PATH)
+	@echo VARIANTS      = $(VARIANTS)
+	@echo VARIANT_NAME  = $(VARIANT_NAME)
+	@echo EXAMPLES_PATH = $(EXAMPLES_PATH)
+	@echo CORE_VERSION  = $(CORE_VERSION)
+	@echo PACKAGE_NAME  = $(PACKAGE_NAME)
+	@echo PACKAGE_OS    = $(PACKAGE_OS)
+#	@echo PACKAGE_PROCESS = $(PACKAGE_PROCESS)
 #	"$(CC)" -v
 #	env
 
@@ -60,6 +120,11 @@ print_info_travis:
 #   - exclude version control system files, here git files and folders .git, .gitattributes and .gitignore
 #   - exclude 'extras' folder
 #   - exclude 'obj' folder from variants
-packaging:
-	-rm $(PACKAGE_NAME)-*.tar.bz2
-	tar --transform "s|module|$(PACKAGE_NAME)-$(CORE_VERSION)|g" --exclude=.gitattributes --exclude=.travis.yaml --exclude-vcs --exclude-vcs-ignores --exclude=.clang --exclude=.codelite --exclude=obj -cvjf $(PACKAGE_NAME)-$(CORE_VERSION).tar.bz2 "$(FOLDER2ARCHIVE)"
+packaging: packaging_clean
+	@echo ----------------------------------------------------------
+	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(VARIANTS_PATH)/$(variant) ; )
+	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(VARIANTS_PATH)/$(variant) ; )
+	$(PACKAGE_PROCESS)
+
+packaging_clean:
+	-$(RM) $(PACKAGE_NAME)-*.tar.bz2

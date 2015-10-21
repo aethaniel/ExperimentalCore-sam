@@ -1,6 +1,22 @@
-SHELL := /bin/sh
-
-.SUFFIXES: .d .o .c .h .cpp .hpp .s .S
+#
+#  SAM Arduino IDE variant makefile.
+#
+#  Copyright (c) 2015 Thibaut VIARD. All right reserved.
+#
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Lesser General Public
+#  License as published by the Free Software Foundation; either
+#  version 2.1 of the License, or (at your option) any later version.
+#
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#  See the GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with this library; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
 
 #-------------------------------------------------------------------------------
 #		Tools
@@ -123,6 +139,8 @@ CPPOBJS = $(patsubst %.cpp,%.o,$(addprefix $(OBJ_PATH)/, $(notdir $(PROJ_CPPSRCS
 all: $(OUTPUT_FILE_PATH)
 
 print_info:
+	@echo DEFAULT_GOAL ---------------------------------------------------------------------------------
+	@echo $(.DEFAULT_GOAL)
 	@echo VPATH ---------------------------------------------------------------------------------
 	@echo $(VPATH)
 	@echo SOURCES -------------------------------------------------------------------------------
@@ -144,7 +162,7 @@ print_info:
 	@echo $(OUTPUT_FILE_PATH)
 	@echo ---------------------------------------------------------------------------------------
 
-$(OUTPUT_FILE_PATH): ../rules.mk ../sources.mk $(VARIANT_PATH)/Makefile $(OBJ_PATH) $(AOBJS) $(COBJS) $(CPPOBJS)
+$(OUTPUT_FILE_PATH): $(OBJ_PATH) ../rules.mk ../sources.mk $(VARIANT_PATH)/Makefile $(AOBJS) $(COBJS) $(CPPOBJS)
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(AOBJS)
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(COBJS)
 	$(AR) -rv $(OUTPUT_FILE_PATH) $(CPPOBJS)
@@ -206,12 +224,20 @@ $(OBJ_PATH)/%.d: %.cpp $(OBJ_PATH)
 
 #|---------------------------------------------------------------------------------------|
 #| Include dependencies, if existing                                                     |
+#| Little trick to avoid dependencies build for some rules when useless                  |
+#| CAUTION: this won't work as expected with 'make clean all'                            |
 #|---------------------------------------------------------------------------------------|
+DEP_EXCLUDE_RULES := clean print_info
+ifeq (,$(findstring $(MAKECMDGOALS), $(DEP_EXCLUDE_RULES)))
 -include $(AOBJS:%.o=%.d)
 -include $(COBJS:%.o=%.d)
 -include $(CPPOBJS:%.o=%.d)
+endif
+
 
 #|---------------------------------------------------------------------------------------|
 #| Module packaging for Arduino IDE Board Manager                                        |
 #|---------------------------------------------------------------------------------------|
 packaging: $(OUTPUT_FILE_PATH)
+
+%.d:
