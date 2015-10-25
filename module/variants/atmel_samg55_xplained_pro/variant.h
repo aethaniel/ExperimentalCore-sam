@@ -49,10 +49,10 @@ extern "C"
  *----------------------------------------------------------------------------*/
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (4ul)
-#define NUM_DIGITAL_PINS     (4ul) // TODO
-#define NUM_ANALOG_INPUTS    (0ul) // TODO
-#define NUM_ANALOG_OUTPUTS   (0ul) // TODO
+#define PINS_COUNT           (20ul) //(35ul) //(sizeof(g_aPinMap)/sizeof(g_aPinMap[0]))
+#define NUM_DIGITAL_PINS     (27ul)
+#define NUM_ANALOG_INPUTS    (4ul)
+#define NUM_ANALOG_OUTPUTS   (0ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -82,7 +82,7 @@ extern "C"
 #define digitalPinToInterrupt(p)  ((p) < NUM_DIGITAL_PINS ? (p) : -1)
 
 // LEDs
-#define PIN_LED_13           (2u)
+#define PIN_LED_13           (6u)
 #define PIN_LED              PIN_LED_13
 #define LED_BUILTIN          PIN_LED_13
 
@@ -113,11 +113,13 @@ static const uint8_t A5  = PIN_A5 ;
 #define PIN_SERIAL_RX       (0ul)
 #define PIN_SERIAL_TX       (1ul)
 
-#if 0 // TODO Serial1
 // Serial1
-#define PIN_SERIAL1_RX       (ul)
-#define PIN_SERIAL1_TX       (ul)
-#endif // TODO Serial1
+#define PIN_SERIAL1_RX       (2ul)
+#define PIN_SERIAL1_TX       (3ul)
+
+// Serial2
+#define PIN_SERIAL2_RX       (4ul)
+#define PIN_SERIAL2_TX       (5ul)
 
 #if 0 // TODO SPI
 /*
@@ -171,7 +173,8 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #ifdef __cplusplus
 
 extern SAMSerial Serial;
-//extern SAMSerial Serial1;
+extern SAMSerial Serial1;
+extern SAMSerial Serial2;
 
 #endif
 
@@ -193,8 +196,10 @@ extern SAMSerial Serial;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-//#define SERIAL_PORT_HARDWARE        Serial1
-//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+#define SERIAL_PORT_HARDWARE        Serial1
+#define SERIAL_PORT_HARDWARE1       Serial2
+#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+#define SERIAL_PORT_HARDWARE_OPEN1  Serial2
 
 #endif /* _VARIANT_ATMEL_SAMG55_XPLAINED_PRO_H_ */
 
