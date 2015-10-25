@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#if defined(ARDUINO_ARCH_SAM)
+//#if defined(ARDUINO_ARCH_SAM)
 
 #include "Arduino.h"
 #include "Servo.hpp"
@@ -109,13 +109,13 @@ static void _initISR(Tc *tc, uint32_t channel, uint32_t id, IRQn_Type irqn)
 {
 //  pmc_enable_periph_clk(id);
   /* Activate TC peripheral clock */
-  if (_dwId < 32)
+  if (id < 32)
   {
-    PMC->PMC_PCER0 = 1 << _dwId;
+    PMC->PMC_PCER0 = 1 << id;
   }
   else
   {
-    PMC->PMC_PCER1 = 1 << (_dwId-32);
+    PMC->PMC_PCER1 = 1 << (id-32);
   }
 
 //  TC_Configure(tc, channel, TC_CMR_TCCLKS_TIMER_CLOCK3 | // MCK/32
@@ -123,18 +123,18 @@ static void _initISR(Tc *tc, uint32_t channel, uint32_t id, IRQn_Type irqn)
 //                            TC_CMR_WAVSEL_UP_RC );       // Counter running up and reset when equals to RC
 
   /*  Disable TC clock */
-  tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_CLKDIS ;
+  tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_CLKDIS;
 
   /*  Disable interrupts */
-  tc->TC_CHANNEL[channel].TC_IDR = 0xFFFFFFFF ;
+  tc->TC_CHANNEL[channel].TC_IDR = 0xFFFFFFFF;
 
   /*  Clear status register */
-  tc->TC_CHANNEL[channel].TC_SR ;
+  tc->TC_CHANNEL[channel].TC_SR;
 
   /*  Set mode */
   tc->TC_CHANNEL[channel].TC_CMR = TC_CMR_TCCLKS_TIMER_CLOCK3 | // MCK/32
                                    TC_CMR_WAVE |                // Waveform mode
-                                   TC_CMR_WAVSEL_UP_RC );       // Counter running up and reset when equals to RC
+                                   TC_CMR_WAVSEL_UP_RC;         // Counter running up and reset when equals to RC
 
 
   /*  84MHz, MCK/32, for 1.5ms: 3937, 2625 for 1ms */
@@ -157,35 +157,35 @@ static void initISR(timer16_Sequence_t timer)
 #if defined (_useTimer1)
     if (timer == _timer1)
     {
-      vectorAssign( IRQn_FOR_TIMER1, HANDLER_FOR_TIMER1)
+      vectorAssign( IRQn_FOR_TIMER1, HANDLER_FOR_TIMER1);
       _initISR(TC_FOR_TIMER1, CHANNEL_FOR_TIMER1, ID_TC_FOR_TIMER1, IRQn_FOR_TIMER1);
     }
 #endif
 #if defined (_useTimer2)
     if (timer == _timer2)
     {
-      vectorAssign( IRQn_FOR_TIMER2, HANDLER_FOR_TIMER2)
+      vectorAssign( IRQn_FOR_TIMER2, HANDLER_FOR_TIMER2);
         _initISR(TC_FOR_TIMER2, CHANNEL_FOR_TIMER2, ID_TC_FOR_TIMER2, IRQn_FOR_TIMER2);
     }
 #endif
 #if defined (_useTimer3)
     if (timer == _timer3)
     {
-      vectorAssign( IRQn_FOR_TIMER3, HANDLER_FOR_TIMER3)
+      vectorAssign( IRQn_FOR_TIMER3, HANDLER_FOR_TIMER3);
         _initISR(TC_FOR_TIMER3, CHANNEL_FOR_TIMER3, ID_TC_FOR_TIMER3, IRQn_FOR_TIMER3);
     }
 #endif
 #if defined (_useTimer4)
     if (timer == _timer4)
     {
-      vectorAssign( IRQn_FOR_TIMER4, HANDLER_FOR_TIMER4)
+      vectorAssign( IRQn_FOR_TIMER4, HANDLER_FOR_TIMER4);
         _initISR(TC_FOR_TIMER4, CHANNEL_FOR_TIMER4, ID_TC_FOR_TIMER4, IRQn_FOR_TIMER4);
     }
 #endif
 #if defined (_useTimer5)
     if (timer == _timer5)
     {
-      vectorAssign( IRQn_FOR_TIMER5, HANDLER_FOR_TIMER5)
+      vectorAssign( IRQn_FOR_TIMER5, HANDLER_FOR_TIMER5);
       _initISR(TC_FOR_TIMER5, CHANNEL_FOR_TIMER5, ID_TC_FOR_TIMER5, IRQn_FOR_TIMER5);
     }
 #endif
@@ -334,5 +334,5 @@ bool Servo::attached()
   return servos[this->servoIndex].Pin.isActive;
 }
 
-#endif // ARDUINO_ARCH_SAM
+//#endif // ARDUINO_ARCH_SAM
 

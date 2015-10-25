@@ -75,37 +75,41 @@ void loop(void)
   // if text arrived in from BT serial...
   {
     c=HC06_SERIAL.read();
+        SERIAL_PORT_MONITOR.print("Received:");
+        SERIAL_PORT_MONITOR.println(c);
     switch ( c )
     {
+      case 'C': // stop everything
+        servo_left.write(90); //
+        servo_right.write(90); //
+      break;
+
       case 'U':
         // move robot forward
-        digitalWrite(LED_BUILTIN, HIGH);
+        servo_left.write(180); //
+        servo_right.write(0); //
       break;
 
       case 'D':
         // move robot backward
-        digitalWrite(LED_BUILTIN, LOW);
+        servo_left.write(0); //
+        servo_right.write(180); //
       break;
 
       case 'L':
         // move robot forward
-        digitalWrite(LED_BUILTIN, HIGH);
-        servo_left.writeMicroseconds(100); //
-        delay(1000);                       // wait for a second
-        servo_left.writeMicroseconds(0);   // stop the servo moving
+        servo_left.write(180); //
+        servo_right.write(180); //
       break;
 
       case 'R':
         // move robot backward
-        digitalWrite(LED_BUILTIN, LOW);
-        servo_right.writeMicroseconds(100); //
-        delay(1000);                        // wait for a second
-        servo_right.writeMicroseconds(0);   // stop the servo moving
+        servo_left.write(0); //
+        servo_right.write(0); //
       break;
 
       default:
-        SERIAL_PORT_MONITOR.print("Received:");
-        SERIAL_PORT_MONITOR.println(c);
+      break;
     }
   }
 }
