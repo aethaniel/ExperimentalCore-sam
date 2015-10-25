@@ -7,10 +7,12 @@
   <Project Name="atmel_sam4s_xplained" Path="../../../variants/atmel_sam4s_xplained/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_wpir_rd" Path="../../../variants/atmel_sam4s_wpir_rd/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_xplained_pro" Path="../../../variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
-  <Project Name="atmel_samg55_xplained_pro" Path="../../../variants/atmel_samg55_xplained_pro/variant.project" Active="Yes"/>
+  <Project Name="atmel_samg55_xplained_pro" Path="../../../variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
   <Project Name="logos_arachnio_due" Path="../../../variants/logos_arachnio_due/variant.project" Active="No"/>
   <Project Name="poppy_core" Path="../../../variants/poppy_core/variant.project" Active="No"/>
   <Project Name="blink" Path="blink/blink.project" Active="No"/>
+  <Project Name="bt_hc06" Path="bt_hc06/bt_hc06.project" Active="No"/>
+  <Project Name="wheel_robot_servo" Path="wheel_robot_servo/wheel_robot_servo.project" Active="Yes"/>
   <Environment>
     <![CDATA[]]>
   </Environment>
@@ -25,8 +27,10 @@
       <Project Name="logos_arachnio_due" ConfigName="Debug"/>
       <Project Name="poppy_core" ConfigName="Debug"/>
       <Project Name="blink" ConfigName="Debug"/>
+      <Project Name="bt_hc06" ConfigName="Debug"/>
+      <Project Name="wheel_robot_servo" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="no">
+    <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="atmel_sam4s_xplained" ConfigName="Release"/>
       <Project Name="atmel_sam4s_wpir_rd" ConfigName="Release"/>
       <Project Name="atmel_sam4s_xplained_pro" ConfigName="Release"/>
@@ -36,6 +40,8 @@
       <Project Name="logos_arachnio_due" ConfigName="Release"/>
       <Project Name="poppy_core" ConfigName="Release"/>
       <Project Name="blink" ConfigName="Release"/>
+      <Project Name="bt_hc06" ConfigName="Release"/>
+      <Project Name="wheel_robot_servo" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
