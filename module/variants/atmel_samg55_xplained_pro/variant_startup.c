@@ -166,6 +166,6 @@ void SystemInit( void )
    */
 //  PMC->PMC_SCER = PMC_SCER_PCK1 ;
 
-
   SystemCoreClock=__SYSTEM_CLOCK_120MHZ;
 }
+
