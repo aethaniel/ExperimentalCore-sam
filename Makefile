@@ -18,11 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-SHELL := /bin/sh
+SHELL = /bin/sh
 
-.SUFFIXES: .d .o .c .h .cpp .hpp .s .S
+.SUFFIXES: .tar.bz2
 
-#ROOT_PATH := $(CURDIR)
 ROOT_PATH := .
 EXAMPLES_PATH := $(ROOT_PATH)/module/libraries/tests/examples
 VARIANTS_PATH := $(ROOT_PATH)/module/variants
@@ -38,48 +37,73 @@ endif
 
 CORE_VERSION := $(shell grep version= $(ROOT_PATH)/module/platform.txt | sed 's/version=//g')
 PACKAGE_NAME := $(basename $(notdir $(CURDIR)))
-FOLDER2ARCHIVE := module
-#../$(basename $(notdir $(ROOT_PATH)))
+PACKAGE_FOLDER := module
 
 # -----------------------------------------------------------------------------
 # packaging specific
-PACKAGE_OS_VALID=win32 win64 lin32 lin64 osx
+
+# these words match the folder names in module/tools
+PACKAGE_OS_VIRTUAL := all
+PACKAGE_OS_REAL    := win32 win64 linux32 linux64 osx
+PACKAGE_OS_VALID   := $(PACKAGE_OS_VIRTUAL) $(PACKAGE_OS_REAL)
+
+#
+# We will define a convenient macro function to handle correctly all cases
+# PACKAGE_PROCESS must be called with one parameter
+# first parameter is one value from PACKAGE_OS_VALID
+#
 
 # handle non-packaging request (normal build)
 ifeq ($(PACKAGE_OS),)
 # we are not requested to build the release package
 # specify default variant, if not provided
 VARIANT_NAME ?= atmel_sam4s_xplained
-define PACKAGE_PROCESS=
-@echo "Packaging won't be fully processed."
-endef
+$(warning, "Packaging won't be fully processed.")
 else
+#
+# handle case where PACKAGE_OS is wrong
+#
   ifeq (,$(findstring $(PACKAGE_OS), $(PACKAGE_OS_VALID)))
-    define PACKAGE_PROCESS=
-@echo "Wrong OS specified for Packaging."
-		endef
+$(error, "Wrong OS specified for Packaging ($(PACKAGE_OS)).")
   else
-		define PACKAGE_PROCESS=
-@echo "Packaging for OS $(PACKAGE_OS)."
-tar --transform "s|module|$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS)|g" --exclude=.gitattributes --exclude=.travis.yml --exclude-vcs \
---exclude-vcs-ignores --exclude=.clang --exclude=.codelite --exclude=obj --exclude=CMSIS_SVD \
--cvjf $(PACKAGE_NAME)-$(CORE_VERSION).tar.bz2 "$(FOLDER2ARCHIVE)"
-    endef
+#
+# handle full packaging for given variant(s)
+# if no specific variant is requested, all present will be integrated
+#
+    PACKAGE_TO_BE_PROCESSED := $(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS).tar.bz2
   endif
 endif
-#		--transform "s/" \
+
+ifeq (postpackaging,$(findstring $(MAKECMDGOALS),postpackaging))
+	PACKAGE_OS_FILENAME=$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS).tar.bz2
+  PACKAGE_CHKSUM := $(firstword $(shell sha256sum $(PACKAGE_OS_FILENAME)))
+	PACKAGE_SIZE := $(firstword $(shell wc -c $(PACKAGE_OS_FILENAME)))
+endif
 
 # end of packaging specific
 # -----------------------------------------------------------------------------
 
+.PHONY: all clean print_info clean print_info_travis packaging packaging_clean postpackaging help $(PACKAGE_NAME)-$(CORE_VERSION)-all.tar.bz2
 
-.PHONY: all clean print_info clean print_info_travis packaging packaging_clean
-
-all: print_info $(PRINT_INFO_TRAVIS)
+all: help print_info $(PRINT_INFO_TRAVIS)
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
 
 clean:
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/blink
+
+help:
+	@echo "----------------------------------------------------------"
+	@echo "Available targets are:"
+	@echo "- VARIANT_NAME=one of [$(VARIANTS)] all"
+	@echo "- VARIANT_NAME=one of [$(VARIANTS)] clean"
+	@echo "- PACKAGE_OS=one of [$(PACKAGE_OS_VALID)] packaging"
+	@echo " "
+	@echo "example:"
+	@echo "> make VARIANT_NAME=$(firstword $(VARIANTS)) all"
+	@echo "or"
+	@echo "> make PACKAGE_OS=$(firstword $(PACKAGE_OS_VALID)) packaging"
+	@echo " "
+	@echo "----------------------------------------------------------"
 
 print_info:
 	@echo ----------------------------------------------------------
@@ -95,7 +119,10 @@ print_info:
 	@echo CORE_VERSION  = $(CORE_VERSION)
 	@echo PACKAGE_NAME  = $(PACKAGE_NAME)
 	@echo PACKAGE_OS    = $(PACKAGE_OS)
+	@echo PACKAGE_OS_VALID = $(PACKAGE_OS_VALID)
+	@echo PACKAGE_OS_REAL  = $(PACKAGE_OS_REAL)
 #	@echo PACKAGE_PROCESS = $(PACKAGE_PROCESS)
+	@echo PACKAGE_TO_BE_PROCESSED = $(PACKAGE_TO_BE_PROCESSED)
 #	"$(CC)" -v
 #	env
 
@@ -116,15 +143,46 @@ print_info_travis:
 	@echo TRAVIS_BUILD_ID     = $(TRAVIS_BUILD_ID)
 	@echo TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)
 
+packaging: packaging_clean build_variants $(PACKAGE_TO_BE_PROCESSED)
+
+build_variants:
+	@echo ----------------------------------------------------------
+	@echo  Build variants: $(VARIANTS)
+	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(VARIANTS_PATH)/$(variant) ; )
+	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(VARIANTS_PATH)/$(variant) ; )
+	@echo ----------------------------------------------------------
+
+# fake phony rule for 'all' virtual os target
+$(PACKAGE_NAME)-$(CORE_VERSION)-all.tar.bz2: $(patsubst %,$(PACKAGE_NAME)-$(CORE_VERSION)-%.tar.bz2,$(PACKAGE_OS_REAL))
+
+define PACKAGE_OS_PROCESS=
 # Arduino module packaging:
 #   - exclude version control system files, here git files and folders .git, .gitattributes and .gitignore
 #   - exclude 'extras' folder
 #   - exclude 'obj' folder from variants
-packaging: packaging_clean
+$(PACKAGE_NAME)-$(CORE_VERSION)-$(1).tar.bz2:
 	@echo ----------------------------------------------------------
-	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(VARIANTS_PATH)/$(variant) ; )
-	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(VARIANTS_PATH)/$(variant) ; )
-	$(PACKAGE_PROCESS)
+	@echo "Packaging for OS $(1)."
+	@echo "Removing OSs $(filter-out $(1),$(PACKAGE_OS_REAL))"
+
+	tar --transform "s|module|$(PACKAGE_NAME)-$(CORE_VERSION)-$(1)|g" --transform "s|tools/$(1)|tools|g" --exclude=.gitattributes --exclude=.travis.yml --exclude-vcs \
+--exclude-vcs-ignores --exclude=.clang --exclude=.codelite --exclude=obj --exclude=*.bat --exclude=*.map --exclude=*.elf --exclude=*.bin --exclude=*_symbols.txt --exclude=CMSIS_SVD $(patsubst %,--exclude=%,$(filter-out $(1),$(PACKAGE_OS_REAL)))\
+-cjf $(PACKAGE_NAME)-$(CORE_VERSION)-$(1).tar.bz2 "$(PACKAGE_FOLDER)"
+	$(MAKE) --no-builtin-rules PACKAGE_OS=$(1) postpackaging -C .
+	@echo ----------------------------------------------------------
+endef
+
+$(foreach OS_VALUE,$(PACKAGE_OS_REAL), $(eval $(call PACKAGE_OS_PROCESS,$(OS_VALUE))))
+
+postpackaging:
+	@echo "PACKAGE_CHKSUM      = $(PACKAGE_CHKSUM)"
+	@echo "PACKAGE_SIZE        = $(PACKAGE_SIZE)"
+	@echo "TRAVIS_JOB_NUMBER   = $(TRAVIS_JOB_NUMBER)"
+	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
+	@echo "PACKAGE_OS_FILENAME = $(PACKAGE_OS_FILENAME)"
+	cat extras/package_index.json.template | sed s/%%PR_NUMBER%%/$(TRAVIS_JOB_NUMBER)/ | sed s/%%BUILD_NUMBER%%/$(TRAVIS_BUILD_NUMBER)/ | sed s/%%VERSION%%/$(CORE_VERSION)-build-$(TRAVIS_BUILD_NUMBER)/ | \
+sed s/%%FILENAME%%/$(PACKAGE_OS_FILENAME)/ | sed s/%%CHECKSUM%%/$(PACKAGE_CHKSUM)/ | sed s/%%SIZE%%/$(PACKAGE_SIZE)/ > package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_b$(TRAVIS_BUILD_NUMBER).json
+	@echo "package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_b$(TRAVIS_BUILD_NUMBER).json created"
 
 packaging_clean:
-	-$(RM) $(PACKAGE_NAME)-*.tar.bz2
+	-$(RM) $(PACKAGE_NAME)-*.tar.bz2 package_$(PACKAGE_NAME)_*.json
