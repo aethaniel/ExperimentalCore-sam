@@ -6,7 +6,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 
 name=ARM Cortex-M3/M4 (32-bits) Boards
-version=1.0.0
+version=0.1.0
 
 # SAM3/4 compile variables
 # ----------------------
