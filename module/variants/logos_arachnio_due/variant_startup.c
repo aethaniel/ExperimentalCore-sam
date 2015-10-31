@@ -89,7 +89,7 @@ DeviceVectors exception_table=
 #endif /* HSMCI */
   .pfnTWI0_Handler   = (void*) vector_halt,  /* 19 Two Wire Interface 0 */
   .pfnTWI1_Handler   = (void*) vector_halt,  /* 20 Two Wire Interface 1 */
-  .pfnSPI_Handler    = (void*) vector_halt,  /* 21 Serial Peripheral Interface */
+  .pfnSPI0_Handler   = (void*) vector_halt,  /* 21 Serial Peripheral Interface */
   .pfnSSC_Handler    = (void*) vector_halt,  /* 22 Synchronous Serial Controller */
   .pfnTC0_Handler    = (void*) vector_halt,  /* 23 Timer/Counter 0 */
   .pfnTC1_Handler    = (void*) vector_halt,  /* 24 Timer/Counter 1 */
@@ -179,7 +179,7 @@ void SystemInit( void )
 
   /*
    * Step 7 - Select the programmable clocks
-   * *
+   *
    * Output MCK on PCK1/pin PA17
    * Used to validate Master Clock settings
    */
