@@ -88,17 +88,19 @@ endif
 
 .PHONY: all clean print_info clean print_info_travis packaging packaging_clean postpackaging help $(PACKAGE_NAME)-$(CORE_VERSION)-all.tar.bz2
 
-#	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
 all: help print_info $(PRINT_INFO_TRAVIS)
 	@echo ----------------------------------------------------------
 	@echo  Build examples: $(EXAMPLES)
-	@echo  Build variants: $(VARIANTS)
-	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules clean -C $(EXAMPLES_PATH)/$(example) ; )
-	$(foreach example,$(EXAMPLES),$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(EXAMPLES_PATH)/$(example) ; ))
+	@echo    for variant: $(VARIANT_NAME)
+	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) all -C $(EXAMPLES_PATH)/$(example) ; )
 	@echo ----------------------------------------------------------
 
 clean:
-	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/blink
+	@echo ----------------------------------------------------------
+	@echo  Clean examples: $(EXAMPLES)
+	@echo    for variant: $(VARIANT_NAME)
+	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/$(example) ; )
+	@echo ----------------------------------------------------------
 
 help:
 	@echo "----------------------------------------------------------"
