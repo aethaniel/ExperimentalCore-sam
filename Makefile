@@ -26,8 +26,11 @@ ROOT_PATH := .
 EXAMPLES_PATH := $(ROOT_PATH)/module/libraries/tests/examples
 VARIANTS_PATH := $(ROOT_PATH)/module/variants
 
-# Variant list can be overriden via command line or ENV
+# Variant list, can be overriden via command line or ENV
 VARIANTS?=$(shell ls --hide=*.mk $(VARIANTS_PATH))
+
+# Examples list, can be overriden via command line or ENV
+EXAMPLES?=$(shell ls --hide=*.mk --hide=.* --hide=sketches.* $(EXAMPLES_PATH))
 
 ifeq ($(TRAVIS),true)
 PRINT_INFO_TRAVIS=print_info_travis
@@ -85,8 +88,14 @@ endif
 
 .PHONY: all clean print_info clean print_info_travis packaging packaging_clean postpackaging help $(PACKAGE_NAME)-$(CORE_VERSION)-all.tar.bz2
 
+#	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
 all: help print_info $(PRINT_INFO_TRAVIS)
-	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) -C $(EXAMPLES_PATH)/blink
+	@echo ----------------------------------------------------------
+	@echo  Build examples: $(EXAMPLES)
+	@echo  Build variants: $(VARIANTS)
+	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules clean -C $(EXAMPLES_PATH)/$(example) ; )
+	$(foreach example,$(EXAMPLES),$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(EXAMPLES_PATH)/$(example) ; ))
+	@echo ----------------------------------------------------------
 
 clean:
 	$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/blink
