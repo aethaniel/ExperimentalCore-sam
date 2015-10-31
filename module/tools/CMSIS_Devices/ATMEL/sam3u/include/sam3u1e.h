@@ -86,7 +86,7 @@ typedef enum IRQn
   HSMCI_IRQn           = 17, /**< 17 SAM3U1E High Speed Multimedia Card Interface (HSMCI) */
   TWI0_IRQn            = 18, /**< 18 SAM3U1E Two-Wire Interface 0 (TWI0) */
   TWI1_IRQn            = 19, /**< 19 SAM3U1E Two-Wire Interface 1 (TWI1) */
-  SPI_IRQn             = 20, /**< 20 SAM3U1E Serial Peripheral Interface (SPI) */
+  SPI0_IRQn            = 20, /**< 20 SAM3U1E Serial Peripheral Interface (SPI0) */
   SSC_IRQn             = 21, /**< 21 SAM3U1E Synchronous Serial Controller (SSC) */
   TC0_IRQn             = 22, /**< 22 SAM3U1E Timer Counter 0 (TC0) */
   TC1_IRQn             = 23, /**< 23 SAM3U1E Timer Counter 1 (TC1) */
@@ -143,7 +143,7 @@ typedef struct _DeviceVectors
   void* pfnHSMCI_Handler;  /* 17 High Speed Multimedia Card Interface */
   void* pfnTWI0_Handler;   /* 18 Two-Wire Interface 0 */
   void* pfnTWI1_Handler;   /* 19 Two-Wire Interface 1 */
-  void* pfnSPI_Handler;    /* 20 Serial Peripheral Interface */
+  void* pfnSPI0_Handler;   /* 20 Serial Peripheral Interface */
   void* pfnSSC_Handler;    /* 21 Synchronous Serial Controller */
   void* pfnTC0_Handler;    /* 22 Timer Counter 0 */
   void* pfnTC1_Handler;    /* 23 Timer Counter 1 */
@@ -181,7 +181,7 @@ void PWM_Handler        ( void );
 void RSTC_Handler       ( void );
 void RTC_Handler        ( void );
 void RTT_Handler        ( void );
-void SPI_Handler        ( void );
+void SPI0_Handler       ( void );
 void SSC_Handler        ( void );
 void SUPC_Handler       ( void );
 void TC0_Handler        ( void );
@@ -313,7 +313,7 @@ void WDT_Handler        ( void );
 #define ID_HSMCI  (17) /**< \brief High Speed Multimedia Card Interface (HSMCI) */
 #define ID_TWI0   (18) /**< \brief Two-Wire Interface 0 (TWI0) */
 #define ID_TWI1   (19) /**< \brief Two-Wire Interface 1 (TWI1) */
-#define ID_SPI    (20) /**< \brief Serial Peripheral Interface (SPI) */
+#define ID_SPI0   (20) /**< \brief Serial Peripheral Interface (SPI0) */
 #define ID_SSC    (21) /**< \brief Synchronous Serial Controller (SSC) */
 #define ID_TC0    (22) /**< \brief Timer Counter 0 (TC0) */
 #define ID_TC1    (23) /**< \brief Timer Counter 1 (TC1) */
@@ -333,51 +333,9 @@ void WDT_Handler        ( void );
 /** \addtogroup SAM3U1E_base Peripheral Base Address Definitions */
 /*@{*/
 
-#if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define HSMCI      (0x40000000U) /**< \brief (HSMCI     ) Base Address */
-#define SSC        (0x40004000U) /**< \brief (SSC       ) Base Address */
-#define SPI        (0x40008000U) /**< \brief (SPI       ) Base Address */
-#define TC0        (0x40080000U) /**< \brief (TC0       ) Base Address */
-#define TWI0       (0x40084000U) /**< \brief (TWI0      ) Base Address */
-#define PDC_TWI0   (0x40084100U) /**< \brief (PDC_TWI0  ) Base Address */
-#define TWI1       (0x40088000U) /**< \brief (TWI1      ) Base Address */
-#define PDC_TWI1   (0x40088100U) /**< \brief (PDC_TWI1  ) Base Address */
-#define PWM        (0x4008C000U) /**< \brief (PWM       ) Base Address */
-#define PDC_PWM    (0x4008C100U) /**< \brief (PDC_PWM   ) Base Address */
-#define USART0     (0x40090000U) /**< \brief (USART0    ) Base Address */
-#define PDC_USART0 (0x40090100U) /**< \brief (PDC_USART0) Base Address */
-#define USART1     (0x40094000U) /**< \brief (USART1    ) Base Address */
-#define PDC_USART1 (0x40094100U) /**< \brief (PDC_USART1) Base Address */
-#define USART2     (0x40098000U) /**< \brief (USART2    ) Base Address */
-#define PDC_USART2 (0x40098100U) /**< \brief (PDC_USART2) Base Address */
-#define USART3     (0x4009C000U) /**< \brief (USART3    ) Base Address */
-#define PDC_USART3 (0x4009C100U) /**< \brief (PDC_USART3) Base Address */
-#define UDPHS      (0x400A4000U) /**< \brief (UDPHS     ) Base Address */
-#define ADC12B     (0x400A8000U) /**< \brief (ADC12B    ) Base Address */
-#define PDC_ADC12B (0x400A8100U) /**< \brief (PDC_ADC12B) Base Address */
-#define ADC        (0x400AC000U) /**< \brief (ADC       ) Base Address */
-#define PDC_ADC    (0x400AC100U) /**< \brief (PDC_ADC   ) Base Address */
-#define DMAC       (0x400B0000U) /**< \brief (DMAC      ) Base Address */
-#define SMC        (0x400E0000U) /**< \brief (SMC       ) Base Address */
-#define MATRIX     (0x400E0200U) /**< \brief (MATRIX    ) Base Address */
-#define PMC        (0x400E0400U) /**< \brief (PMC       ) Base Address */
-#define UART       (0x400E0600U) /**< \brief (UART      ) Base Address */
-#define PDC_UART   (0x400E0700U) /**< \brief (PDC_UART  ) Base Address */
-#define CHIPID     (0x400E0740U) /**< \brief (CHIPID    ) Base Address */
-#define EFC0       (0x400E0800U) /**< \brief (EFC0      ) Base Address */
-#define PIOA       (0x400E0C00U) /**< \brief (PIOA      ) Base Address */
-#define PIOB       (0x400E0E00U) /**< \brief (PIOB      ) Base Address */
-#define PIOC       (0x400E1000U) /**< \brief (PIOC      ) Base Address */
-#define RSTC       (0x400E1200U) /**< \brief (RSTC      ) Base Address */
-#define SUPC       (0x400E1210U) /**< \brief (SUPC      ) Base Address */
-#define RTT        (0x400E1230U) /**< \brief (RTT       ) Base Address */
-#define WDT        (0x400E1250U) /**< \brief (WDT       ) Base Address */
-#define RTC        (0x400E1260U) /**< \brief (RTC       ) Base Address */
-#define GPBR       (0x400E1290U) /**< \brief (GPBR      ) Base Address */
-#else
 #define HSMCI      ((Hsmci  *)0x40000000U) /**< \brief (HSMCI     ) Base Address */
 #define SSC        ((Ssc    *)0x40004000U) /**< \brief (SSC       ) Base Address */
-#define SPI        ((Spi    *)0x40008000U) /**< \brief (SPI       ) Base Address */
+#define SPI0       ((Spi    *)0x40008000U) /**< \brief (SPI0      ) Base Address */
 #define TC0        ((Tc     *)0x40080000U) /**< \brief (TC0       ) Base Address */
 #define TWI0       ((Twi    *)0x40084000U) /**< \brief (TWI0      ) Base Address */
 #define PDC_TWI0   ((Pdc    *)0x40084100U) /**< \brief (PDC_TWI0  ) Base Address */
@@ -415,7 +373,6 @@ void WDT_Handler        ( void );
 #define WDT        ((Wdt    *)0x400E1250U) /**< \brief (WDT       ) Base Address */
 #define RTC        ((Rtc    *)0x400E1260U) /**< \brief (RTC       ) Base Address */
 #define GPBR       ((Gpbr   *)0x400E1290U) /**< \brief (GPBR      ) Base Address */
-#endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /*@}*/
 
 /* ************************************************************************** */

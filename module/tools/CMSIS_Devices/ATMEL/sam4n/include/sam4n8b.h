@@ -85,7 +85,7 @@ typedef enum IRQn
   UART3_IRQn           = 16, /**< 16 SAM4N8B UART 3 (UART3) */
   TWI0_IRQn            = 19, /**< 19 SAM4N8B Two Wire Interface 0 (TWI0) */
   TWI1_IRQn            = 20, /**< 20 SAM4N8B Two Wire Interface 1 (TWI1) */
-  SPI_IRQn             = 21, /**< 21 SAM4N8B Serial Peripheral Interface (SPI) */
+  SPI0_IRQn            = 21, /**< 21 SAM4N8B Serial Peripheral Interface (SPI0) */
   TWI2_IRQn            = 22, /**< 22 SAM4N8B Two Wire Interface 2 (TWI2) */
   TC0_IRQn             = 23, /**< 23 SAM4N8B Timer/Counter 0 (TC0) */
   TC1_IRQn             = 24, /**< 24 SAM4N8B Timer/Counter 1 (TC1) */
@@ -141,7 +141,7 @@ typedef struct _DeviceVectors
   void* pvReserved18;
   void* pfnTWI0_Handler;   /* 19 Two Wire Interface 0 */
   void* pfnTWI1_Handler;   /* 20 Two Wire Interface 1 */
-  void* pfnSPI_Handler;    /* 21 Serial Peripheral Interface */
+  void* pfnSPI0_Handler;   /* 21 Serial Peripheral Interface */
   void* pfnTWI2_Handler;   /* 22 Two Wire Interface 2 */
   void* pfnTC0_Handler;    /* 23 Timer/Counter 0 */
   void* pfnTC1_Handler;    /* 24 Timer/Counter 1 */
@@ -177,7 +177,7 @@ void PWM_Handler        ( void );
 void RSTC_Handler       ( void );
 void RTC_Handler        ( void );
 void RTT_Handler        ( void );
-void SPI_Handler        ( void );
+void SPI0_Handler       ( void );
 void SUPC_Handler       ( void );
 void TC0_Handler        ( void );
 void TC1_Handler        ( void );
@@ -299,7 +299,7 @@ void WDT_Handler        ( void );
 #define ID_UART3  (16) /**< \brief UART 3 (UART3) */
 #define ID_TWI0   (19) /**< \brief Two Wire Interface 0 (TWI0) */
 #define ID_TWI1   (20) /**< \brief Two Wire Interface 1 (TWI1) */
-#define ID_SPI    (21) /**< \brief Serial Peripheral Interface (SPI) */
+#define ID_SPI0   (21) /**< \brief Serial Peripheral Interface (SPI0) */
 #define ID_TWI2   (22) /**< \brief Two Wire Interface 2 (TWI2) */
 #define ID_TC0    (23) /**< \brief Timer/Counter 0 (TC0) */
 #define ID_TC1    (24) /**< \brief Timer/Counter 1 (TC1) */
@@ -317,48 +317,8 @@ void WDT_Handler        ( void );
 /** \addtogroup SAM4N8B_base Peripheral Base Address Definitions */
 /*@{*/
 
-#if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define SPI        (0x40008000U) /**< \brief (SPI       ) Base Address */
-#define PDC_SPI    (0x40008100U) /**< \brief (PDC_SPI   ) Base Address */
-#define TC0        (0x40010000U) /**< \brief (TC0       ) Base Address */
-#define PDC_TC0    (0x40010100U) /**< \brief (PDC_TC0   ) Base Address */
-#define TWI0       (0x40018000U) /**< \brief (TWI0      ) Base Address */
-#define PDC_TWI0   (0x40018100U) /**< \brief (PDC_TWI0  ) Base Address */
-#define TWI1       (0x4001C000U) /**< \brief (TWI1      ) Base Address */
-#define PDC_TWI1   (0x4001C100U) /**< \brief (PDC_TWI1  ) Base Address */
-#define PWM        (0x40020000U) /**< \brief (PWM       ) Base Address */
-#define USART0     (0x40024000U) /**< \brief (USART0    ) Base Address */
-#define PDC_USART0 (0x40024100U) /**< \brief (PDC_USART0) Base Address */
-#define USART1     (0x40028000U) /**< \brief (USART1    ) Base Address */
-#define PDC_USART1 (0x40028100U) /**< \brief (PDC_USART1) Base Address */
-#define ADC        (0x40038000U) /**< \brief (ADC       ) Base Address */
-#define PDC_ADC    (0x40038100U) /**< \brief (PDC_ADC   ) Base Address */
-#define DACC       (0x4003C000U) /**< \brief (DACC      ) Base Address */
-#define PDC_DACC   (0x4003C100U) /**< \brief (PDC_DACC  ) Base Address */
-#define TWI2       (0x40040000U) /**< \brief (TWI2      ) Base Address */
-#define PDC_TWI2   (0x40040100U) /**< \brief (PDC_TWI2  ) Base Address */
-#define UART2      (0x40044000U) /**< \brief (UART2     ) Base Address */
-#define PDC_UART2  (0x40044100U) /**< \brief (PDC_UART2 ) Base Address */
-#define UART3      (0x40048000U) /**< \brief (UART3     ) Base Address */
-#define MATRIX     (0x400E0200U) /**< \brief (MATRIX    ) Base Address */
-#define PMC        (0x400E0400U) /**< \brief (PMC       ) Base Address */
-#define UART0      (0x400E0600U) /**< \brief (UART0     ) Base Address */
-#define PDC_UART0  (0x400E0700U) /**< \brief (PDC_UART0 ) Base Address */
-#define CHIPID     (0x400E0740U) /**< \brief (CHIPID    ) Base Address */
-#define UART1      (0x400E0800U) /**< \brief (UART1     ) Base Address */
-#define PDC_UART1  (0x400E0900U) /**< \brief (PDC_UART1 ) Base Address */
-#define EFC        (0x400E0A00U) /**< \brief (EFC       ) Base Address */
-#define PIOA       (0x400E0E00U) /**< \brief (PIOA      ) Base Address */
-#define PIOB       (0x400E1000U) /**< \brief (PIOB      ) Base Address */
-#define RSTC       (0x400E1400U) /**< \brief (RSTC      ) Base Address */
-#define SUPC       (0x400E1410U) /**< \brief (SUPC      ) Base Address */
-#define RTT        (0x400E1430U) /**< \brief (RTT       ) Base Address */
-#define WDT        (0x400E1450U) /**< \brief (WDT       ) Base Address */
-#define RTC        (0x400E1460U) /**< \brief (RTC       ) Base Address */
-#define GPBR       (0x400E1490U) /**< \brief (GPBR      ) Base Address */
-#else
-#define SPI        ((Spi    *)0x40008000U) /**< \brief (SPI       ) Base Address */
-#define PDC_SPI    ((Pdc    *)0x40008100U) /**< \brief (PDC_SPI   ) Base Address */
+#define SPI0       ((Spi    *)0x40008000U) /**< \brief (SPI0      ) Base Address */
+#define PDC_SPI0   ((Pdc    *)0x40008100U) /**< \brief (PDC_SPI0  ) Base Address */
 #define TC0        ((Tc     *)0x40010000U) /**< \brief (TC0       ) Base Address */
 #define PDC_TC0    ((Pdc    *)0x40010100U) /**< \brief (PDC_TC0   ) Base Address */
 #define TWI0       ((Twi    *)0x40018000U) /**< \brief (TWI0      ) Base Address */
@@ -395,7 +355,6 @@ void WDT_Handler        ( void );
 #define WDT        ((Wdt    *)0x400E1450U) /**< \brief (WDT       ) Base Address */
 #define RTC        ((Rtc    *)0x400E1460U) /**< \brief (RTC       ) Base Address */
 #define GPBR       ((Gpbr   *)0x400E1490U) /**< \brief (GPBR      ) Base Address */
-#endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /*@}*/
 
 /* ************************************************************************** */

@@ -84,7 +84,7 @@ typedef enum IRQn
   HSMCI_IRQn           = 16, /**< 16 SAM4E8E Multimedia Card Interface (HSMCI) */
   TWI0_IRQn            = 17, /**< 17 SAM4E8E Two Wire Interface 0 (TWI0) */
   TWI1_IRQn            = 18, /**< 18 SAM4E8E Two Wire Interface 1 (TWI1) */
-  SPI_IRQn             = 19, /**< 19 SAM4E8E Serial Peripheral Interface (SPI) */
+  SPI0_IRQn            = 19, /**< 19 SAM4E8E Serial Peripheral Interface (SPI0) */
   DMAC_IRQn            = 20, /**< 20 SAM4E8E DMAC (DMAC) */
   TC0_IRQn             = 21, /**< 21 SAM4E8E Timer/Counter 0 (TC0) */
   TC1_IRQn             = 22, /**< 22 SAM4E8E Timer/Counter 1 (TC1) */
@@ -153,7 +153,7 @@ typedef struct _DeviceVectors
   void* pfnHSMCI_Handler;  /* 16 Multimedia Card Interface */
   void* pfnTWI0_Handler;   /* 17 Two Wire Interface 0 */
   void* pfnTWI1_Handler;   /* 18 Two Wire Interface 1 */
-  void* pfnSPI_Handler;    /* 19 Serial Peripheral Interface */
+  void* pfnSPI0_Handler;   /* 19 Serial Peripheral Interface */
   void* pfnDMAC_Handler;   /* 20 DMAC */
   void* pfnTC0_Handler;    /* 21 Timer/Counter 0 */
   void* pfnTC1_Handler;    /* 22 Timer/Counter 1 */
@@ -217,7 +217,7 @@ void PWM_Handler        ( void );
 void RSTC_Handler       ( void );
 void RTC_Handler        ( void );
 void RTT_Handler        ( void );
-void SPI_Handler        ( void );
+void SPI0_Handler       ( void );
 void SUPC_Handler       ( void );
 void TC0_Handler        ( void );
 void TC1_Handler        ( void );
@@ -321,7 +321,7 @@ void WDT_Handler        ( void );
 #define ID_HSMCI  (16) /**< \brief Multimedia Card Interface (HSMCI) */
 #define ID_TWI0   (17) /**< \brief Two Wire Interface 0 (TWI0) */
 #define ID_TWI1   (18) /**< \brief Two Wire Interface 1 (TWI1) */
-#define ID_SPI    (19) /**< \brief Serial Peripheral Interface (SPI) */
+#define ID_SPI0   (19) /**< \brief Serial Peripheral Interface (SPI0) */
 #define ID_DMAC   (20) /**< \brief DMAC (DMAC) */
 #define ID_TC0    (21) /**< \brief Timer/Counter 0 (TC0) */
 #define ID_TC1    (22) /**< \brief Timer/Counter 1 (TC1) */
@@ -366,8 +366,8 @@ void WDT_Handler        ( void );
 #define HSMCI      ((Hsmci  *)0x40080000U) /**< \brief (HSMCI     ) Base Address */
 #define PDC_HSMCI  ((Pdc    *)0x40080100U) /**< \brief (PDC_HSMCI ) Base Address */
 #define USBDEV     ((USBDev *)0x40084000U) /**< \brief (USBDEV    ) Base Address */
-#define SPI        ((Spi    *)0x40088000U) /**< \brief (SPI       ) Base Address */
-#define PDC_SPI    ((Pdc    *)0x40088100U) /**< \brief (PDC_SPI   ) Base Address */
+#define SPI0       ((Spi    *)0x40088000U) /**< \brief (SPI0      ) Base Address */
+#define PDC_SPI0   ((Pdc    *)0x40088100U) /**< \brief (PDC_SPI0  ) Base Address */
 #define TC0        ((Tc     *)0x40090000U) /**< \brief (TC0       ) Base Address */
 #define PDC_TC0    ((Pdc    *)0x40090100U) /**< \brief (PDC_TC0   ) Base Address */
 #define TC1        ((Tc     *)0x40094000U) /**< \brief (TC1       ) Base Address */
