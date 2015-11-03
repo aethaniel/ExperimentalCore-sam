@@ -8,7 +8,9 @@
  * https://play.google.com/store/apps/details?id=com.gundel.bluecontrol&hl=en
  */
 
+#if defined SERIAL_PORT_HARDWARE_OPEN1
 #define HC06_SERIAL SERIAL_PORT_HARDWARE_OPEN1
+#endif // SERIAL_PORT_HARDWARE_OPEN1
 
 // the setup function runs once when you press reset or power the board
 void setup(void)
@@ -20,22 +22,30 @@ void setup(void)
   digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
 
   SERIAL_PORT_MONITOR.begin( 115200 ) ; // Output to EDBG Virtual COM Port
+#if defined HC06_SERIAL
   HC06_SERIAL.begin( 9600 ) ; // Default baudrate for HC06 module
+#endif // HC06_SERIAL
 
   // Test SERIAL_PORT_MONITOR output
   SERIAL_PORT_MONITOR.println("AT");
+#if defined HC06_SERIAL
   HC06_SERIAL.print("AT");
   s=HC06_SERIAL.readString();
+#endif // HC06_SERIAL
   SERIAL_PORT_MONITOR.println(s);
 
   SERIAL_PORT_MONITOR.println("AT+VERSION");
+#if defined HC06_SERIAL
   HC06_SERIAL.print("AT+VERSION");
   s=HC06_SERIAL.readString();
+#endif // HC06_SERIAL
   SERIAL_PORT_MONITOR.println(s);
 
   SERIAL_PORT_MONITOR.println("AT+NAMESAM_HC06");
+#if defined HC06_SERIAL
   HC06_SERIAL.print("AT+NAMESAM_HC06");
   s=HC06_SERIAL.readString();
+#endif // HC06_SERIAL
   SERIAL_PORT_MONITOR.println(s);
 
   delay(1000);              // wait for a second
@@ -46,6 +56,7 @@ void setup(void)
 // the loop function runs over and over again forever
 void loop(void)
 {
+#if defined HC06_SERIAL
   char c;
 
   if ( HC06_SERIAL.available() )
@@ -79,4 +90,5 @@ void loop(void)
         SERIAL_PORT_MONITOR.println(c);
     }
   }
+#endif // HC06_SERIAL
 }

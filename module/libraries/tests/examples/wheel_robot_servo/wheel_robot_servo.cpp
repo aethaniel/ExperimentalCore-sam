@@ -1,4 +1,3 @@
-#include "core_digital.h"
 #include "Arduino.h"
 #include "Servo.hpp"
 
@@ -9,7 +8,9 @@
  * https://play.google.com/store/apps/details?id=com.gundel.bluecontrol&hl=en
  */
 
+#if defined SERIAL_PORT_HARDWARE_OPEN1
 #define HC06_SERIAL SERIAL_PORT_HARDWARE_OPEN1
+#endif // SERIAL_PORT_HARDWARE_OPEN1
 
 #define PIN_SERVO_LEFT        (14u)
 #define PIN_SERVO_RIGHT       (15u)
@@ -17,6 +18,7 @@
 Servo servo_left;
 Servo servo_right;
 
+#if defined HC06_SERIAL
 static void hc06_init(void)
 {
   String s;
@@ -39,6 +41,7 @@ static void hc06_init(void)
   s=HC06_SERIAL.readString();
   SERIAL_PORT_MONITOR.println(s);
 }
+#endif // HC06_SERIAL
 
 static void servos_init(void)
 {
@@ -57,7 +60,9 @@ void setup(void)
   digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
 
   SERIAL_PORT_MONITOR.begin( 115200 ) ; // Output to EDBG Virtual COM Port
+#if defined HC06_SERIAL
   hc06_init();
+#endif // HC06_SERIAL
 
   servos_init();
 
@@ -69,14 +74,16 @@ void setup(void)
 // the loop function runs over and over again forever
 void loop(void)
 {
+#if defined HC06_SERIAL
   char c;
 
   if ( HC06_SERIAL.available() )
   // if text arrived in from BT serial...
   {
     c=HC06_SERIAL.read();
-        SERIAL_PORT_MONITOR.print("Received:");
-        SERIAL_PORT_MONITOR.println(c);
+    SERIAL_PORT_MONITOR.print("Received:");
+    SERIAL_PORT_MONITOR.println(c);
+
     switch ( c )
     {
       case 'C': // stop everything
@@ -112,4 +119,5 @@ void loop(void)
       break;
     }
   }
+#endif // HC06_SERIAL
 }
