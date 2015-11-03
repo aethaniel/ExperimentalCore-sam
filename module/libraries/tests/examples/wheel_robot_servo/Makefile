@@ -24,7 +24,9 @@ SHELL := /bin/sh
 
 PROJECT_NAME := wheel_robot_servo
 
-include ../rules.mk
+include ../preambule.mk
 
 SOURCES +=\
 $(PROJECT_PATH)/Servo.cpp
+
+include ../rules.mk

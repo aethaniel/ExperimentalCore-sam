@@ -24,4 +24,6 @@ SHELL := /bin/sh
 
 PROJECT_NAME := bt_hc06
 
+include ../preambule.mk
+
 include ../rules.mk

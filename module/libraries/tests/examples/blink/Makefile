@@ -24,4 +24,6 @@ SHELL := /bin/sh
 
 PROJECT_NAME := blink
 
+include ../preambule.mk
+
 include ../rules.mk
