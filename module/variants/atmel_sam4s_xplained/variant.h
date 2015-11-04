@@ -49,10 +49,10 @@ extern "C"
  *----------------------------------------------------------------------------*/
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT           (5ul)
-#define NUM_DIGITAL_PINS     (5ul)
-#define NUM_ANALOG_INPUTS    (0ul)
-#define NUM_ANALOG_OUTPUTS   (0ul)
+#define PINS_COUNT           (30ul)
+#define NUM_DIGITAL_PINS     (30ul)
+#define NUM_ANALOG_INPUTS    (6ul)
+#define NUM_ANALOG_OUTPUTS   (1ul)
 
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->PIO_ODSR) )
@@ -114,11 +114,9 @@ static const uint8_t A5  = PIN_A5 ;
 #define PIN_SERIAL_RX       (0ul)
 #define PIN_SERIAL_TX       (1ul)
 
-#if 0 // TODO Serial1
 // Serial1
-#define PIN_SERIAL1_RX       (0ul)
-#define PIN_SERIAL1_TX       (1ul)
-#endif // TODO Serial1
+#define PIN_SERIAL1_RX       (18ul)
+#define PIN_SERIAL1_TX       (13ul)
 
 #if 0 // TODO SPI
 /*
@@ -171,7 +169,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #ifdef __cplusplus
 
 extern SAMSerial Serial;
-//extern SAMSerial Serial1;
+extern SAMSerial Serial1;
 
 #endif
 
@@ -193,8 +191,8 @@ extern SAMSerial Serial;
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         Serial
 // Serial has no physical pins broken out, so it's not listed as HARDWARE port
-//#define SERIAL_PORT_HARDWARE        Serial1
-//#define SERIAL_PORT_HARDWARE_OPEN   Serial1
+#define SERIAL_PORT_HARDWARE        Serial1
+#define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
 #endif /* _VARIANT_ATMEL_SAM4S_XPLAINED_H_ */
 
