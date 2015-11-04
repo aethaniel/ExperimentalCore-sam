@@ -59,6 +59,7 @@
         <File Name="../../cores/arduino/arch_arm/CoreStream.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreString.hpp"/>
         <File Name="../../cores/arduino/arch_arm/IPAddress.hpp"/>
+        <File Name="../../cores/arduino/arch_arm/IPAddress.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_math.hpp"/>
       </VirtualDirectory>
