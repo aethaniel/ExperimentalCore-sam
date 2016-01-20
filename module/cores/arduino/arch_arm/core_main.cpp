@@ -16,8 +16,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
-#include "Arduino.h"
+//#define ARDUINO_MAIN // TODO: check if really used somewhere outside core API
+//#include <Arduino.h>
+#include "core_init.h"
+#include "core_delay.h"
+#include "core_watchdog.c"
+#if defined(USBCON)
+#include ""
+#endif
+#include "variant.h"
+#include "CoreHardwareSerial.hpp"
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.

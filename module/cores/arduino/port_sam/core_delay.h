@@ -19,12 +19,12 @@
 #ifndef _ARDUINO_CORE_DELAY_H_
 #define _ARDUINO_CORE_DELAY_H_
 
+#include "variant.h"
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "variant.h"
-#include <stdint.h>
 
 /**
  * \brief Returns the number of milliseconds since the Arduino board began running the current program.

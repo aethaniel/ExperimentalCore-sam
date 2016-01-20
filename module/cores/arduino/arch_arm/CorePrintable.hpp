@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 class Print;
+//#include "CorePrint.hpp"
 
 /** The Printable class provides a way for new classes to allow themselves to be printed.
     By deriving from Printable and implementing the printTo method, it will then be possible

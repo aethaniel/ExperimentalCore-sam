@@ -20,6 +20,7 @@
 #define _ARDUINO_CORE_NETWORK_IPADDRESS_HPP_
 
 #include "CorePrintable.hpp"
+#include <stdint.h>
 
 // A class to make it easier to handle and pass around IP addresses
 
