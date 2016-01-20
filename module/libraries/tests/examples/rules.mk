@@ -193,7 +193,14 @@ upload_jlink: $(OUTPUT_FILE_PATH).elf
 #|---------------------------------------------------------------------------------------|
 upload_edbg: $(OUTPUT_FILE_PATH).bin
 	$(TOOL_EDBG) -l
-	$(TOOL_EDBG) -bepvf $(OUTPUT_FILE_PATH).bin
+	$(TOOL_EDBG) -t list
+ifeq ($(DEVICE_CORE),cortex-m3)
+	$(TOOL_EDBG) -bepv --target=atmel_cm3 --file $(OUTPUT_FILE_PATH).bin
+else ifeq ($(DEVICE_CORE),cortex-m4)
+	$(TOOL_EDBG) -bepv --target=atmel_cm4 --file $(OUTPUT_FILE_PATH).bin
+else ifeq ($(DEVICE_CORE),cortex-m7)
+	$(TOOL_EDBG) -bepv --target=atmel_cm7 --file $(OUTPUT_FILE_PATH).bin
+endif
 
 #|---------------------------------------------------------------------------------------|
 #| Start openocd GDB server (in a separate shell) in order to prepare a debug session    |
