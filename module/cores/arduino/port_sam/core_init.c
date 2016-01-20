@@ -34,22 +34,19 @@ extern "C" {
 void init( void )
 {
   // Set Systick to 1ms interval, common to all Cortex-M variants
-  if ( SysTick_Config( SystemCoreClock / 1000 ) )
+  if (SysTick_Config( SystemCoreClock / 1000 ) != 0)
   {
     // Capture error
     while ( 1 ) ;
   }
 
   /* Disable pull-up on every pin */
-#if 0
   for (unsigned i = 0; i < PINS_COUNT; i++)
   {
     digitalWrite(i, LOW);
   }
-#endif // 0
 
   // Enable parallel access on PIO output data registers
-#if 0
 #ifdef PIOA
   PIOA->PIO_OWER = 0xFFFFFFFF;
 #endif /* PIOA */
@@ -62,7 +59,6 @@ void init( void )
 #ifdef PIOD
   PIOD->PIO_OWER = 0xFFFFFFFF;
 #endif /* PIOD */
-#endif // 0
 }
 
 #ifdef __cplusplus

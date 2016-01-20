@@ -24,13 +24,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Includes Atmel CMSIS headers
 #include "sam.h"
 #include "core_variant.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * \brief Allocates a pin to a specific peripheral (GPIO mutiplexer).

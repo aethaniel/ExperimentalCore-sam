@@ -23,7 +23,9 @@
 #include <stdio.h> // for size_t
 
 #include "CoreString.hpp"
-#include "CorePrintable.hpp"
+//#include "CorePrintable.hpp"
+
+class Printable;
 
 #define DEC 10
 #define HEX 16

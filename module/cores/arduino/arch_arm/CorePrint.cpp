@@ -16,15 +16,10 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-*/
-#include "Arduino.h"
-
+//#include "Arduino.h"
 #include "CorePrint.hpp"
+#include "CorePrintable.hpp"
+#include <math.h> // for isnan and isinf
 
 // Public Methods //////////////////////////////////////////////////////////////
 

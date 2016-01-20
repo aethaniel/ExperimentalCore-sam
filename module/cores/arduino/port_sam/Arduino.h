@@ -35,15 +35,8 @@
 #include "core_binary.h"
 #include "core_itoa.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif // __cplusplus
-
-// Includes Atmel CMSIS headers
-#include "sam.h"
-
-#include "core_constants.h"
-#include "core_variant.h"
+// Include board variant
+#include "variant.h" // includes "core_variant.h"
 
 #define clockCyclesPerMicrosecond() ( SystemCoreClock / 1000000L )
 #define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (SystemCoreClock / 1000L) )
@@ -55,24 +48,13 @@ extern void yield(void);
 extern void setup( void ) ;
 extern void loop( void ) ;
 
-//typedef void (*voidFuncPtr)( void ) ;
-
-/* Define attribute */
-//#define WEAK __attribute__ ((weak))
-
 #ifdef __cplusplus
-} // extern "C"
-
 #include "CoreString.hpp"
 #include "CoreHardwareSerial.hpp"
 #include "core_tone.hpp"
 #include "core_pulse.hpp"
 #include "core_math.hpp"
-
 #endif // __cplusplus
-
-// Include board variant
-#include "variant.h" // includes "core_variant.h"
 
 #include "core_init.h"
 #include "core_delay.h"

@@ -61,7 +61,7 @@
         <File Name="../../cores/arduino/arch_arm/CoreHardwareSerial.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CorePrint.cpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreRingBuffer.cpp"/>
-        <File Name="../../cores/arduino/arch_arm/CoreRingBuffer.h"/>
+        <File Name="../../cores/arduino/arch_arm/CoreRingBuffer.hpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreStream.cpp"/>
         <File Name="../../cores/arduino/arch_arm/CoreString.cpp"/>
         <File Name="../../cores/arduino/arch_arm/core_abi.cpp"/>
