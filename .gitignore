@@ -10,4 +10,25 @@ obj
 *.a
 module/tools/edbg.exe
 module/tools/edbg
-*.bat
+#*.bat
+
+#
+# remove examples binaries
+#
+module/libraries/tests/examples/blink/*.bin
+module/libraries/tests/examples/blink/*.elf
+module/libraries/tests/examples/blink/*.map
+
+module/libraries/tests/examples/bt_hc06/*.bin
+module/libraries/tests/examples/bt_hc06/*.elf
+module/libraries/tests/examples/bt_hc06/*.map
+
+module/libraries/tests/examples/wheel_robot_servo/*.bin
+module/libraries/tests/examples/wheel_robot_servo/*.elf
+module/libraries/tests/examples/wheel_robot_servo/*.map
+
+#
+# remove production files
+#
+*.json
+*.bz2
