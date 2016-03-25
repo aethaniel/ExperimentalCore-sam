@@ -190,52 +190,6 @@ atmel_samg55_xplained_pro_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PI
 atmel_samg55_xplained_pro_dbg.bootloader.tool=openocd
 atmel_samg55_xplained_pro_dbg.bootloader.file=openblt/atmel_samg55_xplained_pro.bin
 
-logos_arachnio_due.name=Logos Arachnio Due (Native Port)
-logos_arachnio_due.vid.0=0x1366
-logos_arachnio_due.pid.0=0x0105
-logos_arachnio_due.upload.tool=bossac
-logos_arachnio_due.upload.protocol=sam-ba
-logos_arachnio_due.upload.maximum_size=131072
-logos_arachnio_due.upload.use_1200bps_touch=false
-logos_arachnio_due.upload.wait_for_upload_port=false
-logos_arachnio_due.upload.native_usb=true
-logos_arachnio_due.build.mcu=cortex-m4
-logos_arachnio_due.build.f_cpu=120000000L
-logos_arachnio_due.build.usb_product="Arachnio Due"
-logos_arachnio_due.build.board=SAM_ARACHNIO_DUE
-logos_arachnio_due.build.core=arduino
-logos_arachnio_due.build.extra_flags=-D__SAM4S2A__ -mthumb {build.usb_flags}
-logos_arachnio_due.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
-logos_arachnio_due.build.openocdscript=openocd_scripts/variant.cfg
-logos_arachnio_due.build.variant=logos_arachnio_due
-logos_arachnio_due.build.vid=0x2341
-logos_arachnio_due.build.pid=0x003e
-logos_arachnio_due.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
-
-logos_arachnio_due_dbg.name=Logos Arachnio Due (Programming Port)
-logos_arachnio_due_dbg.vid.0=0x1366
-logos_arachnio_due_dbg.pid.0=0x0105
-logos_arachnio_due_dbg.upload.tool=openocd
-logos_arachnio_due_dbg.upload.protocol=sam-ba
-logos_arachnio_due_dbg.upload.maximum_size=131072
-logos_arachnio_due_dbg.upload.use_1200bps_touch=true
-logos_arachnio_due_dbg.upload.wait_for_upload_port=false
-logos_arachnio_due_dbg.upload.native_usb=false
-logos_arachnio_due_dbg.build.mcu=cortex-m4
-logos_arachnio_due_dbg.build.f_cpu=120000000L
-logos_arachnio_due_dbg.build.usb_product="Arachnio Due"
-logos_arachnio_due_dbg.build.board=SAM_ARACHNIO_DUE
-logos_arachnio_due_dbg.build.core=arduino
-logos_arachnio_due_dbg.build.extra_flags=-D__SAM4S2A__ -mthumb {build.usb_flags}
-logos_arachnio_due_dbg.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
-logos_arachnio_due_dbg.build.openocdscript=openocd_scripts/variant.cfg
-logos_arachnio_due_dbg.build.variant=logos_arachnio_due
-logos_arachnio_due_dbg.build.vid=0x2341
-logos_arachnio_due_dbg.build.pid=0x003e
-logos_arachnio_due_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
-logos_arachnio_due_dbg.bootloader.tool=openocd
-logos_arachnio_due_dbg.bootloader.file=openblt/logos_arachnio_due.bin
-
 poppy_core_dbg.name=Poppy Core (Programming Port)
 poppy_core_dbg.vid.0=0x03eb
 poppy_core_dbg.pid.0=0x2111
@@ -259,3 +213,28 @@ poppy_core_dbg.build.pid=0x003e
 poppy_core_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 poppy_core_dbg.bootloader.tool=openocd
 poppy_core_dbg.bootloader.file=openblt/poppy_core.bin
+
+qboard_dbg.name=qboard (Programming Port)
+qboard_dbg.vid.0=0x03eb
+qboard_dbg.pid.0=0x2111
+qboard_dbg.upload.tool=openocd
+qboard_dbg.upload.protocol=sam-ba
+qboard_dbg.upload.maximum_size=524288
+qboard_dbg.upload.use_1200bps_touch=true
+qboard_dbg.upload.wait_for_upload_port=false
+qboard_dbg.upload.native_usb=false
+qboard_dbg.build.mcu=cortex-m4
+qboard_dbg.build.f_cpu=120000000L
+qboard_dbg.build.usb_product="qboard"
+qboard_dbg.build.board=SAM_QBOARD
+qboard_dbg.build.core=arduino
+qboard_dbg.build.extra_flags=-D__SAMG55J19__ -mthumb {build.usb_flags}
+qboard_dbg.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
+qboard_dbg.build.openocdscript=openocd_scripts/variant.cfg
+qboard_dbg.build.variant=qboard
+qboard_dbg.build.vid=0x2341
+qboard_dbg.build.pid=0x003e
+qboard_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+qboard_dbg.bootloader.tool=openocd
+qboard_dbg.bootloader.file=openblt/qboard.bin
+
