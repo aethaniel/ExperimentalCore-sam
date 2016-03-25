@@ -42,7 +42,8 @@ ROOT_PATH = ../../../..
 
 #VARIANT_NAME ?= atmel_sam4s_xplained
 #VARIANT_NAME ?= atmel_sam4s_xplained_pro
-VARIANT_NAME ?= atmel_samg55_xplained_pro
+#VARIANT_NAME ?= atmel_samg55_xplained_pro
+VARIANT_NAME ?= qboard
 VARIANT_PATH = $(ROOT_PATH)/variants/$(VARIANT_NAME)
 include $(VARIANT_PATH)/variant.mk
 
