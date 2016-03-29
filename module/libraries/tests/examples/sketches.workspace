@@ -14,6 +14,7 @@
   <Project Name="wheel_robot_servo" Path="wheel_robot_servo/wheel_robot_servo.project" Active="No"/>
   <Project Name="qboard" Path="../../../variants/qboard/variant.project" Active="No"/>
   <Project Name="wire_temp_sensor" Path="wire_temp_sensor/wire_temp_sensor.project" Active="Yes"/>
+  <Project Name="wire_wii_nunchuck" Path="wire_wii_nunchuck/wire_wii_nunchuck.project" Active="No"/>
   <Environment>
     <![CDATA[]]>
   </Environment>
@@ -32,6 +33,7 @@
       <Project Name="wheel_robot_servo" ConfigName="Debug"/>
       <Project Name="qboard" ConfigName="Debug"/>
       <Project Name="wire_temp_sensor" ConfigName="Debug"/>
+      <Project Name="wire_wii_nunchuck" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
@@ -47,6 +49,7 @@
       <Project Name="wheel_robot_servo" ConfigName="Release"/>
       <Project Name="qboard" ConfigName="Release"/>
       <Project Name="wire_temp_sensor" ConfigName="Release"/>
+      <Project Name="wire_wii_nunchuck" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
