@@ -1,7 +1,7 @@
 /*
  * TwoWire.h - TWI/I2C library for Arduino Due
  * Copyright (c) 2011 Cristian Maglie <c.maglie@arduino.cc>. All rights reserved.
- * Copyright (c) 2015 Thibaut VIARD.  All right reserved.
+ * Copyright (c) 2016 Thibaut VIARD.  All right reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,9 @@
 #define _ARDUINO_CORE_WIRE_HPP_
 
 #include "CoreStream.hpp"
-#include "variant.h"
+
+// Includes Atmel CMSIS
+#include "sam.h"
 
 #define BUFFER_LENGTH 32
 
@@ -84,7 +86,7 @@ class TwoWire : public Stream
     void (*onBeginCallback)(void);
 
     // TWI instance
-    Twi *twi;
+    Twi *_pTwi;
 
     // TWI state
     enum TwoWireStatus
@@ -107,16 +109,5 @@ class TwoWire : public Stream
     static const uint32_t RECV_TIMEOUT = 100000;
     static const uint32_t XMIT_TIMEOUT = 100000;
 };
-
-#ifndef WIRE_INTERFACES_COUNT
-#  define WIRE_INTERFACES_COUNT 0
-#endif
-
-#if WIRE_INTERFACES_COUNT > 0
-extern TwoWire Wire;
-#endif
-#if WIRE_INTERFACES_COUNT > 1
-extern TwoWire Wire1;
-#endif
 
 #endif // _ARDUINO_CORE_WIRE_HPP_

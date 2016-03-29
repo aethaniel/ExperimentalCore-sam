@@ -17,6 +17,7 @@
 */
 
 #include "variant.h"
+#include "core_private.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -245,4 +246,61 @@ void serialEventRun(void)
   if (Serial.available()) serialEvent();
 }
 
+#if WIRE_INTERFACES_COUNT > 0
+static void Wire_Init(void)
+{
+  /* Activate Serial peripheral clock
+   * All TWI peripheral ids are below 32, so on PCER0
+   */
+  PMC->PMC_PCER0 = 1 << WIRE_INTERFACE_ID;
+
+#if SAMG55_SERIES
+  ((Flexcom*)((uint32_t)WIRE_INTERFACE-(0x600)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_TWI;
+#endif
+
+  pinPeripheral(PIN_WIRE_SDA, PIN_WIRE_SDA_PERIPH);
+  pinPeripheral(PIN_WIRE_SCL, PIN_WIRE_SCL_PERIPH);
+
+  NVIC_DisableIRQ(WIRE_ISR_ID);
+  NVIC_ClearPendingIRQ(WIRE_ISR_ID);
+  NVIC_SetPriority(WIRE_ISR_ID, 0);
+  NVIC_EnableIRQ(WIRE_ISR_ID);
+}
+
+TwoWire Wire = TwoWire(WIRE_INTERFACE, Wire_Init);
+
+void WIRE_ISR_HANDLER(void)
+{
+  Wire.onService();
+}
+#endif
+
+#if WIRE_INTERFACES_COUNT > 1
+static void Wire1_Init(void)
+{
+  /* Activate Serial peripheral clock
+   * All TWI peripheral ids are below 32, so on PCER0
+   */
+  PMC->PMC_PCER0 = 1 << WIRE1_INTERFACE_ID;
+
+#if SAMG55_SERIES
+  ((Flexcom*)((uint32_t)WIRE1_INTERFACE-(0x600)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_TWI;
+#endif
+
+  pinPeripheral(PIN_WIRE1_SDA, PIN_WIRE1_SDA_PERIPH);
+  pinPeripheral(PIN_WIRE1_SCL, PIN_WIRE1_SCL_PERIPH);
+
+  NVIC_DisableIRQ(WIRE1_ISR_ID);
+  NVIC_ClearPendingIRQ(WIRE1_ISR_ID);
+  NVIC_SetPriority(WIRE1_ISR_ID, 0);
+  NVIC_EnableIRQ(WIRE1_ISR_ID);
+}
+
+TwoWire Wire1 = TwoWire(WIRE1_INTERFACE, Wire1_Init);
+
+void WIRE1_ISR_HANDLER(void)
+{
+  Wire1.onService();
+}
+#endif
 

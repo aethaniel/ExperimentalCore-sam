@@ -1,7 +1,7 @@
 /*
  * TwoWire.h - TWI/I2C library for Arduino Due
  * Copyright (c) 2011 Cristian Maglie <c.maglie@arduino.cc>. All rights reserved.
- * Copyright (c) 2015 Thibaut VIARD.  All right reserved.
+ * Copyright (c) 2016 Thibaut VIARD.  All right reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,10 +25,11 @@
 
 #include "CoreWire.hpp"
 #include "core_delay.h"
+#include "core_private.h"
 
-static inline bool TWI_FailedAcknowledge(Twi *pTwi)
+static inline bool TWI_FailedAcknowledge(Twi *_twi)
 {
-  return pTwi->TWI_SR & TWI_SR_NACK;
+  return _twi->TWI_SR & TWI_SR_NACK;
 }
 
 static inline bool TWI_WaitTransferComplete(Twi *_twi, uint32_t _timeout)
@@ -100,9 +101,9 @@ static inline bool TWI_STATUS_EOSACC(uint32_t status)
 }
 
 TwoWire::TwoWire(Twi *_twi, void(*_beginCb)(void)) :
-  twi(_twi), rxBufferIndex(0), rxBufferLength(0), txAddress(0),
-      txBufferLength(0), srvBufferIndex(0), srvBufferLength(0), status(
-          UNINITIALIZED), onBeginCallback(_beginCb), twiClock(TWI_CLOCK)
+  _pTwi(_twi), rxBufferIndex(0), rxBufferLength(0),
+  txAddress(0), txBufferLength(0), srvBufferIndex(0), srvBufferLength(0),
+  status( UNINITIALIZED), onBeginCallback(_beginCb), twiClock(TWI_CLOCK)
 {
 }
 
@@ -114,20 +115,20 @@ void TwoWire::begin(void)
   }
 
   // Disable PDC channel
-  twi->TWI_PTCR = TWI_PTCR_RXTDIS | TWI_PTCR_TXTDIS;
+  _pTwi->TWI_PTCR = TWI_PTCR_RXTDIS | TWI_PTCR_TXTDIS;
 
   /* SVEN: TWI Slave Mode Enabled */
-  twi->TWI_CR = TWI_CR_SVEN ;
+  _pTwi->TWI_CR = TWI_CR_SVEN ;
   /* Reset the TWI */
-  twi->TWI_CR = TWI_CR_SWRST ;
-  twi->TWI_RHR ;
+  _pTwi->TWI_CR = TWI_CR_SWRST ;
+  _pTwi->TWI_RHR ;
 
   /* We disable first both Slave and Master */
-  twi->TWI_CR = TWI_CR_SVDIS ;
-  twi->TWI_CR = TWI_CR_MSDIS ;
+  _pTwi->TWI_CR = TWI_CR_SVDIS ;
+  _pTwi->TWI_CR = TWI_CR_MSDIS ;
 
   /* Then we set the Master mode */
-  twi->TWI_CR = TWI_CR_MSEN ;
+  _pTwi->TWI_CR = TWI_CR_MSEN ;
 
   setClock( twiClock );
 
@@ -137,39 +138,41 @@ void TwoWire::begin(void)
 void TwoWire::begin(uint8_t address)
 {
   if (onBeginCallback)
+  {
     onBeginCallback();
+  }
 
   // Disable PDC channel
-  twi->TWI_PTCR = TWI_PTCR_RXTDIS | TWI_PTCR_TXTDIS;
+  _pTwi->TWI_PTCR = TWI_PTCR_RXTDIS | TWI_PTCR_TXTDIS;
 
   /* TWI software reset */
-  twi->TWI_CR = TWI_CR_SWRST;
-  twi->TWI_RHR;
+  _pTwi->TWI_CR = TWI_CR_SWRST;
+  _pTwi->TWI_RHR;
 
   /* Wait at least 10 ms */
   delay(10);
 
   /* TWI Slave Mode Disabled, TWI Master Mode Disabled*/
-  twi->TWI_CR = TWI_CR_SVDIS | TWI_CR_MSDIS;
+  _pTwi->TWI_CR = TWI_CR_SVDIS | TWI_CR_MSDIS;
 
   /* Configure slave address. */
-  twi->TWI_SMR = 0;
-  twi->TWI_SMR = TWI_SMR_SADR(address);
+  _pTwi->TWI_SMR = 0;
+  _pTwi->TWI_SMR = TWI_SMR_SADR(address);
 
   /* SVEN: TWI Slave Mode Enabled */
-  twi->TWI_CR = TWI_CR_SVEN;
+  _pTwi->TWI_CR = TWI_CR_SVEN;
 
   /* Wait at least 10 ms */
   delay(10);
 
   status = SLAVE_IDLE;
-  twi->TWI_IER=TWI_IER_SVACC;
+  _pTwi->TWI_IER=TWI_IER_SVACC;
   //| TWI_IER_RXRDY | TWI_IER_TXRDY	| TWI_IER_TXCOMP);
 }
 
 void TwoWire::begin(int address)
 {
-  begin((uint8_t) address);
+  begin((uint8_t)address);
 }
 
 void TwoWire::setClock(uint32_t ulFrequency)
@@ -195,8 +198,8 @@ void TwoWire::setClock(uint32_t ulFrequency)
 
 //  assert( ulCkDiv < 8 ) ;
 
-  twi->TWI_CWGR = 0 ;
-  twi->TWI_CWGR = (ulCkDiv << 16) | (ulClDiv << 8) | ulClDiv ;
+  _pTwi->TWI_CWGR = 0 ;
+  _pTwi->TWI_CWGR = (ulCkDiv << 16) | (ulClDiv << 8) | ulClDiv ;
 
   twiClock = ulFrequency;
 }
@@ -206,35 +209,37 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
 //  assert( (address & 0x80) == 0 ) ;
 
   if (quantity > BUFFER_LENGTH)
+  {
     quantity = BUFFER_LENGTH;
+  }
 
   // perform blocking read into buffer
   int bytes_read = 0;
 
   /* Set slave address and number of internal address bytes. */
-  twi->TWI_MMR = 0;
-  twi->TWI_MMR = (0 << 8) | TWI_MMR_MREAD | (address << 16);
+  _pTwi->TWI_MMR = 0;
+  _pTwi->TWI_MMR = (0 << 8) | TWI_MMR_MREAD | (address << 16);
 
   /* Set internal address bytes */
-  twi->TWI_IADR = 0;
-  twi->TWI_IADR = 0;
+  _pTwi->TWI_IADR = 0;
+  _pTwi->TWI_IADR = 0;
 
   /* Send START condition */
-  twi->TWI_CR = TWI_CR_START;
+  _pTwi->TWI_CR = TWI_CR_START;
 
   do
   {
     // Stop condition must be set during the reception of last byte
     if (bytes_read + 1 == quantity)
     {
-      twi->TWI_CR |= TWI_CR_STOP;
+      _pTwi->TWI_CR |= TWI_CR_STOP;
     }
 
-    TWI_WaitByteReceived(twi, RECV_TIMEOUT);
-    rxBuffer[bytes_read++] = twi->TWI_RHR;
+    TWI_WaitByteReceived(_pTwi, RECV_TIMEOUT);
+    rxBuffer[bytes_read++] = _pTwi->TWI_RHR;
   } while (bytes_read < quantity);
 
-  TWI_WaitTransferComplete(twi, RECV_TIMEOUT);
+  TWI_WaitTransferComplete(_pTwi, RECV_TIMEOUT);
 
   // set rx buffer iterator vars
   rxBufferIndex = 0;
@@ -290,17 +295,17 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
   uint8_t error = 0;
   // transmit buffer (blocking)
   /* Set slave address and number of internal address bytes. */
-  twi->TWI_MMR = 0;
-  twi->TWI_MMR = (0 << 8) | (txAddress << 16);
+  _pTwi->TWI_MMR = 0;
+  _pTwi->TWI_MMR = (0 << 8) | (txAddress << 16);
 
   /* Set internal address bytes. */
-  twi->TWI_IADR = 0;
-  twi->TWI_IADR = 0;
+  _pTwi->TWI_IADR = 0;
+  _pTwi->TWI_IADR = 0;
 
   /* Write first byte to send.*/
-  twi->TWI_THR = txBuffer[0];
+  _pTwi->TWI_THR = txBuffer[0];
 
-  if (!TWI_WaitByteSent(twi, XMIT_TIMEOUT))
+  if (!TWI_WaitByteSent(_pTwi, XMIT_TIMEOUT))
     error = 2;	// error, got NACK on address transmit
 
   if (error == 0)
@@ -309,17 +314,17 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
 
     while (sent < txBufferLength)
     {
-      twi->TWI_THR=txBuffer[sent++];
-      if (!TWI_WaitByteSent(twi, XMIT_TIMEOUT))
+      _pTwi->TWI_THR=txBuffer[sent++];
+      if (!TWI_WaitByteSent(_pTwi, XMIT_TIMEOUT))
         error = 3;	// error, got NACK during data transmmit
     }
   }
 
   if (error == 0)
   {
-    twi->TWI_CR = TWI_CR_STOP;
+    _pTwi->TWI_CR = TWI_CR_STOP;
 
-    if (!TWI_WaitTransferComplete(twi, XMIT_TIMEOUT))
+    if (!TWI_WaitTransferComplete(_pTwi, XMIT_TIMEOUT))
       error = 4;	// error, finishing up
   }
 
@@ -389,13 +394,19 @@ int TwoWire::available(void)
 int TwoWire::read(void)
 {
   if (rxBufferIndex < rxBufferLength)
+  {
     return rxBuffer[rxBufferIndex++];
+  }
+
   return -1;
 }
 
-int TwoWire::peek(void) {
+int TwoWire::peek(void)
+{
   if (rxBufferIndex < rxBufferLength)
+  {
     return rxBuffer[rxBufferIndex];
+  }
 
   return -1;
 }
@@ -419,13 +430,13 @@ void TwoWire::onRequest(void(*function)(void))
 void TwoWire::onService(void)
 {
   // Retrieve interrupt status
-  uint32_t sr = twi->TWI_SR;
+  uint32_t sr = _pTwi->TWI_SR;
 
   if (status == SLAVE_IDLE && TWI_STATUS_SVACC(sr))
   {
-    twi->TWI_IDR=TWI_IDR_SVACC;
-    twi->TWI_IER=TWI_IER_RXRDY | TWI_IER_GACC | TWI_IER_NACK
-        | TWI_IER_EOSACC | TWI_IER_SCL_WS | TWI_IER_TXCOMP;
+    _pTwi->TWI_IDR=TWI_IDR_SVACC;
+    _pTwi->TWI_IER=TWI_IER_RXRDY | TWI_IER_GACC | TWI_IER_NACK
+                   | TWI_IER_EOSACC | TWI_IER_SCL_WS | TWI_IER_TXCOMP;
 
     srvBufferLength = 0;
     srvBufferIndex = 0;
@@ -442,10 +453,14 @@ void TwoWire::onService(void)
 
       // Alert calling program to generate a response ASAP
       if (onRequestCallback)
+      {
         onRequestCallback();
+      }
       else
+      {
         // create a default 1-byte response
         write((uint8_t) 0);
+      }
     }
   }
 
@@ -459,7 +474,9 @@ void TwoWire::onService(void)
         // (allows to receive another packet while the
         // user program reads actual data)
         for (uint8_t i = 0; i < srvBufferLength; ++i)
+        {
           rxBuffer[i] = srvBuffer[i];
+        }
         rxBufferIndex = 0;
         rxBufferLength = srvBufferLength;
 
@@ -468,9 +485,9 @@ void TwoWire::onService(void)
       }
 
       // Transfer completed
-      twi->TWI_IER=TWI_SR_SVACC;
-      twi->TWI_IDR=TWI_IDR_RXRDY | TWI_IDR_GACC | TWI_IDR_NACK
-          | TWI_IDR_EOSACC | TWI_IDR_SCL_WS | TWI_IER_TXCOMP;
+      _pTwi->TWI_IER=TWI_SR_SVACC;
+      _pTwi->TWI_IDR=TWI_IDR_RXRDY | TWI_IDR_GACC | TWI_IDR_NACK
+                     | TWI_IDR_EOSACC | TWI_IDR_SCL_WS | TWI_IER_TXCOMP;
       status = SLAVE_IDLE;
     }
   }
@@ -480,7 +497,7 @@ void TwoWire::onService(void)
     if ((sr & TWI_SR_RXRDY) == TWI_SR_RXRDY)
     {
       if (srvBufferLength < BUFFER_LENGTH)
-        srvBuffer[srvBufferLength++] = twi->TWI_RHR;
+        srvBuffer[srvBufferLength++] = _pTwi->TWI_RHR;
     }
   }
 
@@ -490,66 +507,10 @@ void TwoWire::onService(void)
     {
       uint8_t c = 'x';
       if (srvBufferIndex < srvBufferLength)
+      {
         c = srvBuffer[srvBufferIndex++];
-      twi->TWI_THR = c;
+      }
+      _pTwi->TWI_THR = c;
     }
   }
 }
-
-#if WIRE_INTERFACES_COUNT > 0
-static void Wire_Init(void)
-{
-  pmc_enable_periph_clk(WIRE_INTERFACE_ID);
-  PIO_Configure(
-      g_aPinMap[PIN_WIRE_SDA].pPort,
-      g_aPinMap[PIN_WIRE_SDA].ulPinType,
-      g_aPinMap[PIN_WIRE_SDA].ulPin,
-      g_aPinMap[PIN_WIRE_SDA].ulPinConfiguration);
-  PIO_Configure(
-      g_aPinMap[PIN_WIRE_SCL].pPort,
-      g_aPinMap[PIN_WIRE_SCL].ulPinType,
-      g_aPinMap[PIN_WIRE_SCL].ulPin,
-      g_aPinMap[PIN_WIRE_SCL].ulPinConfiguration);
-
-  NVIC_DisableIRQ(WIRE_ISR_ID);
-  NVIC_ClearPendingIRQ(WIRE_ISR_ID);
-  NVIC_SetPriority(WIRE_ISR_ID, 0);
-  NVIC_EnableIRQ(WIRE_ISR_ID);
-}
-
-TwoWire Wire = TwoWire(WIRE_INTERFACE, Wire_Init);
-
-void WIRE_ISR_HANDLER(void)
-{
-  Wire.onService();
-}
-#endif
-
-#if WIRE_INTERFACES_COUNT > 1
-static void Wire1_Init(void)
-{
-  pmc_enable_periph_clk(WIRE1_INTERFACE_ID);
-  PIO_Configure(
-      g_aPinMap[PIN_WIRE1_SDA].pPort,
-      g_aPinMap[PIN_WIRE1_SDA].ulPinType,
-      g_aPinMap[PIN_WIRE1_SDA].ulPin,
-      g_aPinMap[PIN_WIRE1_SDA].ulPinConfiguration);
-  PIO_Configure(
-      g_aPinMap[PIN_WIRE1_SCL].pPort,
-      g_aPinMap[PIN_WIRE1_SCL].ulPinType,
-      g_aPinMap[PIN_WIRE1_SCL].ulPin,
-      g_aPinMap[PIN_WIRE1_SCL].ulPinConfiguration);
-
-  NVIC_DisableIRQ(WIRE1_ISR_ID);
-  NVIC_ClearPendingIRQ(WIRE1_ISR_ID);
-  NVIC_SetPriority(WIRE1_ISR_ID, 0);
-  NVIC_EnableIRQ(WIRE1_ISR_ID);
-}
-
-TwoWire Wire1 = TwoWire(WIRE1_INTERFACE, Wire1_Init);
-
-void WIRE1_ISR_HANDLER(void)
-{
-  Wire1.onService();
-}
-#endif
