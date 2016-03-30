@@ -100,8 +100,8 @@ static inline bool TWI_STATUS_EOSACC(uint32_t status)
   return (status & TWI_SR_EOSACC) == TWI_SR_EOSACC;
 }
 
-TwoWire::TwoWire(Twi *_twi, void(*_beginCb)(void)) :
-  _pTwi(_twi), rxBufferIndex(0), rxBufferLength(0),
+TwoWire::TwoWire(Twi *pTwi, void(*_beginCb)(void)) :
+  _pTwi(pTwi), rxBufferIndex(0), rxBufferLength(0),
   txAddress(0), txBufferLength(0), srvBufferIndex(0), srvBufferLength(0),
   status( UNINITIALIZED), onBeginCallback(_beginCb), twiClock(TWI_CLOCK)
 {
@@ -179,16 +179,21 @@ void TwoWire::setClock(uint32_t ulFrequency)
 {
   uint32_t ulCkDiv = 0 ;
   uint32_t ulClDiv ;
-  uint32_t ulResolved = 0 ;
+
+#if (SAMG55_SERIES || SAMS_SERIES || SAME_SERIES)
+#define TWI_CLK_DELTA (3ul)
+#else
+#define TWI_CLK_DELTA (4ul)
+#endif
 
   /* Configure clock */
-  while ( !ulResolved )
+  while (1)
   {
-    ulClDiv = ((VARIANT_MCK / (2 * ulFrequency)) - 4) / (1<<ulCkDiv) ;
+    ulClDiv = ((VARIANT_MCK / (2 * ulFrequency)) - TWI_CLK_DELTA) / (1<<ulCkDiv) ;
 
     if ( ulClDiv <= 255 )
     {
-      ulResolved = 1 ;
+      break;
     }
     else
     {
