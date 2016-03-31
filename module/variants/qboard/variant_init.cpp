@@ -45,9 +45,9 @@ void initVariant( void )
   digitalWrite(PIN_WINC3400_RTC_CLK, LOW);
 
   // Initialize Serial port Flexcom0 pins (WINC3400 BlueTooth)
-  pinPeripheral(PIN_WINC3400_BT_RX, GPIO_PERIPH_A);
-  pinPeripheral(PIN_WINC3400_BT_TX, GPIO_PERIPH_A);
-  pinPeripheral(PIN_WINC3400_BT_RTS, GPIO_PERIPH_A);
-  pinPeripheral(PIN_WINC3400_BT_CTS, GPIO_PERIPH_A);
+//  pinPeripheral(PIN_WINC3400_BT_RX, GPIO_PERIPH_A);
+//  pinPeripheral(PIN_WINC3400_BT_TX, GPIO_PERIPH_A);
+//  pinPeripheral(PIN_WINC3400_BT_RTS, GPIO_PERIPH_A);
+//  pinPeripheral(PIN_WINC3400_BT_CTS, GPIO_PERIPH_A);
 #endif // PIN_WINC3400_BASE
 }
