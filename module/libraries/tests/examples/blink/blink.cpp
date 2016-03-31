@@ -12,6 +12,9 @@ void setup(void)
 {
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
+#ifdef LED_BUILTIN2
+  pinMode(LED_BUILTIN2, OUTPUT);
+#endif // LED_BUILTIN2
 
 #ifdef SERIAL_PORT_MONITOR
   SERIAL_PORT_MONITOR.begin( 115200 ) ; // Output to EDBG Virtual COM Port
@@ -39,6 +42,9 @@ void setup(void)
 void loop(void)
 {
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+#ifdef LED_BUILTIN2
+  digitalWrite(LED_BUILTIN2, LOW);
+#endif // LED_BUILTIN2
   delay(1000);              // wait for a second
 
 #ifdef SERIAL_PORT_MONITOR
@@ -46,6 +52,9 @@ void loop(void)
 #endif // SERIAL_PORT_MONITOR
 
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+#ifdef LED_BUILTIN2
+  digitalWrite(LED_BUILTIN2, HIGH);
+#endif // LED_BUILTIN2
   delay(1000);              // wait for a second
 
 #ifdef SERIAL_PORT_HARDWARE_OPEN

@@ -19,6 +19,8 @@
   <VirtualDirectory Name="source">
     <File Name="Makefile"/>
     <File Name="blink.cpp"/>
+    <File Name="../preambule.mk"/>
+    <File Name="../rules.mk"/>
   </VirtualDirectory>
   <VirtualDirectory Name="output">
     <File Name="blink.map"/>
