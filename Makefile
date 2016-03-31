@@ -78,9 +78,9 @@ $(error, "Wrong OS specified for Packaging ($(PACKAGE_OS)).")
 endif
 
 ifeq (postpackaging,$(findstring $(MAKECMDGOALS),postpackaging))
-	PACKAGE_OS_FILENAME=$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS).tar.bz2
+  PACKAGE_OS_FILENAME=$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS).tar.bz2
   PACKAGE_CHKSUM := $(firstword $(shell sha256sum $(PACKAGE_OS_FILENAME)))
-	PACKAGE_SIZE := $(firstword $(shell wc -c $(PACKAGE_OS_FILENAME)))
+  PACKAGE_SIZE := $(firstword $(shell wc -c $(PACKAGE_OS_FILENAME)))
 endif
 
 # end of packaging specific
@@ -119,40 +119,38 @@ help:
 print_info:
 	@echo ----------------------------------------------------------
 	@echo Building ExperimentalCore-SAM using
-	@echo CURDIR        = $(CURDIR)
-	@echo OS            = $(OS)
-	@echo SHELL         = $(SHELL)
-	@echo TERM          = $(TERM)
-	@echo VARIANTS_PATH = $(VARIANTS_PATH)
-	@echo VARIANTS      = $(VARIANTS)
-	@echo VARIANT_NAME  = $(VARIANT_NAME)
-	@echo EXAMPLES_PATH = $(EXAMPLES_PATH)
-	@echo CORE_VERSION  = $(CORE_VERSION)
-	@echo PACKAGE_NAME  = $(PACKAGE_NAME)
-	@echo PACKAGE_OS    = $(PACKAGE_OS)
-	@echo PACKAGE_OS_VALID = $(PACKAGE_OS_VALID)
-	@echo PACKAGE_OS_REAL  = $(PACKAGE_OS_REAL)
-#	@echo PACKAGE_PROCESS = $(PACKAGE_PROCESS)
-	@echo PACKAGE_TO_BE_PROCESSED = $(PACKAGE_TO_BE_PROCESSED)
+	@echo "CURDIR             = $(CURDIR)"
+	@echo "OS                 = $(OS)"
+	@echo "SHELL              = $(SHELL)"
+	@echo "VARIANTS_PATH      = $(VARIANTS_PATH)"
+	@echo "VARIANTS           = $(VARIANTS)"
+	@echo "VARIANT_NAME       = $(VARIANT_NAME)"
+	@echo "EXAMPLES_PATH      = $(EXAMPLES_PATH)"
+	@echo "CORE_VERSION       = $(CORE_VERSION)"
+	@echo "PACKAGE_NAME       = $(PACKAGE_NAME)"
+	@echo "PACKAGE_OS         = $(PACKAGE_OS)"
+	@echo "PACKAGE_OS_VALID   = $(PACKAGE_OS_VALID)"
+	@echo "PACKAGE_OS_REAL    = $(PACKAGE_OS_REAL)"
+	@echo "PACKAGE_TO_BE_PROCESSED = $(PACKAGE_TO_BE_PROCESSED)"
 #	"$(CC)" -v
 #	env
 
 print_info_travis:
 	@echo ----------------------------------------------------------
 	@echo Travis-CI envvars
-	@echo TRAVIS_OS_NAME      = $(TRAVIS_OS_NAME)
-	@echo TRAVIS_LANGUAGE     = $(TRAVIS_LANGUAGE)
-	@echo TRAVIS_REPO_SLUG    = $(TRAVIS_REPO_SLUG)
-	@echo TRAVIS_BRANCH       = $(TRAVIS_BRANCH)
-	@echo TRAVIS_TAG          = $(TRAVIS_TAG)
-	@echo TRAVIS_PULL_REQUEST = $(TRAVIS_PULL_REQUEST)
-	@echo TRAVIS_COMMIT       = $(TRAVIS_COMMIT)
-	@echo TRAVIS_COMMIT_RANGE = $(TRAVIS_COMMIT_RANGE)
-	@echo TRAVIS_JOB_ID       = $(TRAVIS_JOB_ID)
-	@echo TRAVIS_JOB_NUMBER   = $(TRAVIS_JOB_NUMBER)
-	@echo TRAVIS_BUILD_DIR    = $(TRAVIS_BUILD_DIR)
-	@echo TRAVIS_BUILD_ID     = $(TRAVIS_BUILD_ID)
-	@echo TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)
+	@echo "TRAVIS_OS_NAME      = $(TRAVIS_OS_NAME)"
+	@echo "TRAVIS_LANGUAGE     = $(TRAVIS_LANGUAGE)"
+	@echo "TRAVIS_REPO_SLUG    = $(TRAVIS_REPO_SLUG)"
+	@echo "TRAVIS_BRANCH       = $(TRAVIS_BRANCH)"
+	@echo "TRAVIS_TAG          = $(TRAVIS_TAG)"
+	@echo "TRAVIS_PULL_REQUEST = $(TRAVIS_PULL_REQUEST)"
+	@echo "TRAVIS_COMMIT       = $(TRAVIS_COMMIT)"
+	@echo "TRAVIS_COMMIT_RANGE = $(TRAVIS_COMMIT_RANGE)"
+	@echo "TRAVIS_JOB_ID       = $(TRAVIS_JOB_ID)"
+	@echo "TRAVIS_JOB_NUMBER   = $(TRAVIS_JOB_NUMBER)"
+	@echo "TRAVIS_BUILD_DIR    = $(TRAVIS_BUILD_DIR)"
+	@echo "TRAVIS_BUILD_ID     = $(TRAVIS_BUILD_ID)"
+	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
 
 packaging: packaging_clean build_variants $(PACKAGE_TO_BE_PROCESSED)
 
@@ -191,9 +189,9 @@ postpackaging:
 	@echo "TRAVIS_JOB_NUMBER   = $(TRAVIS_JOB_NUMBER)"
 	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
 	@echo "PACKAGE_OS_FILENAME = $(PACKAGE_OS_FILENAME)"
-	cat extras/package_index.json.template | sed s/%%PR_NUMBER%%/$(TRAVIS_JOB_NUMBER)/ | sed s/%%BUILD_NUMBER%%/$(TRAVIS_BUILD_NUMBER)/ | sed s/%%VERSION%%/$(CORE_VERSION)-build-$(TRAVIS_BUILD_NUMBER)/ | \
-sed s/%%FILENAME%%/$(PACKAGE_OS_FILENAME)/ | sed s/%%CHECKSUM%%/$(PACKAGE_CHKSUM)/ | sed s/%%SIZE%%/$(PACKAGE_SIZE)/ > package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_b$(TRAVIS_BUILD_NUMBER).json
-	@echo "package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_b$(TRAVIS_BUILD_NUMBER).json created"
+	cat extras/package_index.json.template | sed s/%%VERSION%%/$(CORE_VERSION)/ | sed s/%%FILENAME%%/$(PACKAGE_OS_FILENAME)/ | sed s/%%CHECKSUM%%/$(PACKAGE_CHKSUM)/ | sed s/%%SIZE%%/$(PACKAGE_SIZE)/ > package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json
+	cp package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json test_package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json
+	@echo "package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json created"
 
 packaging_clean:
-	-$(RM) $(PACKAGE_NAME)-*.tar.bz2 package_$(PACKAGE_NAME)_*.json
+	-$(RM) $(PACKAGE_NAME)-*.tar.bz2 package_$(PACKAGE_NAME)_*.json test_package_$(PACKAGE_NAME)_*.json

@@ -1,24 +1,27 @@
 {
-  "packages": [
+  "packages":
+  [
     {
       "name": "experimentalcore-sam",
       "maintainer": "Thibaut VIARD",
       "websiteURL": "https://github.com/aethaniel/ExperimentalCore-sam/wiki",
-      "email": "aethaniel@sam-geek.org",
-      "help": {
+      "help":
+      {
         "online": "http://www.arduino.cc/en/Reference/HomePage"
       },
-      "platforms": [
+      "platforms":
+      [
         {
-          "name": "Experimental SAM core (build %%BUILD_NUMBER%%)",
-          "architecture": "sam",
+          "name": "Experimental SAM core",
+          "architecture": "sam2",
           "version": "%%VERSION%%",
           "category": "Partner",
-          "url": "https://github.com/aethaniel/ExperimentalCore-sam/releases/%%FILENAME%%",
+          "url": "https://github.com/aethaniel/ExperimentalCore-sam/releases/download/v%%VERSION%%/%%FILENAME%%",
           "archiveFileName": "%%FILENAME%%",
           "checksum": "SHA-256:%%CHECKSUM%%",
           "size": "%%SIZE%%",
-          "boards": [
+          "boards": 
+	  [
             { "name": "Arduino Due" },
             { "name": "Atmel SAM4S-Xplained" },
             { "name": "Atmel SAM4S-WPIR-RD" },
@@ -28,7 +31,8 @@
             { "name": "Poppy Core" }
             { "name": "qboard" }
           ],
-          "toolsDependencies": [
+          "toolsDependencies":
+          [
             {
               "packager": "arduino",
               "name": "arm-none-eabi-gcc",
@@ -43,16 +47,12 @@
               "packager": "arduino",
               "name": "openocd",
               "version": "0.9.0-arduino"
-            },
-            {
-              "packager": "arduino",
-              "name": "CMSIS",
-              "version": "4.0.0-atmel"
             }
           ]
         }
       ],
-      "tools": [
+      "tools":
+      [
       ]
     }
   ]
