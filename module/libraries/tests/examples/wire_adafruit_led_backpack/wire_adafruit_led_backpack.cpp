@@ -16,9 +16,10 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <Arduino.h>
+
 #if WIRE_INTERFACES_COUNT > 0
 
-#include <Arduino.h>
 #include "Adafruit_LEDBackpack.h"
 
 static const uint8_t smile_bmp[] =
@@ -56,20 +57,22 @@ static const uint8_t frown_bmp[] =
   B00111100
 };
 
-
 Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
 
 void setup(void)
 {
-  Serial.begin(115200);
-  Serial.println("HT16K33 8x8 LED Matrix Test");
+  SERIAL_PORT_MONITOR.begin(115200);
+  SERIAL_PORT_MONITOR.println("HT16K33 8x8 LED Matrix Test");
 
   matrix.begin(0x70);  // pass in the address
 }
 
-
 void loop(void)
 {
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.write( '+' ) ;   // send a char
+#endif // SERIAL_PORT_MONITOR
+
   matrix.clear();      // clear display
   matrix.drawBitmap(0, 0, smile_bmp, 8, 8, LED_ON);
   matrix.writeDisplay();  // write the changes we just made to the display
@@ -92,13 +95,21 @@ void loop(void)
 }
 
 #else
-#include <Arduino.h>
 
 void setup(void)
 {
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.begin(115200);
+  SERIAL_PORT_MONITOR.println("HT16K33 8x8 LED Matrix Test - No Wire");
+#endif // SERIAL_PORT_MONITOR
 }
 
 void loop(void)
 {
+  delay(1000);
+
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.write( '-' ) ;   // send a char
+#endif // SERIAL_PORT_MONITOR
 }
-#endif //WIRE_INTERFACES_COUNT > 0
+#endif // WIRE_INTERFACES_COUNT > 0

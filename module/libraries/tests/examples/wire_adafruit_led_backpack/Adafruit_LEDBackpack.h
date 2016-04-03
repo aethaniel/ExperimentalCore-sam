@@ -44,31 +44,30 @@
 // this is the raw HT16K33 controller
 class Adafruit_LEDBackpack
 {
- public:
-  Adafruit_LEDBackpack(void);
-  void begin(uint8_t _addr);
-  void setBrightness(uint8_t b);
-  void blinkRate(uint8_t b);
-  void writeDisplay(void);
-  void clear(void);
+  public:
+    Adafruit_LEDBackpack(void);
+    void begin(uint8_t _addr);
+    void setBrightness(uint8_t b);
+    void blinkRate(uint8_t b);
+    void writeDisplay(void);
+    void clear(void);
 
-  uint16_t displaybuffer[8];
+    uint16_t displaybuffer[8];
 
-  void init(uint8_t a);
- protected:
-  uint8_t i2c_addr;
+    void init(uint8_t a);
+
+  protected:
+    uint8_t i2c_addr;
 };
 
 
 class Adafruit_8x8matrix : public Adafruit_LEDBackpack
 {
- public:
-  Adafruit_8x8matrix(void);
+  public:
+    Adafruit_8x8matrix(void);
 
-  void drawPixel(int16_t x, int16_t y, uint16_t color);
-  void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color);
-
- private:
+    void drawPixel(int16_t x, int16_t y, uint16_t color);
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color);
 };
 
 #endif // Adafruit_LEDBackpack_h

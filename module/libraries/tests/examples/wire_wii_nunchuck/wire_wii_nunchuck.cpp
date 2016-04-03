@@ -39,6 +39,7 @@ typedef struct _NunchuckData
 static bool NunchuckInitialize(TwoWire& interface)
 {
   interface.begin(); // join i2c bus as master
+
   interface.beginTransmission(0x52);// transmit to device 0x52
     interface.write((uint8_t)0xF0);// sends a zero.
     interface.write((uint8_t)0x55);// sends a zero.
@@ -120,7 +121,7 @@ static bool NunchuckReadData(TwoWire& interface, NunchuckData& data)
 void setup()
 {
   SERIAL_PORT_MONITOR.begin( 115200 ) ;
-  SERIAL_PORT_MONITOR.println("Inits");
+  SERIAL_PORT_MONITOR.println("Wire Wii Nunchuck test");
 
   NunchuckInitialize(Wire);
 
@@ -135,15 +136,26 @@ void loop()
   if ( NunchuckReadData(Wire, sensor_data) == 1 )
   {
   }
+
+  SERIAL_PORT_MONITOR.println( "+" ) ;
+  delay(500);
 }
 
 #else
 
 void setup(void)
 {
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.begin( 115200 ) ;
+  SERIAL_PORT_MONITOR.println("Wire Wii Nunchuck test failed - no Wire");
+#endif // SERIAL_PORT_MONITOR
 }
 
 void loop(void)
 {
+  delay(1000);
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.print("-");
+#endif // SERIAL_PORT_MONITOR
 }
 #endif //WIRE_INTERFACES_COUNT > 0

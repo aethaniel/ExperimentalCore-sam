@@ -34,8 +34,11 @@ void setup(void)
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 
+#ifdef SERIAL_PORT_MONITOR
   SERIAL_PORT_MONITOR.begin(115200);
-  SERIAL_PORT_MONITOR.println("Wire init");
+  SERIAL_PORT_MONITOR.println("AT30TSE75x temperature sensor test");
+#endif // SERIAL_PORT_MONITOR
+
   Wire.begin();
 }
 
@@ -66,11 +69,13 @@ void loop(void)
     temperatureCelsius = - (twosComplement>>8) - ((twosComplement & 0x00F0)>>4)*0.0625f;
   }
 
+#ifdef SERIAL_PORT_MONITOR
   SERIAL_PORT_MONITOR.print("Temperature : ");
   SERIAL_PORT_MONITOR.print(temperatureValue);
   SERIAL_PORT_MONITOR.print(", ");
   SERIAL_PORT_MONITOR.print(temperatureCelsius);
   SERIAL_PORT_MONITOR.println("C");
+#endif // SERIAL_PORT_MONITOR
 
   delay(1000);
 }
@@ -79,10 +84,19 @@ void loop(void)
 
 void setup(void)
 {
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.begin(115200);
+  SERIAL_PORT_MONITOR.println("AT30TSE75x temperature sensor test failed - no wire");
+#endif // SERIAL_PORT_MONITOR
 }
 
 void loop(void)
 {
+  delay(1000);
+
+#ifdef SERIAL_PORT_MONITOR
+  SERIAL_PORT_MONITOR.print("-");
+#endif // SERIAL_PORT_MONITOR
 }
 
-#endif //WIRE_INTERFACES_COUNT > 0
+#endif // WIRE_INTERFACES_COUNT > 0
