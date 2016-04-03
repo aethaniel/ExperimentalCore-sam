@@ -148,21 +148,21 @@ typedef struct _DeviceVectors
   void* pfnPMC_Handler;       /*  5 Power Management Controller */
   void* pfnEFC0_Handler;      /*  6 Enhanced Flash Controller */
   void* pvReserved7;
-  void* pfnFLEXCOM0_Handler;  /* 8  FLEXCOM 0 */
-  void* pfnFLEXCOM1_Handler;  /* 9  FLEXCOM 1 */
+  void* pfnFLEXCOM0_Handler;  /*  8 FLEXCOM 0 */
+  void* pfnFLEXCOM1_Handler;  /*  9 FLEXCOM 1 */
   void* pvReserved10;
   void* pfnPIOA_Handler;      /* 11 Parallel I/O Controller A */
   void* pfnPIOB_Handler;      /* 12 Parallel I/O Controller B */
   void* pfnPDMIC0_Handler;    /* 13 PDM 0 */
-  void* pfnFLEXCOM2_Handler;  /* 14  FLEXCOM 2 */
+  void* pfnFLEXCOM2_Handler;  /* 14 FLEXCOM 2 */
   void* pfnMEM2MEM_Handler;   /* 15 MEM2MEM */
   void* pfnI2SC0_Handler;     /* 16 I2SC0 */
   void* pfnI2SC1_Handler;     /* 17 I2SC1 */
   void* pfnPDMIC1_Handler;    /* 18 PDM 1 */
-  void* pfnFLEXCOM3_Handler;  /* 19  FLEXCOM 3 */
-  void* pfnFLEXCOM4_Handler;  /* 20  FLEXCOM 4 */
-  void* pfnFLEXCOM5_Handler;  /* 21  FLEXCOM 5 */
-  void* pfnFLEXCOM6_Handler;  /* 22  FLEXCOM 6 */
+  void* pfnFLEXCOM3_Handler;  /* 19 FLEXCOM 3 */
+  void* pfnFLEXCOM4_Handler;  /* 20 FLEXCOM 4 */
+  void* pfnFLEXCOM5_Handler;  /* 21 FLEXCOM 5 */
+  void* pfnFLEXCOM6_Handler;  /* 22 FLEXCOM 6 */
   void* pfnTC0_Handler;       /* 23 Timer/Counter 0 */
   void* pfnTC1_Handler;       /* 24 Timer/Counter 1 */
   void* pfnTC2_Handler;       /* 25 Timer/Counter 2 */
@@ -490,3 +490,4 @@ void WDT_Handler        ( void );
 /*@}*/
 
 #endif /* _SAMG55G19_ */
+
