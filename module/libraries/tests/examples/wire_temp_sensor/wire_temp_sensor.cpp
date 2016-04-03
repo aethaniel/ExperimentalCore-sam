@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015 Thibaut VIARD.  All right reserved.
+  Copyright (c) 2016 Thibaut VIARD.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,8 @@
 */
 
 #include <Arduino.h>
+
+#if WIRE_INTERFACES_COUNT > 0
 
 // AT30TSE758 Temperature sensor with EEPROM
 
@@ -72,3 +74,15 @@ void loop(void)
 
   delay(1000);
 }
+
+#else
+
+void setup(void)
+{
+}
+
+void loop(void)
+{
+}
+
+#endif //WIRE_INTERFACES_COUNT > 0
