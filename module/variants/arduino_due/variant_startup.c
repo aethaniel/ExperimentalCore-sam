@@ -61,7 +61,7 @@ DeviceVectors exception_table=
   .pfnPMC_Handler    = (void*) vector_halt,  /* 5  Power Management Controller */
   .pfnEFC0_Handler   = (void*) vector_halt,  /* 6  Enhanced Embedded Flash Controller 0 */
   .pfnEFC1_Handler   = (void*) vector_halt,  /* 7  Enhanced Embedded Flash Controller 1 */
-  .pfnUART_Handler   = (void*) vector_halt,  /* 8  Universal Asynchronous Receiver Transceiver */
+  .pfnUART0_Handler  = (void*) vector_halt,  /* 8  Universal Asynchronous Receiver Transceiver */
 #ifdef SMC
   .pfnSMC_Handler    = (void*) vector_halt,  /* 9  Static Memory Controller */
 #else

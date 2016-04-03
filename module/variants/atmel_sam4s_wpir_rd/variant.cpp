@@ -71,7 +71,7 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial( (Usart*)UART0, UART0_IRQn, Serial_Handler, 1);
+SAMSerial Serial( (Usart*)UART0, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 1);
 void serialEvent() __attribute__((weak));
 void serialEvent() { }
 

@@ -37,6 +37,8 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+#include "CoreSPI.hpp"
+#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -93,7 +95,6 @@ extern "C"
 /*
  * Analog pins
  */
-#if 0 // TODO Analog pins
 static const uint8_t A0  = 54;
 static const uint8_t A1  = 55;
 static const uint8_t A2  = 56;
@@ -111,7 +112,6 @@ static const uint8_t A11 = 65;
 
 static const uint8_t DAC0 = 66;
 static const uint8_t DAC1 = 67;
-#endif // TODO Analog pins
 
 #if 0 // TODO SPI
 /*
@@ -153,7 +153,6 @@ static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 #endif // TODO SPI
 
-#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
@@ -162,36 +161,48 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #define PIN_WIRE_SDA         (20u)
 #define PIN_WIRE_SCL         (21u)
 #define WIRE_INTERFACE       TWI1
-#define WIRE_INTERFACE_ID    ID_TWI1
-#define WIRE_ISR_HANDLER     TWI1_Handler
-#define WIRE_ISR_ID          TWI1_IRQn
+//#define WIRE_INTERFACE_ID    ID_TWI1
+//#define WIRE_ISR_HANDLER     TWI1_Handler
+//#define WIRE_ISR_ID          TWI1_IRQn
+//#define PIN_WIRE_SDA_MUX     (GPIO_PERIPH_A)
+//#define PIN_WIRE_SCL_MUX     (GPIO_PERIPH_A)
 
 #define PIN_WIRE1_SDA        (70u)
 #define PIN_WIRE1_SCL        (71u)
 #define WIRE1_INTERFACE      TWI0
-#define WIRE1_INTERFACE_ID   ID_TWI0
-#define WIRE1_ISR_HANDLER    TWI0_Handler
-#define WIRE1_ISR_ID         TWI0_IRQn
-#endif // TODO Wire
+//#define WIRE1_INTERFACE_ID   ID_TWI0
+//#define WIRE1_ISR_HANDLER    TWI0_Handler
+//#define WIRE1_ISR_ID         TWI0_IRQn
+//#define PIN_WIRE1_SDA_MUX    (GPIO_PERIPH_A)
+//#define PIN_WIRE1_SCL_MUX    (GPIO_PERIPH_A)
 
 /*
- * UART/USART Interfaces
+ * Serial Interfaces
  */
 // Serial
-#define PINS_UART            (81u)
-// Serial1
-#define PINS_USART0          (82u)
-// Serial2
-#define PINS_USART1          (83u)
-// Serial3
-#define PINS_USART3          (84u)
+#define PINS_UART            (81ul)
+#define PIN_SERIAL_RX        (0ul)
+#define PIN_SERIAL_TX        (1ul)
 
-#if 0 // TODO USB
+// Serial1
+#define PINS_USART0          (82ul)
+#define PIN_SERIAL1_RX       (19ul)
+#define PIN_SERIAL1_TX       (18ul)
+
+// Serial2
+#define PINS_USART1          (83ul)
+#define PIN_SERIAL2_RX       (17ul)
+#define PIN_SERIAL2_TX       (16ul)
+
+// Serial3
+#define PINS_USART3          (84ul)
+#define PIN_SERIAL3_RX       (15ul)
+#define PIN_SERIAL3_TX       (14ul)
+
 /*
  * USB Interfaces
  */
-#define PINS_USB             (85u)
-#endif // TODO USB
+#define PINS_USB             (85ul)
 
 /*
  * CAN pins
@@ -210,31 +221,31 @@ static const uint8_t CAN1TX = 89;
 /*
  * DACC
  */
-#define DACC_INTERFACE		DACC
-#define DACC_INTERFACE_ID	ID_DACC
-#define DACC_RESOLUTION		12
-#define DACC_ISR_HANDLER    DACC_Handler
-#define DACC_ISR_ID         DACC_IRQn
+#define DACC_INTERFACE		 DACC
+#define DACC_INTERFACE_ID	 ID_DACC
+#define DACC_RESOLUTION		 12
+#define DACC_ISR_HANDLER     DACC_Handler
+#define DACC_ISR_ID          DACC_IRQn
 
 /*
  * PWM
  */
-#define PWM_INTERFACE		PWM
-#define PWM_INTERFACE_ID	ID_PWM
-#define PWM_FREQUENCY		1000
-#define PWM_MAX_DUTY_CYCLE	255
-#define PWM_MIN_DUTY_CYCLE	0
-#define PWM_RESOLUTION		8
+#define PWM_INTERFACE		 PWM
+#define PWM_INTERFACE_ID	 ID_PWM
+#define PWM_FREQUENCY		 1000
+#define PWM_MAX_DUTY_CYCLE	 255
+#define PWM_MIN_DUTY_CYCLE	 0
+#define PWM_RESOLUTION		 8
 
 /*
  * TC
  */
-#define TC_INTERFACE        TC0
-#define TC_INTERFACE_ID     ID_TC0
-#define TC_FREQUENCY        1000
-#define TC_MAX_DUTY_CYCLE   255
-#define TC_MIN_DUTY_CYCLE   0
-#define TC_RESOLUTION		8
+#define TC_INTERFACE         TC0
+#define TC_INTERFACE_ID      ID_TC0
+#define TC_FREQUENCY         1000
+#define TC_MAX_DUTY_CYCLE    255
+#define TC_MIN_DUTY_CYCLE    0
+#define TC_RESOLUTION	     8
 
 #ifdef __cplusplus
 }
@@ -250,6 +261,9 @@ extern SAMSerial Serial;
 extern SAMSerial Serial1;
 extern SAMSerial Serial2;
 extern SAMSerial Serial3;
+
+extern TwoWire Wire;
+extern TwoWire Wire1;
 
 #endif
 

@@ -115,6 +115,19 @@ const PinDescription g_aPinMap[]=
 */
   // 0 .. 53 - Digital pins
   // ----------------------
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | Digital low      |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 0          |                  |  PA8   | RX0             | URXD
+ * | 1          |                  |  PA9   | TX0             | UTXD
+ * |            |                  |  xxx   | xxx             |
+ * |            |                  |  xxx   | xxx             |
+ * |            |                  |  xxx   | xxx             |
+ * |            |                  |  xxx   | xxx             |
+ * |            |                  |  xxx   | xxx             |
+ * |            |                  |  xxx   | xxx             |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ */
   // 0/1 - UART (Serial)
   { PORTA, PIO_PA8A_URXD, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // URXD
   { PORTA, PIO_PA9A_UTXD, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // UTXD
@@ -128,6 +141,18 @@ const PinDescription g_aPinMap[]=
   { PORTC, PIO_PC25B_TIOA6, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, TC2_CHA6 }, // TIOA6
   { PORTC, PIO_PC24B_PWML7, GPIO_PERIPH_B, NOT_ON_ANALOG, PWM_CHL7, NOT_ON_TIMER }, // PWML7
   { PORTC, PIO_PC23B_PWML6, GPIO_PERIPH_B, NOT_ON_ANALOG, PWM_CHL6, NOT_ON_TIMER }, // PWML6
+
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | Digital high     |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 8          |                  |  xxx   | xxx             |
+ * | 9          |                  |  xxx   | xxx             |
+ * | 10         |                  |  xxx   | xxx             |
+ * | 11         |                  |  xxx   | xxx             |
+ * | 12         |                  |  xxx   | xxx             |
+ * | 13         |                  |  xxx   | xxx             |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ */
   { PORTC, PIO_PC22B_PWML5, GPIO_PERIPH_B, NOT_ON_ANALOG, PWM_CHL5, NOT_ON_TIMER }, // PWML5
   { PORTC, PIO_PC21B_PWML4, GPIO_PERIPH_B, NOT_ON_ANALOG, PWM_CHL4, NOT_ON_TIMER }, // PWML4
   // 10
@@ -138,7 +163,19 @@ const PinDescription g_aPinMap[]=
   // 13 - AMBER LED
   { PORTB, PIO_PB27B_TIOB0, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, TC0_CHB0 }, // TIOB0
 
-#if 0
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | Digital comm.    |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 14         |                  |  xxx   | TX3             | TXD3
+ * | 15         |                  |  xxx   | RX3             | RXD3
+ * | 16         |                  |  xxx   | TX2             | TXD1
+ * | 17         |                  |  xxx   | RX2             | RXD1
+ * | 18         |                  |  xxx   | TX1             | TXD0
+ * | 19         |                  |  xxx   | RX1             | RXD0
+ * | 20         |                  |  xxx   | SDA             | SDA0
+ * | 21         |                  |  xxx   | SCL             | SCL0
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ */
   // 14/15 - USART3 (Serial3)
   { PORTD, PIO_PD4B_TXD3, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TXD3
   { PORTD, PIO_PD5B_RXD3, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // RXD3
@@ -155,6 +192,43 @@ const PinDescription g_aPinMap[]=
   { PORTB, PIO_PB12A_TWD1, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWD1 - SDA0
   { PORTB, PIO_PB13A_TWCK1, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWCK1 - SCL0
 
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | Digital          |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 22         |                  |  xxx   | xxx             |
+ * | 23         |                  |  xxx   | xxx             |
+ * | 24         |                  |  xxx   | xxx             |
+ * | 25         |                  |  xxx   | xxx             |
+ * | 26         |                  |  xxx   | xxx             |
+ * | 27         |                  |  xxx   | xxx             |
+ * | 28         |                  |  xxx   | xxx             |
+ * | 29         |                  |  xxx   | xxx             |
+ * | 30         |                  |  xxx   | xxx             |
+ * | 31         |                  |  xxx   | xxx             |
+ * | 32         |                  |  xxx   | xxx             |
+ * | 33         |                  |  xxx   | xxx             |
+ * | 34         |                  |  xxx   | xxx             |
+ * | 35         |                  |  xxx   | xxx             |
+ * | 36         |                  |  xxx   | xxx             |
+ * | 37         |                  |  xxx   | xxx             |
+ * | 38         |                  |  xxx   | xxx             |
+ * | 39         |                  |  xxx   | xxx             |
+ * | 40         |                  |  xxx   | xxx             |
+ * | 41         |                  |  xxx   | xxx             |
+ * | 42         |                  |  xxx   | xxx             |
+ * | 43         |                  |  xxx   | xxx             |
+ * | 44         |                  |  xxx   | xxx             |
+ * | 45         |                  |  xxx   | xxx             |
+ * | 46         |                  |  xxx   | xxx             |
+ * | 47         |                  |  xxx   | xxx             |
+ * | 48         |                  |  xxx   | xxx             |
+ * | 49         |                  |  xxx   | xxx             |
+ * | 50         |                  |  xxx   | xxx             |
+ * | 51         |                  |  xxx   | xxx             |
+ * | 52         |                  |  xxx   | xxx             |
+ * | 53         |                  |  xxx   | xxx             |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ */
   // 22
   { PORTB, PIO_PB26, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // PIN 22
   { PORTA, PIO_PA14, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // PIN 23
@@ -203,26 +277,23 @@ const PinDescription g_aPinMap[]=
   { PORTB, PIO_PB21, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // PIN 52
   { PORTB, PIO_PB14, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // PIN 53
 
-
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Analog input     |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * | 54         |                  |  PA16  | A0              |
  * | 55         |                  |  PA24  | A1              |
+ * | 56         |                  |  PA23  | A2              |
+ * | 57         |                  |  PA22  | A3              |
+ * | 58         |                  |  PA6   | A4              | TIOB2
+ * | 69         |                  |  PA4   | A5              |
+ * | 60         |                  |  PA3   | A6              | TIOB1
+ * | 61         |                  |  PA2   | A7              | TIOA1
+ * | 62         |                  |  PB17  | A8              |
+ * | 63         |                  |  PB18  | A9              |
+ * | 64         |                  |  PB19  | A10             |
+ * | 65         |                  |  PB20  | A11             |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- *  54             |  PA16  | "A0"
- *  55             |  PA24  | "A1"
- *  56             |  PA23  | "A2"
- *  57             |  PA22  | "A3"
- *  58       TIOB2 |  PA6   | "A4"
- *  69             |  PA4   | "A5"
- *  60       TIOB1 |  PA3   | "A6"
- *  61       TIOA1 |  PA2   | "A7"
- *  62             |  PB17  | "A8"
- *  63             |  PB18  | "A9"
- *  64             |  PB19  | "A10"
- *  65             |  PB20  | "A11"
-*/
+ */
   // 54 .. 65 - Analog pins
   // ----------------------
   { PORTA, PIO_PA16X1_AD7, GPIO_NOMUX, ADC_CHL7, NOT_ON_PWM, NOT_ON_TIMER }, // AD7
@@ -246,7 +317,7 @@ const PinDescription g_aPinMap[]=
  * | 66         |                  |  PB15  | DAC0            |
  * | 67         |                  |  PB16  | DAC1            |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
-*/
+ */
   { PORTB, PIO_PB15X1_DAC0, GPIO_NOMUX, DAC_CHL0, NOT_ON_PWM, NOT_ON_TIMER }, // DAC0
   { PORTB, PIO_PB16X1_DAC1, GPIO_NOMUX, DAC_CHL1, NOT_ON_PWM, NOT_ON_TIMER }, // DAC1
 
@@ -256,9 +327,9 @@ const PinDescription g_aPinMap[]=
  * | 68         |                  |  PA1   | CANRX           |
  * | 69         |                  |  PA0   | CANTX           |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
-*/
-  { PORTA, PIO_PA1A_CANRX0, GPIO_PERIPH_A, NOT_ON_PWM, NOT_ON_TIMER }, // CANRX
-  { PORTA, PIO_PA0A_CANTX0, GPIO_PERIPH_A, NOT_ON_PWM, NOT_ON_TIMER }, // CANTX
+ */
+  { PORTA, PIO_PA1A_CANRX0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // CANRX
+  { PORTA, PIO_PA0A_CANTX0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // CANTX
 
   // 70/71 - TWI0
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
@@ -267,7 +338,7 @@ const PinDescription g_aPinMap[]=
  * | 70         |                  |  PA17  | SDA1            |
  * | 71         |                  |  PA18  | SCL1            |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
-*/
+ */
   { PORTA, PIO_PA17A_TWD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWD0 - SDA1
   { PORTA, PIO_PA18A_TWCK0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWCK0 - SCL1
 
@@ -278,10 +349,20 @@ const PinDescription g_aPinMap[]=
  * | 72         |                  |  PC30  | RX              |
  * | 73         |                  |  PA21  | TX              |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
-*/
+ */
   { PORTC, PIO_PC30, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // LED AMBER RXL
   { PORTA, PIO_PA21, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // LED AMBER TXL
 
+/* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * |            | SPI              |        |                 |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ * | 74         |                  |  xxx   | xxx             |
+ * | 74         |                  |  xxx   | xxx             |
+ * | 74         |                  |  xxx   | xxx             |
+ * | 74         |                  |  xxx   | xxx             |
+ * | 74         |                  |  xxx   | xxx             |
+ * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
+ */
   // 74/75/76 - SPI
   { PORTA, PIO_PA25A_SPI0_MISO, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // MISO
   { PORTA, PIO_PA26A_SPI0_MOSI, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // MOSI
@@ -326,8 +407,7 @@ const PinDescription g_aPinMap[]=
   { PORTA, PIO_PA1A_CANRX0|PIO_PA0A_CANTX0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },
   // 91 - CAN1 all pins
   { PORTB, PIO_PB15A_CANRX1|PIO_PB14A_CANTX1, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }
-#endif // 0
-} ;
+};
 
 #ifdef __cplusplus
 }
@@ -342,7 +422,7 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial((Usart*)UART, UART_IRQn, Serial_Handler, 1);
+SAMSerial Serial((Usart*)UART0, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 1);
 void serialEvent() __attribute__((weak));
 void serialEvent() { }
 
@@ -352,7 +432,7 @@ static void Serial1_Handler(void)
   Serial1.IrqHandler();
 }
 
-SAMSerial Serial1(USART0, USART0_IRQn, Serial1_Handler, 0);
+SAMSerial Serial1(USART0, PIN_SERIAL1_RX, PIN_SERIAL1_TX, Serial1_Handler, 0);
 void serialEvent1() __attribute__((weak));
 void serialEvent1() { }
 
@@ -362,7 +442,7 @@ static void Serial2_Handler(void)
   Serial2.IrqHandler();
 }
 
-SAMSerial Serial2(USART1, USART1_IRQn, Serial2_Handler, 0);
+SAMSerial Serial2(USART1, PIN_SERIAL2_RX, PIN_SERIAL2_TX, Serial2_Handler, 0);
 void serialEvent2() __attribute__((weak));
 void serialEvent2() { }
 
@@ -372,7 +452,7 @@ static void Serial3_Handler(void)
   Serial3.IrqHandler();
 }
 
-SAMSerial Serial3(USART3, USART3_IRQn, Serial3_Handler, 0);
+SAMSerial Serial3(USART3, PIN_SERIAL3_RX, PIN_SERIAL3_TX, Serial3_Handler, 0);
 void serialEvent3() __attribute__((weak));
 void serialEvent3() { }
 
@@ -388,3 +468,24 @@ void serialEventRun(void)
 
 // ----------------------------------------------------------------------------
 
+/*
+ * Wirex objects
+ */
+
+static void Wire_Handler(void)
+{
+  Wire.onService();
+}
+
+TwoWire Wire(WIRE_INTERFACE, PIN_WIRE_SDA, PIN_WIRE_SCL, Wire_Handler);
+
+// ----------------------------------------------------------------------------
+
+static void Wire1_Handler(void)
+{
+  Wire1.onService();
+}
+
+TwoWire Wire1(WIRE1_INTERFACE, PIN_WIRE1_SDA, PIN_WIRE1_SCL, Wire1_Handler);
+
+// ----------------------------------------------------------------------------

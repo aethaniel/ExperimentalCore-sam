@@ -186,12 +186,12 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #define PIN_WIRE_SDA         (11ul)
 #define PIN_WIRE_SCL         (12ul)
-#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_A)
-#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_A)
+//#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_A)
+//#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_A)
 #define WIRE_INTERFACE       TWI4
-#define WIRE_INTERFACE_ID    ID_FLEXCOM4
-#define WIRE_ISR_HANDLER     FLEXCOM4_Handler
-#define WIRE_ISR_ID          FLEXCOM4_IRQn
+//#define WIRE_INTERFACE_ID    ID_FLEXCOM4
+//#define WIRE_ISR_HANDLER     FLEXCOM4_Handler
+//#define WIRE_ISR_ID          FLEXCOM4_IRQn
 
 #if 0 // TODO USB
 /*

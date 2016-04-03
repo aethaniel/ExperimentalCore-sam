@@ -17,7 +17,6 @@
 */
 
 #include "variant.h"
-#include "core_private.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -91,8 +90,8 @@ const PinDescription g_aPinMap[]=
  * | 14         | D14              |  PA03  | USART TX        | TXD3
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { PORTA, PIO_PA3A_TXD3, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
-  { PORTA, PIO_PA4A_RXD3, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
+  { PORTA, PIO_PA4A_RXD3, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // RXD3
+  { PORTA, PIO_PA3A_TXD3, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TXD3
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * | Analog (7)

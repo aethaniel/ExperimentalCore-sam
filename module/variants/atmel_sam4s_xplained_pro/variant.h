@@ -37,6 +37,7 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -113,11 +114,9 @@ static const uint8_t A5  = PIN_A5 ;
 #define PIN_SERIAL_RX       (0ul)
 #define PIN_SERIAL_TX       (1ul)
 
-#if 0 // TODO Serial1
 // Serial1
-#define PIN_SERIAL1_RX       (ul)
-#define PIN_SERIAL1_TX       (ul)
-#endif // TODO Serial1
+#define PIN_SERIAL1_RX       (28ul)
+#define PIN_SERIAL1_TX       (29ul)
 
 #if 0 // TODO SPI
 /*
@@ -141,15 +140,28 @@ static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 #endif // TODO SPI
 
-#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
-#define WIRE_INTERFACES_COUNT 1
+#define WIRE_INTERFACES_COUNT 2
 
-#define PIN_WIRE_SDA         (ul)
-#define PIN_WIRE_SCL         (ul)
-#endif // TODO Wire
+#define PIN_WIRE_SDA         (30ul)
+#define PIN_WIRE_SCL         (31ul)
+//#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_A)
+//#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_A)
+#define WIRE_INTERFACE       TWI0
+//#define WIRE_INTERFACE_ID    ID_TWI0
+//#define WIRE_ISR_HANDLER     TWI0_Handler
+//#define WIRE_ISR_ID          TWI0_IRQn
+
+#define PIN_WIRE1_SDA        (32ul)
+#define PIN_WIRE1_SCL        (33ul)
+//#define PIN_WIRE1_SDA_PERIPH (GPIO_PERIPH_A)
+//#define PIN_WIRE1_SCL_PERIPH (GPIO_PERIPH_A)
+#define WIRE1_INTERFACE      TWI1
+//#define WIRE1_INTERFACE_ID   ID_TWI1
+//#define WIRE1_ISR_HANDLER    TWI1_Handler
+//#define WIRE1_ISR_ID         TWI1_IRQn
 
 #ifdef __cplusplus
 }
@@ -162,7 +174,10 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #ifdef __cplusplus
 
 extern SAMSerial Serial;
-//extern SAMSerial Serial1;
+extern SAMSerial Serial1;
+
+extern TwoWire Wire;
+extern TwoWire Wire1;
 
 #endif
 

@@ -21,49 +21,23 @@
 
 void initVariant( void )
 {
-  // Initialize Serial port U(S)ART pins
-  /*
-  PIO_Configure(
-    g_aPinMap[PINS_UART].pPort,
-    g_aPinMap[PINS_UART].ulPinType,
-    g_aPinMap[PINS_UART].ulPin,
-    g_aPinMap[PINS_UART].ulPinConfiguration);
-  digitalWrite(0, HIGH); // Enable pullup for RX0
-  PIO_Configure(
-    g_aPinMap[PINS_USART0].pPort,
-    g_aPinMap[PINS_USART0].ulPinType,
-    g_aPinMap[PINS_USART0].ulPin,
-    g_aPinMap[PINS_USART0].ulPinConfiguration);
-  PIO_Configure(
-    g_aPinMap[PINS_USART1].pPort,
-    g_aPinMap[PINS_USART1].ulPinType,
-    g_aPinMap[PINS_USART1].ulPin,
-    g_aPinMap[PINS_USART1].ulPinConfiguration);
-  PIO_Configure(
-    g_aPinMap[PINS_USART3].pPort,
-    g_aPinMap[PINS_USART3].ulPinType,
-    g_aPinMap[PINS_USART3].ulPin,
-    g_aPinMap[PINS_USART3].ulPinConfiguration);
-
   // Initialize USB pins
-  PIO_Configure(
-    g_aPinMap[PINS_USB].pPort,
-    g_aPinMap[PINS_USB].ulPinType,
-    g_aPinMap[PINS_USB].ulPin,
-    g_aPinMap[PINS_USB].ulPinConfiguration);
+  pinPeripheral(PINS_USB, GPIO_PERIPH_A);
 
   // Initialize CAN pins
-  PIO_Configure(
-    g_aPinMap[PINS_CAN0].pPort,
-    g_aPinMap[PINS_CAN0].ulPinType,
-    g_aPinMap[PINS_CAN0].ulPin,
-    g_aPinMap[PINS_CAN0].ulPinConfiguration);
-  PIO_Configure(
-    g_aPinMap[PINS_CAN1].pPort,
-    g_aPinMap[PINS_CAN1].ulPinType,
-    g_aPinMap[PINS_CAN1].ulPin,
-    g_aPinMap[PINS_CAN1].ulPinConfiguration);
+  pinPeripheral(PINS_CAN0, GPIO_PERIPH_A);
+  pinPeripheral(PINS_CAN1, GPIO_PERIPH_A);
 
+  // Set LED to off
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
+  // Output MCK to A1 pin
+  pinPeripheral(A1, GPIO_PERIPH_B);
+  PMC->PMC_PCK[1]=PMC_PCK_CSS_MCK;
+  PMC->PMC_SCER|=PMC_SCER_PCK1;
+
+  /*
   // Initialize Analog Controller
   pmc_enable_periph_clk(ID_ADC);
   adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
@@ -71,8 +45,7 @@ void initVariant( void )
   adc_configure_trigger(ADC, ADC_TRIG_SW, 0); // Disable hardware trigger.
   adc_disable_interrupt(ADC, 0xFFFFFFFF); // Disable all ADC interrupts.
   adc_disable_all_channel(ADC);
-
   // Initialize analogOutput module
   analogOutputInit();
-*/  
+*/
 }
