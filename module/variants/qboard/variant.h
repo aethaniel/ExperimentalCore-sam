@@ -215,17 +215,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 extern SAMSerial Serial;
 extern SAMSerial Serial1;
 
-#ifndef WIRE_INTERFACES_COUNT
-#  define WIRE_INTERFACES_COUNT 0
-#endif
-
-#if WIRE_INTERFACES_COUNT > 0
 extern TwoWire Wire;
-#endif
-#if WIRE_INTERFACES_COUNT > 1
-extern TwoWire Wire1;
-#endif
-
 
 #endif // __cplusplus
 

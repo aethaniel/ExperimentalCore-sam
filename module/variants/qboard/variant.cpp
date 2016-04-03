@@ -68,7 +68,7 @@ const PinDescription g_aPinMap[]=
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  */
   { PORTA, PIO_PA6A_SPI2_MOSI, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SPI MOSI (Flexcom 2)
-  { PORTA, PIO_PA15B_SPI2_SPCK, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SPI SCK (Flexcom 2)
+  { PORTA, PIO_PA15B_SPI2_SPCK, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SPI SCK (Flexcom 2)
   { PORTA, PIO_PA5A_SPI2_MISO, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SPI MISO (Flexcom 2)
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
@@ -78,8 +78,8 @@ const PinDescription g_aPinMap[]=
  * | 12         | D12              |  PB11  | SCL             |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  */
-  { PORTB, PIO_PB10A_TWD4, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Wire SDA (Flexcom 4)
-  { PORTB, PIO_PB11A_TWCK4, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Wire SCL (Flexcom 4)
+  { PORTB, PIO_PB10A_TWD4, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Wire SDA (Flexcom 4)
+  { PORTB, PIO_PB11A_TWCK4, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Wire SCL (Flexcom 4)
 
 /*
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial( (Usart*)USART7, FLEXCOM7_IRQn, Serial_Handler, 0);
+SAMSerial Serial( (Usart*)USART7, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 0);
 
 // Serial1 Interrupt handler
 static void Serial1_Handler(void)
@@ -233,7 +233,7 @@ static void Serial1_Handler(void)
   Serial1.IrqHandler();
 }
 
-SAMSerial Serial1( (Usart*)USART0, FLEXCOM0_IRQn, Serial1_Handler, 0);
+SAMSerial Serial1( (Usart*)USART0, PIN_SERIAL1_RX, PIN_SERIAL1_TX, Serial1_Handler, 0);
 
 /*
  * Serial Event handler
@@ -247,60 +247,13 @@ void serialEventRun(void)
 }
 
 #if WIRE_INTERFACES_COUNT > 0
-static void Wire_Init(void)
-{
-  /* Activate Serial peripheral clock
-   * All TWI peripheral ids are below 32, so on PCER0
-   */
-  PMC->PMC_PCER0 = 1 << WIRE_INTERFACE_ID;
 
-#if SAMG55_SERIES
-  ((Flexcom*)((uint32_t)WIRE_INTERFACE-(0x600)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_TWI;
-#endif
-
-  pinPeripheral(PIN_WIRE_SDA, PIN_WIRE_SDA_PERIPH);
-  pinPeripheral(PIN_WIRE_SCL, PIN_WIRE_SCL_PERIPH);
-
-  NVIC_DisableIRQ(WIRE_ISR_ID);
-  NVIC_ClearPendingIRQ(WIRE_ISR_ID);
-  NVIC_SetPriority(WIRE_ISR_ID, 0);
-  NVIC_EnableIRQ(WIRE_ISR_ID);
-}
-
-TwoWire Wire = TwoWire(WIRE_INTERFACE, Wire_Init);
-
-void WIRE_ISR_HANDLER(void)
+// Wire Interrupt handler
+static void Wire_Handler(void)
 {
   Wire.onService();
 }
+
+TwoWire Wire(WIRE_INTERFACE, PIN_WIRE_SDA, PIN_WIRE_SCL, Wire_Handler);
+
 #endif
-
-#if WIRE_INTERFACES_COUNT > 1
-static void Wire1_Init(void)
-{
-  /* Activate Serial peripheral clock
-   * All TWI peripheral ids are below 32, so on PCER0
-   */
-  PMC->PMC_PCER0 = 1 << WIRE1_INTERFACE_ID;
-
-#if SAMG55_SERIES
-  ((Flexcom*)((uint32_t)WIRE1_INTERFACE-(0x600)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_TWI;
-#endif
-
-  pinPeripheral(PIN_WIRE1_SDA, PIN_WIRE1_SDA_PERIPH);
-  pinPeripheral(PIN_WIRE1_SCL, PIN_WIRE1_SCL_PERIPH);
-
-  NVIC_DisableIRQ(WIRE1_ISR_ID);
-  NVIC_ClearPendingIRQ(WIRE1_ISR_ID);
-  NVIC_SetPriority(WIRE1_ISR_ID, 0);
-  NVIC_EnableIRQ(WIRE1_ISR_ID);
-}
-
-TwoWire Wire1 = TwoWire(WIRE1_INTERFACE, Wire1_Init);
-
-void WIRE1_ISR_HANDLER(void)
-{
-  Wire1.onService();
-}
-#endif
-
