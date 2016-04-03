@@ -500,3 +500,4 @@ void WDT_Handler        ( void );
 /*@}*/
 
 #endif /* _SAMG55J19_ */
+

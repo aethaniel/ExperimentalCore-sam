@@ -60,18 +60,18 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Digital          |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         |                  |  PA24  | EXT1_5          | RTS1  PWMH1 A20         PIODC0
- * | xx         |                  |  PA25  | EXT1_6          | CTS1  PWMH2 A23         PIODC1
- * | xx         |                  |  PA1   | EXT1_9          | PWMH1 TIOB0 A18         WKUP1
- * | xx         |                  |  PA6   | EXT1_10         | TXD0  PCK0
- * | xx         |                  |  PC24  | EXT1_5          | A6    TIOB3
- * | xx         |                  |  PC25  | EXT1_6          | A7    TCLK3
- * | xx         |                  |  PC26  | EXT1_9          | A8    TIOA4
- * | xx         |                  |  PC27  | EXT1_10         | A9    TIOB4
- * | xx         |                  |  PC21  | EXT1_5          | A3    PWMH3
- * | xx         |                  |  PC22  | EXT1_6          | A4    PWML3
- * | xx         |                  |  PA0   | EXT1_9          | PWMH0 TIOA0 A17 WKUP0
- * | xx         |                  |  PC31  | EXT1_10         | A13   TCLK5
+ * | 4          |                  |  PA24  | EXT1_5          | RTS1  PWMH1 A20         PIODC0
+ * | 5          |                  |  PA25  | EXT1_6          | CTS1  PWMH2 A23         PIODC1
+ * | 6          |                  |  PA1   | EXT1_9          | PWMH1 TIOB0 A18         WKUP1
+ * | 7          |                  |  PA6   | EXT1_10         | TXD0  PCK0
+ * | 8          |                  |  PC24  | EXT1_5          | A6    TIOB3
+ * | 9          |                  |  PC25  | EXT1_6          | A7    TCLK3
+ * | 10         |                  |  PC26  | EXT1_9          | A8    TIOA4
+ * | 11         |                  |  PC27  | EXT1_10         | A9    TIOB4
+ * | 12         |                  |  PC21  | EXT1_5          | A3    PWMH3
+ * | 13         |                  |  PC22  | EXT1_6          | A4    PWML3
+ * | 14         |                  |  PA0   | EXT1_9          | PWMH0 TIOA0 A17 WKUP0
+ * | 15         |                  |  PC31  | EXT1_10         | A13   TCLK5
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTA, PIO_PA24, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER },
@@ -92,12 +92,12 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Digital/PWM      |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         | PWM+             |  PA23  | EXT1_7          | SCK1 *PWMH0 A19       PIODCCLK
- * | xx         | PWM-             |  PA19  | EXT1_8          | RK   *PWML0 A15       AD2/WKUP9
- * | xx         | PWM+             |  PC19  | EXT2_7          | A1   *PWMH1
- * | xx         | PWM-             |  PA20  | EXT2_8          | RF   *PWML1 A16       AD3/WKUP10
- * | xx         | PWM+             |  PC20  | EXT3_7          | A2   *PWMH2
- * | xx         | PWM-             |  PA16  | EXT3_8          | TK   TIOB1  *PWML2    WKUP15/PIODCEN2
+ * | 16         | PWM+             |  PA23  | EXT1_7          | SCK1 *PWMH0 A19       PIODCCLK
+ * | 17         | PWM-             |  PA19  | EXT1_8          | RK   *PWML0 A15       AD2/WKUP9
+ * | 18         | PWM+             |  PC19  | EXT2_7          | A1   *PWMH1
+ * | 19         | PWM-             |  PA20  | EXT2_8          | RF   *PWML1 A16       AD3/WKUP10
+ * | 20         | PWM+             |  PC20  | EXT3_7          | A2   *PWMH2
+ * | 21         | PWM-             |  PA16  | EXT3_8          | TK   TIOB1  *PWML2    WKUP15/PIODCEN2
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTA, PIO_PA23B_PWMH0, GPIO_PERIPH_B, NOT_ON_ANALOG, PWM_CHL0, NOT_ON_TIMER }, // PWM0+
@@ -110,12 +110,12 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Analog           |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         |                  |  PA17  | A0/EXT1_3       | TD    PCK1       PWMH3    *AD0
- * | xx         |                  |  PA18  | A1/EXT1_4       | RD    PCK2  A14  PWMFI2   *AD1
- * | xx         |                  |  PB0   | A2/EXT2_3       | PWMH0                     *AD4/RTCOUT0
- * | xx         |                  |  PB1   | A3/EXT2_4       | PWMH1                     *AD5/RTCOUT1
- * | xx         |                  |  PC29  | A4/EXT3_3       | A11   TIOA5               *AD13
- * | xx         |                  |  PC30  | A5/EXT3_4       | A12   TIOB5               *AD14
+ * | 22         |                  |  PA17  | A0/EXT1_3       | TD    PCK1       PWMH3    *AD0
+ * | 23         |                  |  PA18  | A1/EXT1_4       | RD    PCK2  A14  PWMFI2   *AD1
+ * | 24         |                  |  PB0   | A2/EXT2_3       | PWMH0                     *AD4/RTCOUT0
+ * | 25         |                  |  PB1   | A3/EXT2_4       | PWMH1                     *AD5/RTCOUT1
+ * | 26         |                  |  PC29  | A4/EXT3_3       | A11   TIOA5               *AD13
+ * | 27         |                  |  PC30  | A5/EXT3_4       | A12   TIOB5               *AD14
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTA, PIO_PA17X1_AD0, GPIO_NOMUX, ADC_CHL0, NOT_ON_PWM,  NOT_ON_TIMER }, // AD0
@@ -128,8 +128,8 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Serial1          |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         |                  |  PA21  | EXT1_13/EXT2_13 | *RXD1 PCK1        AD8
- * | xx         |                  |  PA22  | EXT1_14/EXT2_14 | *TXD1 NPCS3 NCS2  AD9
+ * | 28         |                  |  PA21  | EXT1_13/EXT2_13 | *RXD1 PCK1        AD8
+ * | 29         |                  |  PA22  | EXT1_14/EXT2_14 | *TXD1 NPCS3 NCS2  AD9
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTB, PIO_PA21A_RXD1, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // RXD1
@@ -138,8 +138,8 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Wire             |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         |                  |  PA3   | EXT1_11/EXT2_11 | *TWD0  NPCS3
- * | xx         |                  |  PA4   | EXT1_12/EXT2_12 | *TWCK0 TCLK0       WKUP3
+ * | 30         |                  |  PA3   | EXT1_11/EXT2_11 | *TWD0  NPCS3
+ * | 31         |                  |  PA4   | EXT1_12/EXT2_12 | *TWCK0 TCLK0       WKUP3
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTA, PIO_PA3A_TWD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SDA0
@@ -148,8 +148,8 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | Wire1            |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xx         |                  |  PB4   | EXT3_11         | *TWD1  PWMH2
- * | xx         |                  |  PB5   | EXT3_12         | *TWCK1 PWML0       WKUP13
+ * | 32         |                  |  PB4   | EXT3_11         | *TWD1  PWMH2
+ * | 33         |                  |  PB5   | EXT3_12         | *TWCK1 PWML0       WKUP13
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
   { PORTB, PIO_PB4A_TWD1, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // SDA1
@@ -188,7 +188,19 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial((Usart*)UART1, UART1_IRQn, Serial_Handler, 1);
+SAMSerial Serial((Usart*)UART1, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 1);
+
+// Serial1 Interrupt handler
+static void Serial1_Handler(void)
+{
+  Serial1.IrqHandler();
+}
+
+SAMSerial Serial1( USART1, PIN_SERIAL1_RX, PIN_SERIAL1_TX, Serial1_Handler, 0);
+
+/*
+ * Serial Event handler
+ */
 void serialEvent() __attribute__((weak));
 void serialEvent() { }
 
@@ -197,4 +209,19 @@ void serialEventRun(void)
   if (Serial.available()) serialEvent();
 }
 
+// Wire Interrupt handler
+static void Wire_Handler(void)
+{
+  Wire.onService();
+}
+
+TwoWire Wire(WIRE_INTERFACE, PIN_WIRE_SDA, PIN_WIRE_SCL, Wire_Handler);
+
+// Wire1 Interrupt handler
+static void Wire1_Handler(void)
+{
+  Wire1.onService();
+}
+
+TwoWire Wire1(WIRE1_INTERFACE, PIN_WIRE1_SDA, PIN_WIRE1_SCL, Wire1_Handler);
 

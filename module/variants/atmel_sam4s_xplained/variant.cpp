@@ -62,8 +62,8 @@ const PinDescription g_aPinMap[]=
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | J1 header        |        |                 |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | xxx        | J1.1             |  PA3   | also J4.1       | TWD0
- * | xxx        | J1.2             |  PA4   | also J4.2       | TWCK0
+ * | 5          | J1.1             |  PA3   | also J4.1       | TWD0
+ * | 6          | J1.2             |  PA4   | also J4.2       | TWCK0
  * | xxx        | J1.3             |  PB2   | also J4.3       | URXD1/AD6/WKUP12
  * | xxx        | J1.4             |  PB3   | also J4.4       | UTXD1/AD7
  * | xxx        | J1.5             |  PA31  |                 | NPCS1
@@ -74,14 +74,14 @@ const PinDescription g_aPinMap[]=
  * |            | J1.10            |        | 3.3V            |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, PIO_PA3A_TWD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Wire data
+  { PORTA, PIO_PA4A_TWCK0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Wire clock
+  { PORTB, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTB, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
 
 /*
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
@@ -149,8 +149,8 @@ const PinDescription g_aPinMap[]=
  * |            | J4.10            |        | 3.3V            |
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
 */
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
+  { PORTA, PIO_PA3A_TWD0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Wire data
+  { PORTA, PIO_PA4A_TWCK0, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Wire clock
   { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
   { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
   { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM,  NOT_ON_TIMER }, // Fake definition
@@ -172,7 +172,7 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial( (Usart*)UART0, UART0_IRQn, Serial_Handler, 1);
+SAMSerial Serial( (Usart*)UART0, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 1);
 
 // Serial1 Interrupt handler
 static void Serial1_Handler(void)
@@ -180,7 +180,7 @@ static void Serial1_Handler(void)
   Serial1.IrqHandler();
 }
 
-SAMSerial Serial1( (Usart*)USART1, USART1_IRQn, Serial1_Handler, 0);
+SAMSerial Serial1( USART1, PIN_SERIAL1_RX, PIN_SERIAL1_TX, Serial1_Handler, 0);
 
 /*
  * Serial Event handler
@@ -192,5 +192,13 @@ void serialEventRun(void)
 {
   if (Serial.available()) serialEvent();
 }
+
+// Wire Interrupt handler
+static void Wire_Handler(void)
+{
+  Wire.onService();
+}
+
+TwoWire Wire(WIRE_INTERFACE, PIN_WIRE_SDA, PIN_WIRE_SCL, Wire_Handler);
 
 

@@ -37,6 +37,7 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -178,7 +179,6 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 //#define PIN_WINC3400_BT_RTS  (PIN_WINC3400_BASE+11)
 //#define PIN_WINC3400_BT_CTS  (PIN_WINC3400_BASE+12)
 
-#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
@@ -186,7 +186,12 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #define PIN_WIRE_SDA         (11ul)
 #define PIN_WIRE_SCL         (12ul)
-#endif // TODO Wire
+//#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_A)
+//#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_A)
+#define WIRE_INTERFACE       TWI4
+//#define WIRE_INTERFACE_ID    ID_FLEXCOM4
+//#define WIRE_ISR_HANDLER     FLEXCOM4_Handler
+//#define WIRE_ISR_ID          FLEXCOM4_IRQn
 
 #if 0 // TODO USB
 /*
@@ -199,7 +204,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #ifdef __cplusplus
 }
-#endif
+#endif // __cplusplus
 
 /*----------------------------------------------------------------------------
  *        Arduino objects - C++ only
@@ -210,7 +215,9 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 extern SAMSerial Serial;
 extern SAMSerial Serial1;
 
-#endif
+extern TwoWire Wire;
+
+#endif // __cplusplus
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type

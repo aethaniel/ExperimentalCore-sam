@@ -119,20 +119,20 @@ const PinDescription g_aPinMap[]=
   { PORTA, PIO_PA20X1_AD3, GPIO_NOMUX, ADC_CHL3, NOT_ON_PWM, NOT_ON_TIMER }, // AD3
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * |            | Wire             |        |                 |
+ * |            | Wire             |        |                 | !! Warning, schematics seem to be false !!
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
- * | 26         | EXT1_11          |  PB10  |                 |
- * | 27         | EXT1_12          |  PB11  |                 |
- * | 28         | EXT3_11          |  PB8   |                 |
- * | 29         | EXT3_12          |  PB9   |                 |
+ * | 26         | EXT1_11          |  PB10  |                 | TWD6
+ * | 27         | EXT1_12          |  PB11  |                 | TWCK6
+ * | 28         | EXT3_11          |  PB8   |                 | TWD4
+ * | 29         | EXT3_12          |  PB9   |                 | TWCK4
  * +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  */
 // Wire
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
+  { PORTB, PIO_PB10B_TWD6, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWD6
+  { PORTB, PIO_PB11B_TWCK6, GPIO_PERIPH_B, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWCK6
 // Wire 1
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
-  { NOT_A_PORT, 0, GPIO_NOMUX, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // Fake definition
+  { PORTB, PIO_PB8A_TWD4, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWD4
+  { PORTB, PIO_PB9A_TWCK4, GPIO_PERIPH_A, NOT_ON_ANALOG, NOT_ON_PWM, NOT_ON_TIMER }, // TWCK4
 
 /* +------------+------------------+--------+-----------------+--------------------------------------------------------------------------------------------------------
  * |            | SPI              |        |                 |
@@ -164,7 +164,7 @@ static void Serial_Handler(void)
   Serial.IrqHandler();
 }
 
-SAMSerial Serial( (Usart*)USART7, FLEXCOM7_IRQn, Serial_Handler, 0);
+SAMSerial Serial( (Usart*)USART7, PIN_SERIAL_RX, PIN_SERIAL_TX, Serial_Handler, 0);
 
 // Serial1 Interrupt handler
 static void Serial1_Handler(void)
@@ -172,7 +172,7 @@ static void Serial1_Handler(void)
   Serial1.IrqHandler();
 }
 
-SAMSerial Serial1( (Usart*)USART0, FLEXCOM0_IRQn, Serial1_Handler, 0);
+SAMSerial Serial1( (Usart*)USART0, PIN_SERIAL1_RX, PIN_SERIAL1_TX, Serial1_Handler, 0);
 
 // Serial2 Interrupt handler
 static void Serial2_Handler(void)
@@ -180,7 +180,7 @@ static void Serial2_Handler(void)
   Serial2.IrqHandler();
 }
 
-SAMSerial Serial2( (Usart*)USART6, FLEXCOM6_IRQn, Serial2_Handler, 0);
+SAMSerial Serial2( (Usart*)USART6, PIN_SERIAL2_RX, PIN_SERIAL2_TX, Serial2_Handler, 0);
 
 /*
  * Serial Event handler
@@ -193,4 +193,18 @@ void serialEventRun(void)
   if (Serial.available()) serialEvent();
 }
 
+// Wire Interrupt handler
+static void Wire_Handler(void)
+{
+  Wire.onService();
+}
 
+TwoWire Wire(WIRE_INTERFACE, PIN_WIRE_SDA, PIN_WIRE_SCL, Wire_Handler);
+
+// Wire1 Interrupt handler
+static void Wire1_Handler(void)
+{
+  Wire1.onService();
+}
+
+TwoWire Wire1(WIRE1_INTERFACE, PIN_WIRE1_SDA, PIN_WIRE1_SCL, Wire1_Handler);

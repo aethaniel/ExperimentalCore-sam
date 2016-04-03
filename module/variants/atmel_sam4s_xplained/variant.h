@@ -37,6 +37,7 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -140,15 +141,19 @@ static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 #endif // TODO SPI
 
-#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
-#endif // TODO Wire
+#define PIN_WIRE_SDA         (5u)
+#define PIN_WIRE_SCL         (6u)
+//#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_A)
+//#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_A)
+#define WIRE_INTERFACE       TWI0
+//#define WIRE_INTERFACE_ID    ID_TWI0
+//#define WIRE_ISR_HANDLER     TWI0_Handler
+//#define WIRE_ISR_ID          TWI0_IRQn
 
 #if 0 // TODO USB
 /*
@@ -170,6 +175,8 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 extern SAMSerial Serial;
 extern SAMSerial Serial1;
+
+extern TwoWire Wire;
 
 #endif
 

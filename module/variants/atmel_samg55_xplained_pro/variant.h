@@ -37,6 +37,7 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -143,15 +144,28 @@ static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 #endif // TODO SPI
 
-#if 0 // TODO Wire
 /*
  * Wire Interfaces
  */
-#define WIRE_INTERFACES_COUNT 1
+#define WIRE_INTERFACES_COUNT 2
 
-#define PIN_WIRE_SDA         (ul)
-#define PIN_WIRE_SCL         (ul)
-#endif // TODO Wire
+#define PIN_WIRE_SDA         (26ul)
+#define PIN_WIRE_SCL         (27ul)
+//#define PIN_WIRE_SDA_PERIPH  (GPIO_PERIPH_B)
+//#define PIN_WIRE_SCL_PERIPH  (GPIO_PERIPH_B)
+#define WIRE_INTERFACE       TWI6
+//#define WIRE_INTERFACE_ID    ID_FLEXCOM6
+//#define WIRE_ISR_HANDLER     FLEXCOM6_Handler
+//#define WIRE_ISR_ID          FLEXCOM6_IRQn
+
+#define PIN_WIRE1_SDA        (28ul)
+#define PIN_WIRE1_SCL        (29ul)
+//#define PIN_WIRE1_SDA_PERIPH (GPIO_PERIPH_A)
+//#define PIN_WIRE1_SCL_PERIPH (GPIO_PERIPH_A)
+#define WIRE1_INTERFACE      TWI4
+//#define WIRE1_INTERFACE_ID   ID_FLEXCOM4
+//#define WIRE1_ISR_HANDLER    FLEXCOM4_Handler
+//#define WIRE1_ISR_ID         FLEXCOM4_IRQn
 
 #if 0 // TODO USB
 /*
@@ -175,6 +189,9 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 extern SAMSerial Serial;
 extern SAMSerial Serial1;
 extern SAMSerial Serial2;
+
+extern TwoWire Wire;
+extern TwoWire Wire1;
 
 #endif
 

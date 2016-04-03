@@ -37,6 +37,7 @@
 
 #ifdef __cplusplus
 #include "CoreSerial.hpp"
+//#include "CoreWire.hpp"
 #endif // __cplusplus
 
 #ifdef __cplusplus
