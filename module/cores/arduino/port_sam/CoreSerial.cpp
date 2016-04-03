@@ -112,11 +112,13 @@ int SAMSerial::initClockNVIC(void)
     _uc_clockId = ID_FLEXCOM6;
     _IdNVIC = FLEXCOM6_IRQn;
   }
-  else if(_pUsart == USART7)
+#ifdef __SAMG55J19__
+  else if(_pTwi == TWI7) // only in SAMG55J19
   {
     _uc_clockId = ID_FLEXCOM7;
     _IdNVIC = FLEXCOM7_IRQn;
   }
+#endif // __SAMG55J19__
 #endif /* (SAMG55_SERIES) */
 
 #if (SAME70_SERIES)
