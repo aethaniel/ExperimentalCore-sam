@@ -76,7 +76,7 @@ typedef enum IRQn
   PMC_IRQn             =  5, /**<  5 SAM3X8E Power Management Controller (PMC) */
   EFC0_IRQn            =  6, /**<  6 SAM3X8E Enhanced Flash Controller 0 (EFC0) */
   EFC1_IRQn            =  7, /**<  7 SAM3X8E Enhanced Flash Controller 1 (EFC1) */
-  UART_IRQn            =  8, /**<  8 SAM3X8E Universal Asynchronous Receiver Transceiver (UART) */
+  UART0_IRQn           =  8, /**<  8 SAM3X8E Universal Asynchronous Receiver Transceiver (UART0) */
   SMC_IRQn             =  9, /**<  9 SAM3X8E Static Memory Controller (SMC) */
   PIOA_IRQn            = 11, /**< 11 SAM3X8E Parallel I/O Controller A, (PIOA) */
   PIOB_IRQn            = 12, /**< 12 SAM3X8E Parallel I/O Controller B (PIOB) */
@@ -144,7 +144,7 @@ typedef struct _DeviceVectors
   void* pfnPMC_Handler;    /*  5 Power Management Controller */
   void* pfnEFC0_Handler;   /*  6 Enhanced Flash Controller 0 */
   void* pfnEFC1_Handler;   /*  7 Enhanced Flash Controller 1 */
-  void* pfnUART_Handler;   /*  8 Universal Asynchronous Receiver Transceiver */
+  void* pfnUART0_Handler;  /*  8 Universal Asynchronous Receiver Transceiver */
   void* pfnSMC_Handler;    /*  9 Static Memory Controller */
   void* pvReserved10;
   void* pfnPIOA_Handler;   /* 11 Parallel I/O Controller A, */
@@ -230,7 +230,7 @@ void TC8_Handler        ( void );
 void TRNG_Handler       ( void );
 void TWI0_Handler       ( void );
 void TWI1_Handler       ( void );
-void UART_Handler       ( void );
+void UART0_Handler      ( void );
 void UOTGHS_Handler     ( void );
 void USART0_Handler     ( void );
 void USART1_Handler     ( void );
@@ -308,7 +308,7 @@ void WDT_Handler        ( void );
 #define ID_PMC    ( 5) /**< \brief Power Management Controller (PMC) */
 #define ID_EFC0   ( 6) /**< \brief Enhanced Flash Controller 0 (EFC0) */
 #define ID_EFC1   ( 7) /**< \brief Enhanced Flash Controller 1 (EFC1) */
-#define ID_UART   ( 8) /**< \brief Universal Asynchronous Receiver Transceiver (UART) */
+#define ID_UART0  ( 8) /**< \brief Universal Asynchronous Receiver Transceiver (UART0) */
 #define ID_SMC    ( 9) /**< \brief Static Memory Controller (SMC) */
 #define ID_PIOA   (11) /**< \brief Parallel I/O Controller A, (PIOA) */
 #define ID_PIOB   (12) /**< \brief Parallel I/O Controller B (PIOB) */
@@ -384,7 +384,7 @@ void WDT_Handler        ( void );
 #define SMC        ((Smc    *)0x400E0000U) /**< \brief (SMC       ) Base Address */
 #define MATRIX     ((Matrix *)0x400E0400U) /**< \brief (MATRIX    ) Base Address */
 #define PMC        ((Pmc    *)0x400E0600U) /**< \brief (PMC       ) Base Address */
-#define UART       ((Uart   *)0x400E0800U) /**< \brief (UART      ) Base Address */
+#define UART0      ((Uart   *)0x400E0800U) /**< \brief (UART0     ) Base Address */
 #define PDC_UART   ((Pdc    *)0x400E0900U) /**< \brief (PDC_UART  ) Base Address */
 #define CHIPID     ((Chipid *)0x400E0940U) /**< \brief (CHIPID    ) Base Address */
 #define EFC0       ((Efc    *)0x400E0A00U) /**< \brief (EFC0      ) Base Address */
@@ -492,3 +492,4 @@ void WDT_Handler        ( void );
 /*@}*/
 
 #endif /* _SAM3X8E_ */
+
