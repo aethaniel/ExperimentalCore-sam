@@ -45,16 +45,16 @@ int SAMSerial::initClockNVIC(void)
   _IdNVIC=HardFault_IRQn ; // Dummy init to intercept potential error later
 
 #if (SAM4S_SERIES || SAM4E_SERIES || SAM3XA_SERIES)
-  if(_pUsart == UART0)
+  if(_pUsart == (Usart*)UART0)
   {
     _uc_clockId = ID_UART0;
     _IdNVIC = UART0_IRQn;
   }
 #if (SAM4S_SERIES)
-  else if(_pUsart == UART0)
+  else if(_pUsart == (Usart*)UART1)
   {
-    _uc_clockId = ID_UART0;
-    _IdNVIC = UART0_IRQn;
+    _uc_clockId = ID_UART1;
+    _IdNVIC = UART1_IRQn;
   }
 #endif /* (SAM4S_SERIES) */
   else if(_pUsart == USART0)
@@ -120,27 +120,27 @@ int SAMSerial::initClockNVIC(void)
 #endif /* (SAMG55_SERIES) */
 
 #if (SAME70_SERIES)
-  if(_pUsart == UART0)
+  if(_pUsart == (Usart*)UART0)
   {
     _uc_clockId = ID_UART0;
     _IdNVIC = UART0_IRQn;
   }
-  else if(_pUsart == UART1)
+  else if(_pUsart == (Usart*)UART1)
   {
     _uc_clockId = ID_UART1;
     _IdNVIC = UART1_IRQn;
   }
-  else if(_pUsart == UART2)
+  else if(_pUsart == (Usart*)UART2)
   {
     _uc_clockId = ID_UART2;
     _IdNVIC = UART2_IRQn;
   }
-  else if(_pUsart == UART3)
+  else if(_pUsart == (Usart*)UART3)
   {
     _uc_clockId = ID_UART3;
     _IdNVIC = UART3_IRQn;
   }
-  else if(_pUsart == UART4)
+  else if(_pUsart == (Usart*)UART4)
   {
     _uc_clockId = ID_UART4;
     _IdNVIC = UART4_IRQn;
