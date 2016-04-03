@@ -20,35 +20,197 @@
 #include <string.h>
 #include <stdlib.h>
 #include "CoreSerial.hpp"
+#include "core_private.h"
 #include "core_cortex_vectors.h"
 
 // Constructors ////////////////////////////////////////////////////////////////
 
-SAMSerial::SAMSerial(Usart *pUsart, IRQn_Type irq, void (*irq_handler)(void), uint32_t isUART)
+SAMSerial::SAMSerial(Usart *pUsart, uint32_t pinRX, uint32_t pinTX, void (*irq_handler)(void), uint32_t isUART)
 {
   _pUsart=pUsart;
-  _dwIrq=irq;
-  _dwId=(uint32_t)irq;
 
-  // Dynamic assignment of IRQ handler
-  vectorAssign(irq, irq_handler);
+  _ulPinRX=pinRX;
+  _ulPinTX=pinTX;
+
+  _irq_handler=irq_handler;
+
+  _isUART=isUART;
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-void SAMSerial::begin(const uint32_t ulBaudrate)
+int SAMSerial::initClockNVIC(void)
 {
-  init(ulBaudrate, SERIAL_8N1);
-}
+  _uc_clockId = 0;
+  _IdNVIC=HardFault_IRQn ; // Dummy init to intercept potential error later
 
-void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
-{
-  uint32_t ulRegister=0;
+#if (SAM4S_SERIES || SAM4E_SERIES || SAM3XA_SERIES)
+  if(_pUsart == UART0)
+  {
+    _uc_clockId = ID_UART0;
+    _IdNVIC = UART0_IRQn;
+  }
+#if (SAM4S_SERIES)
+  else if(_pUsart == UART0)
+  {
+    _uc_clockId = ID_UART0;
+    _IdNVIC = UART0_IRQn;
+  }
+#endif /* (SAM4S_SERIES) */
+  else if(_pUsart == USART0)
+  {
+    _uc_clockId = ID_USART0;
+    _IdNVIC = USART0_IRQn;
+  }
+  else if(_pUsart == USART1)
+  {
+    _uc_clockId = ID_USART1;
+    _IdNVIC = USART1_IRQn;
+  }
+#if (SAM3XA_SERIES)
+  else if(_pUsart == USART2)
+  {
+    _uc_clockId = ID_USART2;
+    _IdNVIC = USART2_IRQn;
+  }
+#endif /* (SAM3XA_SERIES) */
+#endif /* (SAM4S_SERIES || SAM4E_SERIES || SAM3XA_SERIES) */
+
+#if (SAMG55_SERIES)
+  if(_pUsart == USART0)
+  {
+    _uc_clockId = ID_FLEXCOM0;
+    _IdNVIC = FLEXCOM0_IRQn;
+  }
+  else if(_pUsart == USART1)
+  {
+    _uc_clockId = ID_FLEXCOM1;
+    _IdNVIC = FLEXCOM1_IRQn;
+  }
+  else if(_pUsart == USART2)
+  {
+    _uc_clockId = ID_FLEXCOM2;
+    _IdNVIC = FLEXCOM2_IRQn;
+  }
+  else if(_pUsart == USART3)
+  {
+    _uc_clockId = ID_FLEXCOM3;
+    _IdNVIC = FLEXCOM3_IRQn;
+  }
+  else if(_pUsart == USART4)
+  {
+    _uc_clockId = ID_FLEXCOM4;
+    _IdNVIC = FLEXCOM4_IRQn;
+  }
+  else if(_pUsart == USART5)
+  {
+    _uc_clockId = ID_FLEXCOM5;
+    _IdNVIC = FLEXCOM5_IRQn;
+  }
+  else if(_pUsart == USART6)
+  {
+    _uc_clockId = ID_FLEXCOM6;
+    _IdNVIC = FLEXCOM6_IRQn;
+  }
+  else if(_pUsart == USART7)
+  {
+    _uc_clockId = ID_FLEXCOM7;
+    _IdNVIC = FLEXCOM7_IRQn;
+  }
+#endif /* (SAMG55_SERIES) */
+
+#if (SAME70_SERIES)
+  if(_pUsart == UART0)
+  {
+    _uc_clockId = ID_UART0;
+    _IdNVIC = UART0_IRQn;
+  }
+  else if(_pUsart == UART1)
+  {
+    _uc_clockId = ID_UART1;
+    _IdNVIC = UART1_IRQn;
+  }
+  else if(_pUsart == UART2)
+  {
+    _uc_clockId = ID_UART2;
+    _IdNVIC = UART2_IRQn;
+  }
+  else if(_pUsart == UART3)
+  {
+    _uc_clockId = ID_UART3;
+    _IdNVIC = UART3_IRQn;
+  }
+  else if(_pUsart == UART4)
+  {
+    _uc_clockId = ID_UART4;
+    _IdNVIC = UART4_IRQn;
+  }
+  else if(_pUsart == USART0)
+  {
+    _uc_clockId = ID_USART0;
+    _IdNVIC = USART0_IRQn;
+  }
+  else if(_pUsart == USART1)
+  {
+    _uc_clockId = ID_USART1;
+    _IdNVIC = USART1_IRQn;
+  }
+  else if(_pUsart == USART2)
+  {
+    _uc_clockId = ID_USART2;
+    _IdNVIC = USART2_IRQn;
+  }
+#endif /* (SAME70_SERIES) */
+
+  if ( _IdNVIC == HardFault_IRQn )
+  {
+    // We got a problem here
+    return -1L;
+  }
+
+  // Setting NVIC configuration for this peripheral
+  NVIC_DisableIRQ(_IdNVIC);
+  NVIC_ClearPendingIRQ(_IdNVIC);
+  NVIC_SetPriority(_IdNVIC, (1<<__NVIC_PRIO_BITS) - 1);
+  NVIC_EnableIRQ(_IdNVIC);
 
   /* Activate Serial peripheral clock
    * All UART/USART peripheral ids are below 32, so on PCER0
+   *
+   * !!! NOT TRUE FOR SAME70/S70 !!!
+   *
    */
-  PMC->PMC_PCER0 = 1 << _dwId;
+  PMC->PMC_PCER0 = 1 << _uc_clockId;
+
+#if 0
+  // Activate Serial peripheral clock
+  if (_uc_clockId < 32)
+  {
+    PMC->PMC_PCER0 = 1 << _uc_clockId;
+  }
+#if (SAM3XA_SERIES || SAM4S_SERIES || SAM4E_SERIES || SAMG55_SERIES || SAME70_SERIES)
+  else
+  {
+    PMC->PMC_PCER1 = 1 << (_uc_clockId-32);
+  }
+#endif
+#endif // 0
+
+  return 0L;
+}
+
+void SAMSerial::init(const uint32_t ulBaudrate, const UARTModes mode)
+{
+  uint32_t ulRegister=0;
+
+  _ulPinRXMux=g_aPinMap[_ulPinRX].ulPinType;
+  _ulPinTXMux=g_aPinMap[_ulPinTX].ulPinType;
+
+  pinPeripheral(_ulPinRX, _ulPinRXMux);
+  pinPeripheral(_ulPinTX, _ulPinTXMux);
+
+  // Enable UART interrupt in NVIC
+  initClockNVIC();
 
 #if SAMG55_SERIES
   ((Flexcom*)((uint32_t)_pUsart-(0x200)))->FLEXCOM_MR=FLEXCOM_MR_OPMODE_USART;
@@ -61,7 +223,7 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
   _pUsart->US_CR = US_CR_RSTRX | US_CR_RSTTX | US_CR_RXDIS | US_CR_TXDIS;
 
   // Configure mode
-  switch ( ulMode & HARDSER_PARITY_MASK)
+  switch ( mode & HARDSER_PARITY_MASK)
   {
     case HARDSER_PARITY_EVEN:
       ulRegister|=US_MR_PAR_EVEN;
@@ -76,7 +238,7 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
    break;
   }
 
-  switch ( ulMode & HARDSER_STOP_BIT_MASK)
+  switch ( mode & HARDSER_STOP_BIT_MASK)
   {
     case HARDSER_STOP_BIT_1:
       ulRegister|=US_MR_NBSTOP_1_BIT;
@@ -94,7 +256,7 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
   /* UART has CHaracter Length fixed to 8bits */
   if ( _isUART == 0)
   {
-    switch ( ulMode & HARDSER_DATA_MASK)
+    switch ( mode & HARDSER_DATA_MASK)
     {
       case HARDSER_DATA_5:
         ulRegister|=US_MR_CHRL_5_BIT;
@@ -124,8 +286,8 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
   _pUsart->US_IDR = 0xFFFFFFFF;
   _pUsart->US_IER = US_IER_RXRDY | US_IER_OVRE | US_IER_FRAME;
 
-  // Enable UART interrupt in NVIC
-  NVIC_EnableIRQ(_dwIrq);
+  // Dynamic assignment of IRQ handler
+  vectorAssign(_IdNVIC, _irq_handler);
 
   // Make sure both ring buffers are initialized back to empty.
   _rx_buffer.clear();
@@ -133,6 +295,16 @@ void SAMSerial::init(const uint32_t ulBaudrate, const uint32_t ulMode)
 
   // Enable receiver and transmitter
   _pUsart->US_CR = US_CR_RXEN | US_CR_TXEN;
+}
+
+void SAMSerial::begin(const uint32_t ulBaudrate)
+{
+  init(ulBaudrate, SERIAL_8N1);
+}
+
+void SAMSerial::begin(const uint32_t ulBaudrate, const UARTModes mode)
+{
+  init(ulBaudrate, mode);
 }
 
 void SAMSerial::end( void )
@@ -143,23 +315,30 @@ void SAMSerial::end( void )
   // Wait for any outstanding data to be sent
   flush();
 
+  // Disable all UART interrupts
+  _pUsart->US_IER=0;
+
   // Disable UART interrupt in NVIC
-  NVIC_DisableIRQ( _dwIrq );
+  NVIC_DisableIRQ(_IdNVIC);
+  NVIC_ClearPendingIRQ(_IdNVIC);
+
+  // Dynamic assignment of IRQ handler
+  vectorAssign(_IdNVIC, NULL);
 
   /* Remove clock of Serial peripheral
    * All UART/USART peripheral ids are below 32, so on PCDR0
    */
-  PMC->PMC_PCDR0 = 1 << _dwId;
+  PMC->PMC_PCDR0 = 1 << _uc_clockId;
 }
 
 void SAMSerial::setInterruptPriority(uint32_t priority)
 {
-  NVIC_SetPriority(_dwIrq, priority & 0x0F);
+  NVIC_SetPriority(_IdNVIC, priority & 0x0F);
 }
 
 uint32_t SAMSerial::getInterruptPriority()
 {
-  return NVIC_GetPriority(_dwIrq);
+  return NVIC_GetPriority(_IdNVIC);
 }
 
 int SAMSerial::available(void)
@@ -214,7 +393,7 @@ size_t SAMSerial::write( const uint8_t uc_data )
       (_tx_buffer._iTail != _tx_buffer._iHead))
   {
     // If busy we buffer
-    unsigned int l = (_tx_buffer._iHead + 1) % SERIAL_BUFFER_SIZE;
+    /*unsigned*/ int l = (_tx_buffer._iHead + 1) % SERIAL_BUFFER_SIZE;
     while (_tx_buffer._iTail == l)
       ; // Spin locks if we're about to overwrite the buffer. This continues once the data is sent
 
