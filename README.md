@@ -3,8 +3,7 @@ Experimental new core for Arduino Due and other (AT91)SAM based boards.
 
 Please, check https://github.com/aethaniel/ExperimentalCore-sam/wiki for more information.
 
-[![Build Status](https://travis-ci.org/aethaniel/ExperimentalCore-sam.svg?branch=master)](https://travis-ci.org/aethaniel/ExperimentalCore-sam)
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/6858.svg)](https://scan.coverity.com/projects/aethaniel-experimentalcore-sam)
+[![Build Status](https://travis-ci.org/luc-github/ExperimentalCore-sam.svg?branch=master)](https://travis-ci.org/luc-github/ExperimentalCore-sam)
 
 # Where to download
 [![Downloads](https://img.shields.io/github/downloads/aethaniel/ExperimentalCore-sam/v0.1.0/total.svg)](https://github.com/aethaniel/ExperimentalCore-sam/releases/tag/v0.1.0)
