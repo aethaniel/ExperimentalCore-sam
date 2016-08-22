@@ -16,6 +16,7 @@
 #include "core_constants.h"
 //#include <stdio.h>
 
+/*
 #ifndef SPI_INTERFACES_COUNT
 #  define SPI_INTERFACES_COUNT 0
 #endif
@@ -24,8 +25,24 @@
 #  define SPI_INTERFACES_COUNT 0
 #  define SPI_CHANNELS_NUM     0
 #endif
+*/
 
-// SPI_HAS_TRANSACTION means SPI has
+/*
+ * We won't compile SPI class if there isn't any SPI object definitions
+ */
+#if SPI_INTERFACES_COUNT > 0
+
+// For compatibility with sketches designed for AVR @ 16 MHz
+// New programs should use SPI.beginTransaction to set the SPI clock
+#define SPI_CLOCK_DIV2	 11
+#define SPI_CLOCK_DIV4	 21
+#define SPI_CLOCK_DIV8	 42
+#define SPI_CLOCK_DIV16	 84
+#define SPI_CLOCK_DIV32	 168
+#define SPI_CLOCK_DIV64	 255
+#define SPI_CLOCK_DIV128 255
+
+// SPI_HAS_TRANSACTION means SPIClass has
 //   - beginTransaction()
 //   - endTransaction()
 //   - usingInterrupt()
@@ -60,7 +77,7 @@ public:
   SPISettings(uint32_t clock, BitOrder bitOrder, uint8_t dataMode)
   {
     if (__builtin_constant_p(clock))
-      {
+    {
       init_AlwaysInline(clock, bitOrder, dataMode);
     }
     else
@@ -69,7 +86,10 @@ public:
     }
   }
 
-  SPISettings() { init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0); }
+  SPISettings(void)
+  {
+    init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0);
+  }
 
 private:
   void init_MightInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode)
@@ -107,8 +127,6 @@ private:
   friend class SPIClass;
 };
 
-
-
 class SPIClass
 {
   public:
@@ -144,9 +162,9 @@ class SPIClass
   void setClockDivider(uint8_t _pin, uint8_t);
 
   // These methods sets the same parameters but on default pin defaultSS
-  void setBitOrder(BitOrder _order) { setBitOrder(defaultSS, _order); };
-  void setDataMode(uint8_t _mode) { setDataMode(defaultSS, _mode); };
-  void setClockDivider(uint8_t _div) { setClockDivider(defaultSS, _div); };
+  void setBitOrder(BitOrder _order) { setBitOrder(defaultSS, _order); }
+  void setDataMode(uint8_t _mode) { setDataMode(defaultSS, _mode); }
+  void setClockDivider(uint8_t _div) { setClockDivider(defaultSS, _div); }
 
   private:
     void init();
@@ -164,18 +182,6 @@ class SPIClass
     uint32_t interruptMask[4];
 };
 
-#if SPI_INTERFACES_COUNT > 0
-extern SPIClass SPI;
-#endif
-
-// For compatibility with sketches designed for AVR @ 16 MHz
-// New programs should use SPI.beginTransaction to set the SPI clock
-#define SPI_CLOCK_DIV2	 11
-#define SPI_CLOCK_DIV4	 21
-#define SPI_CLOCK_DIV8	 42
-#define SPI_CLOCK_DIV16	 84
-#define SPI_CLOCK_DIV32	 168
-#define SPI_CLOCK_DIV64	 255
-#define SPI_CLOCK_DIV128 255
+#endif // SPI_INTERFACES_COUNT > 0
 
 #endif // _ARDUINO_CORE_SPI_HPP_

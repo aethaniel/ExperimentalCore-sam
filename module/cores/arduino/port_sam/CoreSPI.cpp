@@ -9,7 +9,13 @@
  * published by the Free Software Foundation.
  */
 
+#include "variant.h"
 #include "CoreSPI.hpp"
+
+/*
+ * We won't compile SPI class if there isn't any SPI object definitions
+ */
+#if SPI_INTERFACES_COUNT > 0
 
 SPIClass::SPIClass(Spi *_spi, uint32_t _id, uint32_t _defaultSS, void(*_initCb)(void)) :
   spi(_spi), id(_id), defaultSS(_defaultSS), initCb(_initCb), initialized(false)
@@ -19,39 +25,36 @@ SPIClass::SPIClass(Spi *_spi, uint32_t _id, uint32_t _defaultSS, void(*_initCb)(
 
 void SPIClass::begin()
 {
-#if 0
   init();
   // NPCS control is left to the user
 
   // Default speed set to 4Mhz
-  setClockDivider(BOARD_SPI_DEFAULT_SS, 21);
-  setDataMode(BOARD_SPI_DEFAULT_SS, SPI_MODE0);
-  setBitOrder(BOARD_SPI_DEFAULT_SS, MSBFIRST);
-#endif // 0
+  setClockDivider(PIN_SPI_SS_DEFAULT, 21);
+  setDataMode(PIN_SPI_SS_DEFAULT, SPI_MODE0);
+  setBitOrder(PIN_SPI_SS_DEFAULT, MSBFIRST);
 }
 
 void SPIClass::begin(uint8_t _pin)
 {
-#if 0
   init();
 
   uint32_t spiPin = BOARD_PIN_TO_SPI_PIN(_pin);
+#if 0
   PIO_Configure(
     g_aPinMap[spiPin].pPort,
     g_aPinMap[spiPin].ulPinType,
     g_aPinMap[spiPin].ulPin,
     g_aPinMap[spiPin].ulPinConfiguration);
+#endif // 0
 
   // Default speed set to 4Mhz
   setClockDivider(_pin, 21);
   setDataMode(_pin, SPI_MODE0);
   setBitOrder(_pin, MSBFIRST);
-#endif // 0
 }
 
 void SPIClass::init()
 {
-#if 0
   if (initialized)
     return;
   interruptMode = 0;
@@ -61,10 +64,24 @@ void SPIClass::init()
   interruptMask[2] = 0;
   interruptMask[3] = 0;
   initCb();
+
+
+#if 0
   SPI_Configure(spi, id, SPI_MR_MSTR | SPI_MR_PS | SPI_MR_MODFDIS);
-  SPI_Enable(spi);
-  initialized = true;
+#else
+  pmc_enable_periph_clk( dwId ) ;
+  spi->SPI_CR = SPI_CR_SPIDIS ;
+
+  /* Execute a software reset of the SPI twice */
+  spi->SPI_CR = SPI_CR_SWRST ;
+  spi->SPI_CR = SPI_CR_SWRST ;
+  spi->SPI_MR = SPI_MR_MSTR | SPI_MR_PS | SPI_MR_MODFDIS ;
 #endif // 0
+
+
+
+  spi->SPI_CR = SPI_CR_SPIEN ;
+  initialized = true;
 }
 
 #if 0
@@ -176,10 +193,8 @@ void SPIClass::end(uint8_t _pin)
 
 void SPIClass::end(void)
 {
-#if 0
-  SPI_Disable(spi);
+  spi->SPI_CR = SPI_CR_SPIDIS ;
   initialized = false;
-#endif // 0
 }
 
 void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder)
@@ -306,28 +321,4 @@ void SPIClass::detachInterrupt(void)
   // Should be disableInterrupt()
 }
 
-#if SPI_INTERFACES_COUNT > 0
-static void SPI_0_Init(void)
-{
-#if 0
-  PIO_Configure(
-      g_aPinMap[PIN_SPI_MOSI].pPort,
-      g_aPinMap[PIN_SPI_MOSI].ulPinType,
-      g_aPinMap[PIN_SPI_MOSI].ulPin,
-      g_aPinMap[PIN_SPI_MOSI].ulPinConfiguration);
-  PIO_Configure(
-      g_aPinMap[PIN_SPI_MISO].pPort,
-      g_aPinMap[PIN_SPI_MISO].ulPinType,
-      g_aPinMap[PIN_SPI_MISO].ulPin,
-      g_aPinMap[PIN_SPI_MISO].ulPinConfiguration);
-  PIO_Configure(
-      g_aPinMap[PIN_SPI_SCK].pPort,
-      g_aPinMap[PIN_SPI_SCK].ulPinType,
-      g_aPinMap[PIN_SPI_SCK].ulPin,
-      g_aPinMap[PIN_SPI_SCK].ulPinConfiguration);
-}
-
-SPIClass SPI(SPI_INTERFACE, SPI_INTERFACE_ID, BOARD_SPI_DEFAULT_SS, SPI_0_Init);
-#endif // 0
-#endif // SPI_INTERFACES_COUNT
-
+#endif // SPI_INTERFACES_COUNT > 0
