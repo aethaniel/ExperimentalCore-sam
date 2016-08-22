@@ -20,8 +20,8 @@
           "archiveFileName": "%%FILENAME%%",
           "checksum": "SHA-256:%%CHECKSUM%%",
           "size": "%%SIZE%%",
-          "boards": 
-	  [
+          "boards":
+          [
             { "name": "Arduino Due" },
             { "name": "Atmel SAM4S-Xplained" },
             { "name": "Atmel SAM4S-WPIR-RD" },
@@ -29,7 +29,6 @@
             { "name": "Atmel SAM4E-Xplained Pro" },
             { "name": "Atmel SAMG55-Xplained Pro" },
             { "name": "Poppy Core" }
-            { "name": "qboard" }
           ],
           "toolsDependencies":
           [

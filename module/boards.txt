@@ -213,28 +213,3 @@ poppy_core_dbg.build.pid=0x003e
 poppy_core_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 poppy_core_dbg.bootloader.tool=openocd
 poppy_core_dbg.bootloader.file=openblt/poppy_core.bin
-
-qboard_dbg.name=qboard (Programming Port)
-qboard_dbg.vid.0=0x03eb
-qboard_dbg.pid.0=0x2111
-qboard_dbg.upload.tool=openocd
-qboard_dbg.upload.protocol=sam-ba
-qboard_dbg.upload.maximum_size=524288
-qboard_dbg.upload.use_1200bps_touch=true
-qboard_dbg.upload.wait_for_upload_port=false
-qboard_dbg.upload.native_usb=false
-qboard_dbg.build.mcu=cortex-m4
-qboard_dbg.build.f_cpu=120000000L
-qboard_dbg.build.usb_product="qboard"
-qboard_dbg.build.board=SAM_QBOARD
-qboard_dbg.build.core=arduino
-qboard_dbg.build.extra_flags=-D__SAMG55J19__ -mthumb {build.usb_flags}
-qboard_dbg.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
-qboard_dbg.build.openocdscript=openocd_scripts/variant.cfg
-qboard_dbg.build.variant=qboard
-qboard_dbg.build.vid=0x2341
-qboard_dbg.build.pid=0x003e
-qboard_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
-qboard_dbg.bootloader.tool=openocd
-qboard_dbg.bootloader.file=openblt/qboard.bin
-
