@@ -13,11 +13,12 @@
   <Project Name="bt_hc06" Path="bt_hc06/bt_hc06.project" Active="No"/>
   <Project Name="wheel_robot_servo" Path="wheel_robot_servo/wheel_robot_servo.project" Active="No"/>
   <Project Name="qboard" Path="../../../variants/qboard/variant.project" Active="No"/>
-  <Project Name="wire_temp_sensor" Path="wire_temp_sensor/wire_temp_sensor.project" Active="Yes"/>
+  <Project Name="wire_temp_sensor" Path="wire_temp_sensor/wire_temp_sensor.project" Active="No"/>
   <Project Name="wire_wii_nunchuck" Path="wire_wii_nunchuck/wire_wii_nunchuck.project" Active="No"/>
   <Environment>
     <![CDATA[]]>
   </Environment>
+  <Project Name="core" Path="../../../cores/arduino/core.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
@@ -34,6 +35,7 @@
       <Project Name="qboard" ConfigName="Debug"/>
       <Project Name="wire_temp_sensor" ConfigName="Debug"/>
       <Project Name="wire_wii_nunchuck" ConfigName="Debug"/>
+      <Project Name="core" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
@@ -50,6 +52,7 @@
       <Project Name="qboard" ConfigName="Release"/>
       <Project Name="wire_temp_sensor" ConfigName="Release"/>
       <Project Name="wire_wii_nunchuck" ConfigName="Release"/>
+      <Project Name="core" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
