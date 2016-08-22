@@ -189,27 +189,3 @@ atmel_samg55_xplained_pro_dbg.build.pid=0x003e
 atmel_samg55_xplained_pro_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 atmel_samg55_xplained_pro_dbg.bootloader.tool=openocd
 atmel_samg55_xplained_pro_dbg.bootloader.file=openblt/atmel_samg55_xplained_pro.bin
-
-poppy_core_dbg.name=Poppy Core (Programming Port)
-poppy_core_dbg.vid.0=0x03eb
-poppy_core_dbg.pid.0=0x2111
-poppy_core_dbg.upload.tool=openocd
-poppy_core_dbg.upload.protocol=sam-ba
-poppy_core_dbg.upload.maximum_size=524288
-poppy_core_dbg.upload.use_1200bps_touch=true
-poppy_core_dbg.upload.wait_for_upload_port=false
-poppy_core_dbg.upload.native_usb=false
-poppy_core_dbg.build.mcu=cortex-m4
-poppy_core_dbg.build.f_cpu=120000000L
-poppy_core_dbg.build.usb_product="Poppy Core"
-poppy_core_dbg.build.board=SAM_POPPY_CORE
-poppy_core_dbg.build.core=arduino
-poppy_core_dbg.build.extra_flags=-D__SAMG55G19__ -mthumb {build.usb_flags}
-poppy_core_dbg.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
-poppy_core_dbg.build.openocdscript=openocd_scripts/variant.cfg
-poppy_core_dbg.build.variant=poppy_core
-poppy_core_dbg.build.vid=0x2341
-poppy_core_dbg.build.pid=0x003e
-poppy_core_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
-poppy_core_dbg.bootloader.tool=openocd
-poppy_core_dbg.bootloader.file=openblt/poppy_core.bin

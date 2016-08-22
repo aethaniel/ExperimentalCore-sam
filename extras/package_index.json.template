@@ -28,7 +28,6 @@
             { "name": "Atmel SAM4S-Xplained Pro" },
             { "name": "Atmel SAM4E-Xplained Pro" },
             { "name": "Atmel SAMG55-Xplained Pro" },
-            { "name": "Poppy Core" }
           ],
           "toolsDependencies":
           [

@@ -8,7 +8,6 @@
   <Project Name="atmel_sam4s_wpir_rd" Path="../../../variants/atmel_sam4s_wpir_rd/variant.project" Active="No"/>
   <Project Name="atmel_sam4s_xplained_pro" Path="../../../variants/atmel_sam4s_xplained_pro/variant.project" Active="No"/>
   <Project Name="atmel_samg55_xplained_pro" Path="../../../variants/atmel_samg55_xplained_pro/variant.project" Active="No"/>
-  <Project Name="poppy_core" Path="../../../variants/poppy_core/variant.project" Active="No"/>
   <Project Name="blink" Path="blink/blink.project" Active="No"/>
   <Project Name="bt_hc06" Path="bt_hc06/bt_hc06.project" Active="No"/>
   <Project Name="wheel_robot_servo" Path="wheel_robot_servo/wheel_robot_servo.project" Active="No"/>
@@ -27,7 +26,6 @@
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Debug"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Debug"/>
       <Project Name="arduino_due" ConfigName="Debug"/>
-      <Project Name="poppy_core" ConfigName="Debug"/>
       <Project Name="blink" ConfigName="Debug"/>
       <Project Name="bt_hc06" ConfigName="Debug"/>
       <Project Name="wheel_robot_servo" ConfigName="Debug"/>
@@ -43,7 +41,6 @@
       <Project Name="atmel_sam4e_xplained_pro" ConfigName="Release"/>
       <Project Name="atmel_samg55_xplained_pro" ConfigName="Release"/>
       <Project Name="arduino_due" ConfigName="Release"/>
-      <Project Name="poppy_core" ConfigName="Release"/>
       <Project Name="blink" ConfigName="Release"/>
       <Project Name="bt_hc06" ConfigName="Release"/>
       <Project Name="wheel_robot_servo" ConfigName="Release"/>

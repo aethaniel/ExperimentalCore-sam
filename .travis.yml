@@ -20,7 +20,6 @@ env:
     - VARIANT_NAME=atmel_sam4s_wpir_rd
     - VARIANT_NAME=atmel_sam4e_xplained_pro
     - VARIANT_NAME=atmel_samg55_xplained_pro
-    - VARIANT_NAME=poppy_core
 
 #addons:
 #  apt:
