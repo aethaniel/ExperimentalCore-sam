@@ -36,11 +36,6 @@
 #include "core_variant.h"
 
 #ifdef __cplusplus
-#include "CoreSerial.hpp"
-#include "CoreWire.hpp"
-#endif // __cplusplus
-
-#ifdef __cplusplus
 extern "C"
 {
 #endif // __cplusplus
@@ -170,8 +165,11 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 /*----------------------------------------------------------------------------
  *        Arduino objects - C++ only
  *----------------------------------------------------------------------------*/
-
 #ifdef __cplusplus
+
+#include "CoreSerial.hpp"
+#include "CoreWire.hpp"
+#include "CoreSPI.hpp"
 
 extern SAMSerial Serial;
 extern SAMSerial Serial1;
