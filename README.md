@@ -1,5 +1,6 @@
 # ExperimentalCore-sam
 Experimental new core for Arduino Due and other (AT91)SAM based boards.
+[![License](https://img.shields.io/badge/licence-GPL%20v3-brightgreen.svg?style=flat)](LICENSE)
 
 Please, check https://github.com/aethaniel/ExperimentalCore-sam/wiki for more information.
 
