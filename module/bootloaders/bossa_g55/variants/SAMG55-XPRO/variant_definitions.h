@@ -18,17 +18,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _BOARD_DEFINITIONS_H_
-#define _BOARD_DEFINITIONS_H_
-
-/*
- * If BOOT_DOUBLE_TAP_ADDRESS is defined the bootloader is started by
- * quickly tapping two times on the reset button.
- * BOOT_DOUBLE_TAP_ADDRESS must point to a free SRAM cell that must not
- * be touched from the loaded application.
- */
-#define BOOT_DOUBLE_TAP_ADDRESS           (0x20007FFCul)
-#define BOOT_DOUBLE_TAP_DATA              (*((volatile uint32_t *) BOOT_DOUBLE_TAP_ADDRESS))
+#ifndef _VARIANT_DEFINITIONS_H_
+#define _VARIANT_DEFINITIONS_H_
 
 /*
  * If BOOT_LOAD_PIN is defined the bootloader is started if the selected
@@ -38,7 +29,7 @@
 //#define BOOT_LOAD_PIN                     PIN_PA15 // Pin 5
 #define BOOT_PIN_MASK                     (1U << (BOOT_LOAD_PIN & 0x1f))
 
-#define CPU_FREQUENCY                     (48000000ul)
+#define CPU_FREQUENCY                     (120000000ul)
 
 #define BOOT_USART_MODULE                 USART0
 
@@ -60,4 +51,4 @@
 #define BOARD_LEDTX_PORT                  (0)
 #define BOARD_LEDTX_PIN                   (27)
 
-#endif // _BOARD_DEFINITIONS_H_
+#endif // _VARIANT_DEFINITIONS_H_

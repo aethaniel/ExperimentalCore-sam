@@ -18,11 +18,11 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _BOARD_DRIVER_LED_
-#define _BOARD_DRIVER_LED_
+#ifndef _VARIANT_DRIVER_LED_
+#define _VARIANT_DRIVER_LED_
 
 #include <sam.h>
-#include "board_definitions.h"
+#include "variant_definitions.h"
 
 inline void LED_init(void)   { /* TODOG55; */ }
 inline void LED_on(void)     { /* TODOG55; */ }
@@ -39,4 +39,4 @@ inline void LEDTX_on(void)     { /* TODOG55; */ }
 inline void LEDTX_off(void)    { /* TODOG55; */ }
 inline void LEDTX_toggle(void) { /* TODOG55; */ }
 
-#endif // _BOARD_DRIVER_LED_
+#endif // _VARIANT_DRIVER_LED_

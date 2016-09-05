@@ -166,7 +166,7 @@ USB_CDC sam_ba_cdc;
  */
 void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 {
-  Usb *pUsb = pCdc->pUsb;
+  UsbDev *pUsb = pCdc->pUsb;
   static volatile uint8_t bmRequestType, bRequest, dir;
   static volatile uint16_t wValue, wIndex, wLength, wStatus;
 
@@ -356,7 +356,6 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
           if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<1))
           {
             // Remove stall request
-            //pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSCLR_STALLRQ1;
             pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.bit.STALLRQ = (1<<1);
             if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPINTFLAG.bit.STALL & (1<<1))
             {
@@ -371,7 +370,6 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
           if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<0))
           {
             // Remove stall request
-            //pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSCLR_STALLRQ0;
             pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.bit.STALLRQ = (1<<0);
             if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPINTFLAG.bit.STALL & (1<<0))
             {

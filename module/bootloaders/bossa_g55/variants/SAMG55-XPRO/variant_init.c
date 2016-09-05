@@ -17,7 +17,7 @@
 */
 
 #include <sam.h>
-#include "board_definitions.h"
+#include "variant_definitions.h"
 
 /**
  * \brief system_init() configures the needed clocks and according Flash Read Wait States.
@@ -29,7 +29,7 @@
  * 2) Configure and enable PLLB
  */
 
-void board_init(void)
+void variant_init(void)
 {
 // TODOG55
 }

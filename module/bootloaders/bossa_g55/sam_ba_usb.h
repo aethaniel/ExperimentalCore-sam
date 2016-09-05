@@ -78,7 +78,7 @@
 typedef struct _USB_CDC
 {
 	// Private members
-	Usb *pUsb;
+	USBDev *pUsb;
 	uint8_t currentConfiguration;
 	uint8_t currentConnection;
 	// Public Methods:
@@ -97,7 +97,7 @@ P_USB_CDC usb_init(void);
 void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc);
 
 #if 0 // TODO: pending validation
-uint32_t USB_SendString(Usb *pUsb, const char* ascii_string, uint8_t length, uint8_t maxLength);
+uint32_t USB_SendString(USBDev *pUsb, const char* ascii_string, uint8_t length, uint8_t maxLength);
 #endif // 0
 
 extern USB_CDC sam_ba_cdc;

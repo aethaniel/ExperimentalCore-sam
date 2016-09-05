@@ -1,2 +1,6 @@
 
 CFLAGS_VARIANT=-mthumb -mcpu=cortex-m4
+LDFLAGS_VARIANT=-mthumb -mcpu=cortex-m4
+
+# Atmel SAMG55 XPlained Pro (PID == 0x6124)
+CFLAGS_EXTRA?=-D__SAMG55J19__ -DUSB_PID_HIGH=0x61 -DUSB_PID_LOW=0x24 -DUSB_VID_HIGH=0x03 -DUSB_VID_LOW=0xEB

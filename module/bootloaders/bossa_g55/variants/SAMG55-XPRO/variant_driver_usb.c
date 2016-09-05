@@ -19,17 +19,17 @@
 */
 
 #include <string.h>
-#include "board_driver_usb.h"
-#include "sam_ba_usb.h"
-#include "sam_ba_cdc.h"
+#include "variant_driver_usb.h"
+#include "../../misc.h"
 
+#define USB_COMMON_CFG_BITS (USBDEV_CSR_RX_DATA_BK0 | USBDEV_CSR_RX_DATA_BK1 | USBDEV_CSR_STALLSENT | USBDEV_CSR_RXSETUP | USBDEV_CSR_TXCOMP)
 
-static volatile bool read_job = false;
+static uint32_t g_currentReceiveBank = USBDEV_CSR_RX_DATA_BK0;
 
 /*----------------------------------------------------------------------------
  * \brief
  */
-P_USB_CDC USB_Open(P_USB_CDC pCdc, Usb *pUsb)
+P_USB_CDC USB_Open(P_USB_CDC pCdc, USB_DEVICE *pUsb)
 {
   pCdc->pUsb = pUsb;
   pCdc->currentConfiguration = 0;
@@ -48,27 +48,75 @@ P_USB_CDC USB_Open(P_USB_CDC pCdc, Usb *pUsb)
  */
 void USB_Init(void)
 {
-  uint32_t pad_transn, pad_transp, pad_trim;
+  USBDEV->USBDEV_TXVC  = USBDEV_TXVC_TXVDIS; // reset PUON and set TXVDIS
+  /* Enables the 48MHz USB clock UDPCK */
+  PMC->PMC_SCER = PMC_SCER_UDP;
+
+  /* Set device mode */
+  MATRIX->CCFG_USBMR |= CCFG_USBMR_USBMODE ;
+
+  MATRIX->CCFG_SYSIO &=  ~(CCFG_SYSIO_SYSIO10 | CCFG_SYSIO_SYSIO11);
 
   /* Enable USB clock */
-// TODOG55  PM->APBBMASK.reg |= PM_APBBMASK_USB;
+  PMC->PMC_PCER1 = (1 << (ID_USBDEV - 32));
 
+  /* Enable the pull-up */
+  USBDEV->USBDEV_TXVC = USBDEV_TXVC_PUON; // Set PUON and Clear TXVDIS
 }
 
-uint32_t USB_Write(Usb *pUsb, const char *pData, uint32_t length, uint8_t ep_num)
+uint32_t USB_Write(USB_DEVICE *pUsb, const char *pData, uint32_t length, uint8_t ep_num)
 {
-  uint32_t data_address;
-  uint8_t buf_index;
+  uint32_t cpt = 0;
+  volatile uint32_t i = 0;
 
-  /* Set buffer index */
-  buf_index = (ep_num == 0) ? 0 : 1;
+  // Send the first packet
+  cpt = min_u32(length, USB_EP_IN_SIZE);
+  length -= cpt;
 
-  /* Check for requirement for multi-packet or auto zlp */
-// TODOG55
+  while (cpt--) pUsb->USBDEV_FDR[USB_EP_IN] = *pData++;
+  {
+    pUsb->USBDEV_CSR[USB_EP_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
+  }
 
+  while ( length )
+  {
+    // Needed for UDP CSR Synchro
+    for (i = 0; i < 15; i++);
 
-  /* Wait for transfer to complete */
-// TODOG55  while (  );
+    // Fill the second bank
+    cpt = min_u32(length, USB_EP_IN_SIZE);
+    length -= cpt;
+    while (cpt--)
+    {
+      pUsb->USBDEV_FDR[USB_EP_IN] = *pData++;
+    }
+
+    // Wait for the the first bank to be sent
+    while ( !(pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP) )
+    {
+      if ( !USB_IsConfigured(pCdc) )
+      {
+        return length;
+      }
+    }
+    pUsb->USBDEV_CSR[USB_EP_IN] &= ~(USBDEV_CSR_TXCOMP);
+
+    while (pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP);
+
+    pUsb->USBDEV_CSR[USB_EP_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
+  }
+
+  // Wait for the end of transfer
+  while ( !(pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP) )
+  {
+    if ( !USB_IsConfigured(pCdc) )
+    {
+      return length;
+    }
+  }
+  pUsb->USBDEV_CSR[USB_EP_IN] &= ~(USBDEV_CSR_TXCOMP);
+
+  while (pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP);
 
   return length;
 }
@@ -76,43 +124,42 @@ uint32_t USB_Write(Usb *pUsb, const char *pData, uint32_t length, uint8_t ep_num
 /*----------------------------------------------------------------------------
  * \brief Read available data from Endpoint OUT
  */
-uint32_t USB_Read(Usb *pUsb, char *pData, uint32_t length)
+uint32_t USB_Read(USB_DEVICE *pUsb, char *pData, uint32_t length)
 {
-  uint32_t packetSize = 0;
+  uint32_t ulPacketSize = 0;
+  uint32_t ulBytesReceived = 0;
+  uint32_t currentReceiveBank = g_currentReceiveBank;
 
-  if (!read_job)
+  while (!ulBytesReceived)
   {
-// TODOG55
+    if ( !USB_IsConfigured(pCdc) )
+    {
+      break;
+    }
 
-    /* set the user flag */
-    read_job = true;
+    if ( pUsb->USBDEV_CSR[USB_EP_OUT] & currentReceiveBank )
+    {
+      for ( ulPacketSize = MIN(pUsb->USBDEV_CSR[USB_EP_OUT] >> 16, length) ; ulPacketSize-- ; )
+      {
+        pData[ulBytesReceived++] = pUsb->USBDEV_FDR[USB_EP_OUT];
+      }
+
+      pUsb->USBDEV_CSR[USB_EP_OUT] &= ~(currentReceiveBank);
+
+      if ( currentReceiveBank == USBDEV_CSR_RX_DATA_BK0 )
+      {
+        currentReceiveBank = USBDEV_CSR_RX_DATA_BK1;
+      }
+      else
+      {
+        currentReceiveBank = USBDEV_CSR_RX_DATA_BK0;
+      }
+    }
   }
 
-  /* Check for Transfer Complete 0 flag */
-  if ( pUsb->DEVICE.DeviceEndpoint[USB_EP_OUT].EPINTFLAG.bit.TRCPT & (1<<0) )
-  {
-// TODOG55
+  g_currentReceiveBank = currentReceiveBank;
 
-    /* Clear the user flag */
-    read_job = false;
-  }
-
-  return packetSize;
-}
-
-uint32_t USB_Read_blocking(Usb *pUsb, char *pData, uint32_t length)
-{
-  if (read_job)
-  {
-    /* Stop the reception by setting the bank 0 ready bit */
-// TODOG55    pUsb->DEVICE.DeviceEndpoint[USB_EP_OUT].EPSTATUSSET.bit.BK0RDY = true;
-    /* Clear the user flag */
-    read_job = false;
-  }
-
-// TODOG55
-
-  return length;
+  return ulBytesReceived;
 }
 
 /*----------------------------------------------------------------------------
@@ -120,11 +167,46 @@ uint32_t USB_Read_blocking(Usb *pUsb, char *pData, uint32_t length)
  */
 uint8_t USB_IsConfigured(P_USB_CDC pCdc)
 {
-  Usb *pUsb = pCdc->pUsb;
+  USBDev *pUsb = pCdc->pUsb;
+	uint32_t isr = pUsb->USBDEV_ISR;
 
   /* Check for End of Reset flag */
 
 // TODOG55
+  // Suspend
+  if (isr & USBDEV_ISR_RXSUSP)
+  {
+    pCdc->currentConfiguration = 0;
+    // Acknowledge interrupt
+    pUsb->USBDEV_ICR = USBDEV_ICR_RXSUSP;
+  }
+  // End Of Bus Reset
+  else
+  {
+    if (isr & USBDEV_ISR_ENDBUSRES)
+    {
+      // Reset current configuration value to 0
+      pCdc->currentConfiguration = 0;
+      pCdc->GetSetInterface = 0;
+      // reset all endpoints
+      pUsb->USBDEV_RST_EP  = (uint32_t) -1;
+      pUsb->USBDEV_RST_EP  = 0;
+      // Enable the function address
+      pUsb->USBDEV_FADDR = USBDEV_FADDR_FEN;
+      // Configure endpoint 0
+      pUsb->USBDEV_CSR[0] = USB_COMMON_CFG_BITS | USBDEV_CSR_EPEDS | USBDEV_CSR_EPTYPE_CTRL;
+      pUsb->USBDEV_ICR = USBDEV_ICR_ENDBUSRES;
+    }
+    // Endpoint
+    else
+    {
+      if (isr & USBDEV_ISR_EP0INT)
+      {
+        CDC_Enumerate(pCdc);
+      }
+      // else Nothing to do
+    }
+  }
 
   return pCdc->currentConfiguration;
 }
@@ -132,41 +214,39 @@ uint8_t USB_IsConfigured(P_USB_CDC pCdc)
 /*----------------------------------------------------------------------------
  * \brief Stall the control endpoint
  */
-void USB_SendStall(Usb *pUsb, bool direction_in)
+void USB_SendStall(USB_DEVICE *pUsb)
 {
-  /* Check the direction */
-  if (direction_in)
-  {
-    /* Set STALL request on IN direction */
-// TODOG55
-  }
-  else
-  {
-    /* Set STALL request on OUT direction */
-// TODOG55
-  }
+  pUsb->USBDEV_CSR[0] |= USB_COMMON_CFG_BITS | USBDEV_CSR_FORCESTALL;
+  while ( !(pUsb->USBDEV_CSR[0] & USBDEV_CSR_STALLSENT) );
+  pUsb->USBDEV_CSR[0] &= ~(USBDEV_CSR_FORCESTALL | USBDEV_CSR_STALLSENT);
+  while (pUsb->USBDEV_CSR[0] & (USBDEV_CSR_FORCESTALL | USBDEV_CSR_STALLSENT));
 }
 
 /*----------------------------------------------------------------------------
  * \brief Send zero length packet through the control endpoint
  */
-void USB_SendZlp(Usb *pUsb)
+void USB_SendZlp(USB_DEVICE *pUsb)
 {
-// TODOG55
+  pUsb->USBDEV_CSR[0] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
+  while ( !(pUsb->USBDEV_CSR[0] & USBDEV_CSR_TXCOMP) );
+  pUsb->USBDEV_CSR[0] &= ~(USBDEV_CSR_TXCOMP);
+  while (pUsb->USBDEV_CSR[0] & USBDEV_CSR_TXCOMP);
 }
 
 /*----------------------------------------------------------------------------
  * \brief Set USB device address obtained from host
  */
-void USB_SetAddress(Usb *pUsb, uint16_t wValue)
+void USB_SetAddress(USB_DEVICE *pUsb, uint16_t wValue)
 {
-// TODOG55
+  USB_SendZlp(pUsb);
+  pUsb->USBDEV_FADDR = ( (wValue&0x7F) | USBDEV_FADDR_FEN );
+  pUsb->USBDEV_GLB_STAT  = (wValue&0x7F) ? USBDEV_GLB_STAT_FADDEN : 0;
 }
 
 /*----------------------------------------------------------------------------
  * \brief Configure USB device
  */
-void USB_Configure(Usb *pUsb)
+void USB_Configure(USB_DEVICE *pUsb)
 {
 // TODOG55
 }

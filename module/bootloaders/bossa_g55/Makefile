@@ -53,7 +53,10 @@ else
     endif
 endif
 
-BUILD_PATH=build
+VARIANT?=SAMG55-XPRO
+BUILD_PATH=build_$(VARIANT)
+
+include variants/$(VARIANT)/variant.mk
 
 # -----------------------------------------------------------------------------
 # Tools
@@ -64,39 +67,37 @@ SIZE=$(ARM_GCC_PATH)size
 
 # -----------------------------------------------------------------------------
 # Compiler options
-CFLAGS=-mthumb -mcpu=cortex-m0plus -Wall -c -std=gnu99 -ffunction-sections -fdata-sections -nostdlib -nostartfiles --param max-inline-insns-single=500
+CFLAGS=$(CFLAGS_VARIANT) -Wall -c -std=gnu99 -ffunction-sections -fdata-sections -nostdlib -nostartfiles --param max-inline-insns-single=500
 ifdef DEBUG
 CFLAGS+=-g3 -O1 -DDEBUG=1
 else
 CFLAGS+=-Os -DDEBUG=0
 endif
 
-# Atmel SAMG55 XPlained Pro (PID == 0x6124)
-CFLAGS_EXTRA?=-D__SAMG55J19__ -DUSB_PID_HIGH=0x61 -DUSB_PID_LOW=0x24 -DUSB_VID_HIGH=0x03 -DUSB_VID_LOW=0xEB
-
-INCLUDES=-I"$(MODULE_PATH)/tools/CMSIS/4.0.0-atmel/CMSIS/Include/" -I"$(MODULE_PATH)/tools/CMSIS/4.0.0-atmel/Device/ATMEL/"
+INCLUDES=-I"variants/$(VARIANT)" -I"$(MODULE_PATH)/tools/CMSIS_API/Include/" -I"$(MODULE_PATH)/tools/CMSIS_Devices/ATMEL/"
 
 # -----------------------------------------------------------------------------
 # Linker options
-LDFLAGS=-mthumb -mcpu=cortex-m0plus -Wall -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all
+LDFLAGS=$(LDFLAGS_VARIANT) -Wall -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all
 LDFLAGS+=-Wl,--warn-common -Wl,--warn-section-align -Wl,--warn-unresolved-symbols --specs=nano.specs --specs=nosys.specs
 
 # -----------------------------------------------------------------------------
 # Source files and objects
 SOURCES= \
-board_driver_led.c \
-board_driver_serial.c \
-board_driver_usb.c \
-board_init.c \
-board_startup.c \
+variants/$(VARIANT)/variant_driver_led.c \
+variants/$(VARIANT)/variant_driver_serial.c \
+variants/$(VARIANT)/variant_driver_usb.c \
+variants/$(VARIANT)/variant_init.c \
+variants/$(VARIANT)/variant_startup.c \
 main.c \
 sam_ba_usb.c \
 sam_ba_cdc.c \
 sam_ba_monitor.c \
 sam_ba_serial.c
 
-OBJECTS=$(addprefix $(BUILD_PATH)/, $(SOURCES:.c=.o))
-DEPS=$(addprefix $(BUILD_PATH)/, $(SOURCES:.c=.d))
+OBJECTS=$(addprefix $(BUILD_PATH)/, $(notdir $(SOURCES:.c=.o)))
+DEPS=$(addprefix $(BUILD_PATH)/, $(notdir $(SOURCES:.c=.d)))
+VPATH=$(foreach path,$(sort $(foreach file,$(SOURCES),$(dir $(file)))),$(path) :)
 
 NAME=bossa_g55
 ELF=$(NAME).elf
@@ -117,7 +118,7 @@ all: print_info $(SOURCES) $(BIN) $(HEX) $(AS_BUILD)
 $(ELF): Makefile $(BUILD_PATH) $(OBJECTS)
 	@echo ----------------------------------------------------------
 	@echo Creating ELF binary
-	"$(CC)" -L. -L$(BUILD_PATH) $(LDFLAGS) -Os -Wl,--gc-sections -save-temps -Tbootloader_samd21x18.ld -Wl,-Map,"$(BUILD_PATH)/$(NAME).map" -o "$(BUILD_PATH)/$(ELF)" -Wl,--start-group $(OBJECTS) -lm -Wl,--end-group
+	"$(CC)" -L. -L$(BUILD_PATH) $(LDFLAGS) -Os -Wl,--gc-sections -save-temps -Tvariants/$(VARIANT)/variant_bootloader.ld -Wl,-Map,"$(BUILD_PATH)/$(NAME).map" -o "$(BUILD_PATH)/$(ELF)" -Wl,--start-group $(OBJECTS) -lm -Wl,--end-group
 	"$(NM)" "$(BUILD_PATH)/$(ELF)" >"$(BUILD_PATH)/$(NAME)_symbols.txt"
 	"$(SIZE)" --format=sysv -t -x $(BUILD_PATH)/$(ELF)
 
@@ -144,9 +145,10 @@ $(BUILD_PATH):
 
 print_info:
 	@echo ----------------------------------------------------------
-	@echo Compiling bootloader using
+	@echo Compiling bootloader using $(VARIANT)
 	@echo BASE PATH = $(MODULE_PATH)
 	@echo GCC  PATH = $(ARM_GCC_PATH)
+	@echo VPATH     = $(VPATH)
 #	@echo OS        = $(OS)
 #	@echo SHELL     = $(SHELL)
 #	@echo TERM      = $(TERM)

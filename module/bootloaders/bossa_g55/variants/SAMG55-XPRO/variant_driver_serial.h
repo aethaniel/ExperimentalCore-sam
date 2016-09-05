@@ -18,74 +18,65 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef UART_DRIVER_H
-#define UART_DRIVER_H
+#ifndef _VARIANT_SERIAL_DRIVER_H_
+#define _VARIANT_SERIAL_DRIVER_H_
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <sam.h>
 
 #define PINMUX_UNUSED          0xFFFFFFFF
-#define GCLK_ID_SERCOM0_CORE   0x14
 
-/* SERCOM UART available pad settings */
-enum uart_pad_settings {
-	UART_RX_PAD0_TX_PAD2 = SERCOM_USART_CTRLA_RXPO(0) | SERCOM_USART_CTRLA_TXPO(1),
-	UART_RX_PAD1_TX_PAD2 = SERCOM_USART_CTRLA_RXPO(1) | SERCOM_USART_CTRLA_TXPO(1),
-	UART_RX_PAD2_TX_PAD0 = SERCOM_USART_CTRLA_RXPO(2),
-	UART_RX_PAD3_TX_PAD0 = SERCOM_USART_CTRLA_RXPO(3),
-	UART_RX_PAD1_TX_PAD0 = SERCOM_USART_CTRLA_RXPO(1),
-	UART_RX_PAD3_TX_PAD2 = SERCOM_USART_CTRLA_RXPO(3) | SERCOM_USART_CTRLA_TXPO(1),
-};
+#define SERIAL Usart
 
 /**
  * \brief Initializes the UART
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  * \param Baud value corresponding to the desired baudrate
- * \param SERCOM pad settings
+ * \param SERIAL pad settings
  */
-void uart_basic_init(Sercom *sercom, uint16_t baud_val, enum uart_pad_settings pad_conf);
+void uart_basic_init(SERIAL *serial, uint16_t baud_val);
 
 /**
  * \brief Disables UART interface
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  */
-void uart_disable(Sercom *sercom);
+void uart_disable(SERIAL *serial);
 
 /**
  * \brief Sends a single byte through UART interface
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  * \param Data to send
  */
-void uart_write_byte(Sercom *sercom, uint8_t data);
+void uart_write_byte(SERIAL *serial, uint8_t data);
 
 /**
  * \brief Reads a single character from UART interface
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  * \return Data byte read
  */
-uint8_t uart_read_byte(Sercom *sercom);
+uint8_t uart_read_byte(SERIAL *serial);
 
 /**
  * \brief Sends buffer on UART interface
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  * \param Pointer to data to send
  * \param Number of bytes to send
  */
-void uart_write_buffer_polled(Sercom *sercom, uint8_t *ptr, uint16_t length);
+void uart_write_buffer_polled(SERIAL *serial, uint8_t *ptr, uint16_t length);
 
 /**
  * \brief Reads data on UART interface
  *
- * \param Pointer to SERCOM instance
+ * \param Pointer to SERIAL instance
  * \param Pointer to store read data
  * \param Number of bytes to read
  */
-void uart_read_buffer_polled(Sercom *sercom, uint8_t *ptr, uint16_t length);
+void uart_read_buffer_polled(SERIAL *serial, uint8_t *ptr, uint16_t length);
 
-#endif
+#endif // _VARIANT_SERIAL_DRIVER_H_

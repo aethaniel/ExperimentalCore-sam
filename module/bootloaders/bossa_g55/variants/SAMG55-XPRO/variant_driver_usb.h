@@ -18,25 +18,26 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _BOARD_DRIVER_USB_H_
-#define _BOARD_DRIVER_USB_H_
+#ifndef _VARIANT_DRIVER_USB_H_
+#define _VARIANT_DRIVER_USB_H_
 
-#include "sam_ba_cdc.h"
+#include "../../sam_ba_cdc.h"
 
-P_USB_CDC USB_Open(P_USB_CDC pCdc, Usb *pUsb);
+#define USB_DEVICE USBDev
+
+P_USB_CDC USB_Open(P_USB_CDC pCdc, USB_DEVICE *pUsb);
 
 void USB_Init(void);
 
-uint32_t USB_Write(Usb *pUsb, const char *pData, uint32_t length, uint8_t ep_num);
-uint32_t USB_Read(Usb *pUsb, char *pData, uint32_t length);
-uint32_t USB_Read_blocking(Usb *pUsb, char *pData, uint32_t length);
+uint32_t USB_Write(USB_DEVICE *pUsb, const char *pData, uint32_t length, uint8_t ep_num);
+uint32_t USB_Read(USB_DEVICE *pUsb, char *pData, uint32_t length);
 
 uint8_t USB_IsConfigured(P_USB_CDC pCdc);
 
-void USB_SendStall(Usb *pUsb, bool direction_in);
-void USB_SendZlp(Usb *pUsb);
+void USB_SendStall(USB_DEVICE *pUsb);
+void USB_SendZlp(USB_DEVICE *pUsb);
 
-void USB_SetAddress(Usb *pUsb, uint16_t wValue);
-void USB_Configure(Usb *pUsb);
+void USB_SetAddress(USB_DEVICE *pUsb, uint16_t wValue);
+void USB_Configure(USB_DEVICE *pUsb);
 
-#endif // _BOARD_DRIVER_USB_H_
+#endif // _VARIANT_DRIVER_USB_H_

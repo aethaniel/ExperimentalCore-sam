@@ -18,32 +18,32 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "board_driver_serial.h"
+#include "variant_driver_serial.h"
 
 bool uart_drv_error_flag = false;
 
-void uart_basic_init(Usart *serial, uint16_t baud_val, enum uart_pad_settings pad_conf)
+void uart_basic_init(SERIAL *serial, uint16_t baud_val)
 {
 // TODOG55
 }
 
-void uart_disable(Usart *serial)
+void uart_disable(SERIAL *serial)
 {
 // TODOG55
 }
 
-void uart_write_byte(Usart *serial, uint8_t data)
+void uart_write_byte(SERIAL *serial, uint8_t data)
 {
 // TODOG55
 }
 
-uint8_t uart_read_byte(Usart *serial)
+uint8_t uart_read_byte(SERIAL *serial)
 {
 // TODOG55
-	return((uint8_t));
+	return((uint8_t)1);
 }
 
-void uart_write_buffer_polled(Usart *serial, uint8_t *ptr, uint16_t length)
+void uart_write_buffer_polled(SERIAL *serial, uint8_t *ptr, uint16_t length)
 {
 	/* Do the following for specified length */
 	do {
@@ -51,7 +51,7 @@ void uart_write_buffer_polled(Usart *serial, uint8_t *ptr, uint16_t length)
 	} while (length--);
 }
 
-void uart_read_buffer_polled(Usart *serial, uint8_t *ptr, uint16_t length)
+void uart_read_buffer_polled(SERIAL *serial, uint8_t *ptr, uint16_t length)
 {
 	/* Do the following for specified length */
 	do {
