@@ -51,12 +51,12 @@
 /**
  * \brief Open the given USART
  */
-void serial_open(void);
+void samba_serial_open(void);
 
 /**
  * \brief Stops the USART
  */
-void serial_close(void);
+void samba_serial_close(void);
 
 /**
  * \brief Puts a byte on usart line
@@ -65,35 +65,35 @@ void serial_close(void);
  *
  * \return \c 1 if function was successfully done, otherwise \c 0.
  */
-int serial_putc(int value);
+int samba_serial_putc(int value);
 
 /**
  * \brief Waits and gets a value on usart line
  *
  * \return value read on usart line
  */
-int serial_getc(void);
+int samba_serial_getc(void);
 
 /**
  * \brief Returns true if the SAM-BA Uart received the sharp char
  *
  * \return Returns true if the SAM-BA Uart received the sharp char
  */
-int serial_sharp_received(void);
+int samba_serial_sharp_received(void);
 
 /**
  * \brief This function checks if a character has been received on the usart line
  *
  * \return \c 1 if a byte is ready to be read.
  */
-bool serial_is_rx_ready(void);
+bool samba_serial_is_rx_ready(void);
 
 /**
  * \brief Gets a value on usart line
  *
  * \return value read on usart line
  */
-int serial_readc(void);
+int samba_serial_readc(void);
 
 /**
  * \brief Send buffer on usart line
@@ -102,7 +102,7 @@ int serial_readc(void);
  * \param number of data to send
  * \return number of data sent
  */
-uint32_t serial_putdata(void const* data, uint32_t length); //Send given data (polling)
+uint32_t samba_serial_putdata(void const* data, uint32_t length); //Send given data (polling)
 
 /**
  * \brief Gets data from usart line
@@ -111,7 +111,7 @@ uint32_t serial_putdata(void const* data, uint32_t length); //Send given data (p
  * \param number of data to get
  * \return value read on usart line
  */
-uint32_t serial_getdata(void* data, uint32_t length); //Get data from comm. device
+uint32_t samba_serial_getdata(void* data, uint32_t length); //Get data from comm. device
 
 /**
  * \brief Send buffer on usart line using Xmodem protocol
@@ -120,7 +120,7 @@ uint32_t serial_getdata(void* data, uint32_t length); //Get data from comm. devi
  * \param number of data to send
  * \return number of data sent
  */
-uint32_t serial_putdata_xmd(void const* data, uint32_t length); //Send given data (polling) using xmodem (if necessary)
+uint32_t samba_serial_putdata_xmd(void const* data, uint32_t length); //Send given data (polling) using xmodem (if necessary)
 
 /**
  * \brief Gets data from usart line using Xmodem protocol
@@ -129,7 +129,7 @@ uint32_t serial_putdata_xmd(void const* data, uint32_t length); //Send given dat
  * \param number of data to get
  * \return value read on usart line
  */
-uint32_t serial_getdata_xmd(void* data, uint32_t length); //Get data from comm. device using xmodem (if necessary)
+uint32_t samba_serial_getdata_xmd(void* data, uint32_t length); //Get data from comm. device using xmodem (if necessary)
 
 /**
  * \brief Compute the CRC
@@ -138,6 +138,6 @@ uint32_t serial_getdata_xmd(void* data, uint32_t length); //Get data from comm. 
  * \param Previous CRC
  * \return The new computed CRC
  */
-unsigned short serial_add_crc(char c, unsigned short crc);
+unsigned short samba_serial_add_crc(char c, unsigned short crc);
 
 #endif // _SAM_BA_SERIAL_H_

@@ -44,69 +44,13 @@ uint8_t error_timeout;
 uint16_t size_of_data;
 uint8_t mode_of_transfer;
 
-#define BOOT_USART_PAD(n) BOOT_USART_PAD##n
-
 /**
  * \brief Open the given USART
  */
-void serial_open(void)
+void samba_serial_open(void)
 {
 	uint32_t port;
 	uint32_t pin;
-
-	/* Configure the port pins for SERCOM_USART */
-	if (BOOT_USART_PAD0 != PINMUX_UNUSED)
-  {
-		/* Mask 6th bit in pin number to check whether it is greater than 32 i.e., PORTB pin */
-		port = (BOOT_USART_PAD0 & 0x200000) >> 21;
-		pin = (BOOT_USART_PAD0 >> 16);
-		PORT->Group[port].PINCFG[(pin - (port*32))].bit.PMUXEN = 1;
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg &= ~(0xF << (4 * (pin & 0x01u)));
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg |= (BOOT_USART_PAD0 & 0xFF) << (4 * (pin & 0x01u));
-	}
-
-	if (BOOT_USART_PAD1 != PINMUX_UNUSED)
-  {
-		/* Mask 6th bit in pin number to check whether it is greater than 32 i.e., PORTB pin */
-		port = (BOOT_USART_PAD1 & 0x200000) >> 21;
-		pin = BOOT_USART_PAD1 >> 16;
-		PORT->Group[port].PINCFG[(pin - (port*32))].bit.PMUXEN = 1;
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg &= ~(0xF << (4 * (pin & 0x01u)));
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg |= (BOOT_USART_PAD1 & 0xFF) << (4 * (pin & 0x01u));
-	}
-
-	if (BOOT_USART_PAD2 != PINMUX_UNUSED)
-  {
-		/* Mask 6th bit in pin number to check whether it is greater than 32 i.e., PORTB pin */
-		port = (BOOT_USART_PAD2 & 0x200000) >> 21;
-		pin = BOOT_USART_PAD2 >> 16;
-		PORT->Group[port].PINCFG[(pin - (port*32))].bit.PMUXEN = 1;
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg &= ~(0xF << (4 * (pin & 0x01u)));
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg |= (BOOT_USART_PAD2 & 0xFF) << (4 * (pin & 0x01u));
-	}
-
-	if (BOOT_USART_PAD3 != PINMUX_UNUSED)
-  {
-		/* Mask 6th bit in pin number to check whether it is greater than 32 i.e., PORTB pin */
-		port = (BOOT_USART_PAD3 & 0x200000) >> 21;
-		pin = BOOT_USART_PAD3 >> 16;
-		PORT->Group[port].PINCFG[(pin - (port*32))].bit.PMUXEN = 1;
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg &= ~(0xF << (4 * (pin & 0x01u)));
-		PORT->Group[port].PMUX[(pin - (port*32))/2].reg |= (BOOT_USART_PAD3 & 0xFF) << (4 * (pin & 0x01u));
-	}
-
-	/* Enable clock for BOOT_USART_MODULE */
-	PM->APBCMASK.reg |= BOOT_USART_BUS_CLOCK_INDEX ;
-
-	/* Set GCLK_GEN0 as source for GCLK_ID_SERCOMx_CORE */
-  GCLK->CLKCTRL.reg = GCLK_CLKCTRL_ID( BOOT_USART_PER_CLOCK_INDEX ) | // Generic Clock 0 (SERCOMx)
-                      GCLK_CLKCTRL_GEN_GCLK0 | // Generic Clock Generator 0 is source
-                      GCLK_CLKCTRL_CLKEN ;
-
-  while ( GCLK->STATUS.reg & GCLK_STATUS_SYNCBUSY )
-  {
-    /* Wait for synchronization */
-  }
 
 	/* Baud rate 115200 - clock 48MHz -> BAUD value-63018 */
 	uart_basic_init(BOOT_USART_MODULE, 63018, BOOT_USART_PAD_SETTINGS);
@@ -124,7 +68,7 @@ void serial_open(void)
 /**
  * \brief Close communication line
  */
-void serial_close(void)
+void samba_serial_close(void)
 {
 	uart_disable(BOOT_USART_MODULE);
 }
@@ -137,13 +81,13 @@ void serial_close(void)
  *
  * \return \c 1 if function was successfully done, otherwise \c 0.
  */
-int serial_putc(int value)
+int samba_serial_putc(int value)
 {
 	uart_write_byte(BOOT_USART_MODULE, (uint8_t)value);
 	return 1;
 }
 
-int serial_getc(void)
+int samba_serial_getc(void)
 {
 	uint16_t retval;
 	//Wait until input buffer is filled
@@ -154,7 +98,7 @@ int serial_getc(void)
 
 }
 
-int serial_sharp_received(void)
+int samba_serial_sharp_received(void)
 {
 	if (serial_is_rx_ready())
   {
@@ -164,12 +108,12 @@ int serial_sharp_received(void)
 	return (false);
 }
 
-bool serial_is_rx_ready(void)
+bool samba_serial_is_rx_ready(void)
 {
 	return (BOOT_USART_MODULE->USART.INTFLAG.reg & SERCOM_USART_INTFLAG_RXC);
 }
 
-int serial_readc(void)
+int samba_serial_readc(void)
 {
 	int retval;
 	retval = buffer_rx_usart[idx_rx_read];
@@ -178,7 +122,7 @@ int serial_readc(void)
 }
 
 //Send given data (polling)
-uint32_t serial_putdata(void const* data, uint32_t length)
+uint32_t samba_serial_putdata(void const* data, uint32_t length)
 {
 	uint32_t i;
 	uint8_t* ptrdata;
@@ -192,7 +136,7 @@ uint32_t serial_putdata(void const* data, uint32_t length)
 }
 
 //Get data from comm. device
-uint32_t serial_getdata(void* data, uint32_t length)
+uint32_t samba_serial_getdata(void* data, uint32_t length)
 {
 	uint8_t* ptrdata;
 	ptrdata = (uint8_t*) data;
@@ -200,7 +144,7 @@ uint32_t serial_getdata(void* data, uint32_t length)
 	return (1);
 }
 
-static const uint16_t crc16Table[256]=
+static const uint16_t samba_serial_crc16Table[256]=
 {
 	0x0000,0x1021,0x2042,0x3063,0x4084,0x50a5,0x60c6,0x70e7,
 	0x8108,0x9129,0xa14a,0xb16b,0xc18c,0xd1ad,0xe1ce,0xf1ef,
@@ -239,15 +183,15 @@ static const uint16_t crc16Table[256]=
 //*----------------------------------------------------------------------------
 //* \brief Compute the CRC
 //*----------------------------------------------------------------------------
-unsigned short serial_add_crc(char ptr, unsigned short crc)
+unsigned short samba_serial_add_crc(char ptr, unsigned short crc)
 {
-	return (crc << 8) ^ crc16Table[((crc >> 8) ^ ptr) & 0xff];
+	return (crc << 8) ^ samba_serial_crc16Table[((crc >> 8) ^ ptr) & 0xff];
 }
 
 //*----------------------------------------------------------------------------
 //* \brief
 //*----------------------------------------------------------------------------
-static uint16_t getbytes(uint8_t *ptr_data, uint16_t length)
+static uint16_t samba_serial_getbytes(uint8_t *ptr_data, uint16_t length)
 {
 	uint16_t crc = 0;
 	uint16_t cpt;
@@ -274,7 +218,7 @@ static uint16_t getbytes(uint8_t *ptr_data, uint16_t length)
 //*----------------------------------------------------------------------------
 //* \brief Used by Xup to send packets.
 //*----------------------------------------------------------------------------
-static int putPacket(uint8_t *tmppkt, uint8_t sno)
+static int samba_serial_putPacket(uint8_t *tmppkt, uint8_t sno)
 {
 	uint32_t i;
 	uint16_t chksm;
@@ -297,17 +241,17 @@ static int putPacket(uint8_t *tmppkt, uint8_t sno)
     else
 			data = 0x00;
 
-		serial_putc(data);
+		samba_serial_putc(data);
 
 		//chksm = (chksm<<8) ^ xcrc16tab[(chksm>>8)^data];
-		chksm = serial_add_crc(data, chksm);
+		chksm = samba_serial_add_crc(data, chksm);
 	}
 
 	/* An "endian independent way to extract the CRC bytes. */
-	serial_putc((uint8_t) (chksm >> 8));
-	serial_putc((uint8_t) chksm);
+	samba_serial_putc((uint8_t) (chksm >> 8));
+	samba_serial_putc((uint8_t) chksm);
 
-	return (serial_getc()); /* Wait for ack */
+	return (samba_serial_getc()); /* Wait for ack */
 }
 
 //*----------------------------------------------------------------------------
@@ -339,11 +283,11 @@ uint32_t serial_putdata_xmd(void const* data, uint32_t length)
 	/* Wait to receive a NAK or 'C' from receiver. */
 	done = 0;
 	while (!done) {
-		c = (uint8_t) serial_getc();
+		c = (uint8_t) samba_serial_getc();
 		if (error_timeout)
-    { // Test for timeout in serial_getc
+    { // Test for timeout in samba_serial_getc
 			error_timeout = 0;
-			c = (uint8_t) serial_getc();
+			c = (uint8_t) samba_serial_getc();
 			if (error_timeout)
       {
 				error_timeout = 0;
@@ -371,7 +315,7 @@ uint32_t serial_putdata_xmd(void const* data, uint32_t length)
 	sno = 1;
 	while (!done)
   {
-		c = (uint8_t) putPacket((uint8_t *) ptr_data, sno);
+		c = (uint8_t) samba_serial_putPacket((uint8_t *) ptr_data, sno);
 		if (error_timeout)
     { // Test for timeout in serial_getc
 			error_timeout = 0;
@@ -399,8 +343,8 @@ uint32_t serial_putdata_xmd(void const* data, uint32_t length)
 
 		if (!length)
     {
-			serial_putc(EOT);
-			serial_getc(); /* Flush the ACK */
+			samba_serial_putc(EOT);
+			samba_serial_getc(); /* Flush the ACK */
 			break;
 		}
 		// ("!");
@@ -415,30 +359,30 @@ uint32_t serial_putdata_xmd(void const* data, uint32_t length)
 /*----------------------------------------------------------------------------
  * \brief Used by serial_getdata_xmd to retrieve packets.
  */
-static uint8_t getPacket(uint8_t *ptr_data, uint8_t sno)
+static uint8_t samba_serial_getPacket(uint8_t *ptr_data, uint8_t sno)
 {
 	uint8_t seq[2];
 	uint16_t crc, xcrc;
 
-	getbytes(seq, 2);
-	xcrc = getbytes(ptr_data, PKTLEN_128);
+	samba_serial_getbytes(seq, 2);
+	xcrc = samba_serial_getbytes(ptr_data, PKTLEN_128);
 	if (error_timeout)
 		return (false);
 
 	/* An "endian independent way to combine the CRC bytes. */
-	crc = (uint16_t) serial_getc() << 8;
-	crc += (uint16_t) serial_getc();
+	crc = (uint16_t) samba_serial_getc() << 8;
+	crc += (uint16_t) samba_serial_getc();
 
 	if (error_timeout == 1)
 		return (false);
 
 	if ((crc != xcrc) || (seq[0] != sno) || (seq[1] != (uint8_t) (~sno)))
   {
-		serial_putc(CAN);
+		samba_serial_putc(CAN);
 		return (false);
 	}
 
-	serial_putc(ACK);
+	samba_serial_putc(ACK);
 	return (true);
 }
 
@@ -447,7 +391,7 @@ static uint8_t getPacket(uint8_t *ptr_data, uint8_t sno)
 //*        an download).
 //*----------------------------------------------------------------------------
 //Get data from comm. device using xmodem (if necessary)
-uint32_t serial_getdata_xmd(void* data, uint32_t length)
+uint32_t samba_serial_getdata_xmd(void* data, uint32_t length)
 {
 	uint32_t timeout;
 	char c;
@@ -474,9 +418,9 @@ uint32_t serial_getdata_xmd(void* data, uint32_t length)
 	// ("Xdown");
 	while (1)
   {
-		serial_putc('C');
+		samba_serial_putc('C');
 		timeout = loops_per_second;
-		while (!(serial_is_rx_ready()) && timeout)
+		while (!(samba_serial_is_rx_ready()) && timeout)
 			timeout--;
 		if (timeout)
 			break;
@@ -490,9 +434,9 @@ uint32_t serial_getdata_xmd(void* data, uint32_t length)
 	// ("Got response");
 	while (b_run != false)
   {
-		c = (char) serial_getc();
+		c = (char) samba_serial_getc();
 		if (error_timeout)
-    { // Test for timeout in serial_getc
+    { // Test for timeout in samba_serial_getc
 			error_timeout = 0;
 			return (0);
 //            return (-1);
@@ -503,7 +447,7 @@ uint32_t serial_getdata_xmd(void* data, uint32_t length)
         // ("O");
         b_run = getPacket(ptr_data, sno);
         if (error_timeout)
-        { // Test for timeout in serial_getc
+        { // Test for timeout in samba_serial_getc
           error_timeout = 0;
           return (0);
   //                return (-1);
@@ -516,7 +460,7 @@ uint32_t serial_getdata_xmd(void* data, uint32_t length)
         }
 			break;
       case EOT: // ("E");
-        serial_putc(ACK);
+        samba_serial_putc(ACK);
         b_run = false;
 			break;
       case CAN: // ("C");
