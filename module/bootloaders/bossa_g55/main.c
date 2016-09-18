@@ -33,7 +33,7 @@ extern void board_init(void);
 volatile uint32_t* pulSketch_Start_Address;
 #endif
 
-static volatile bool main_b_cdc_enable = false;
+static volatile uint32_t ul_usb_cdc_enabled = 0;
 
 /**
  * \brief Check the application startup condition
@@ -43,37 +43,6 @@ static void check_start_application(void)
 {
 //  LED_init();
 //  LED_off();
-
-#if defined(BOOT_DOUBLE_TAP_ADDRESS)
-  #define DOUBLE_TAP_MAGIC 0x07738135
-  if (PM->RCAUSE.bit.POR)
-  {
-    /* On power-on initialize double-tap */
-    BOOT_DOUBLE_TAP_DATA = 0;
-  }
-  else
-  {
-    if (BOOT_DOUBLE_TAP_DATA == DOUBLE_TAP_MAGIC)
-    {
-      /* Second tap, stay in bootloader */
-      BOOT_DOUBLE_TAP_DATA = 0;
-      return;
-    }
-
-    /* First tap */
-    BOOT_DOUBLE_TAP_DATA = DOUBLE_TAP_MAGIC;
-
-    /* Wait 0.5sec to see if the user tap reset again.
-     * The loop value is based on SAMD21 default 1MHz clock @ reset.
-     */
-    for (uint32_t i=0; i<125000; i++) /* 500ms */
-      /* force compiler to not optimize this... */
-      __asm__ __volatile__("");
-
-    /* Timeout happened, continue boot... */
-    BOOT_DOUBLE_TAP_DATA = 0;
-  }
-#endif
 
 #if (!defined DEBUG) || ((defined DEBUG) && (DEBUG == 0))
 uint32_t* pulSketch_Start_Address;
@@ -108,17 +77,14 @@ uint32_t* pulSketch_Start_Address;
     return;
   }
 
-/*
 #if defined(BOOT_LOAD_PIN)
-  volatile PortGroup *boot_port = (volatile PortGroup *)(&(PORT->Group[BOOT_LOAD_PIN / 32]));
   volatile bool boot_en;
 
   // Enable the input mode in Boot GPIO Pin
-  boot_port->DIRCLR.reg = BOOT_PIN_MASK;
-  boot_port->PINCFG[BOOT_LOAD_PIN & 0x1F].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-  boot_port->OUTSET.reg = BOOT_PIN_MASK;
+  PMC->PMC_PCER0=1<<BOOT_LOAD_PIN_PORT_ID;
+  BOOT_LOAD_PIN_PORT->PIO_ODR = BOOT_PIN_MASK;
   // Read the BOOT_LOAD_PIN status
-  boot_en = (boot_port->IN.reg) & BOOT_PIN_MASK;
+  boot_en = (USRBP1_PIO->PIO_PDSR & BOOT_PIN_MASK) == 0;
 
   // Check the bootloader enable condition
   if (!boot_en)
@@ -127,7 +93,6 @@ uint32_t* pulSketch_Start_Address;
     return;
   }
 #endif
-*/
 
 //  LED_on();
 
@@ -140,14 +105,6 @@ uint32_t* pulSketch_Start_Address;
   /* Jump to application Reset Handler in the application */
   asm("bx %0"::"r"(*pulSketch_Start_Address));
 }
-
-#if DEBUG_ENABLE
-#	define DEBUG_PIN_HIGH 	port_pin_set_output_level(BOOT_LED, 1)
-#	define DEBUG_PIN_LOW 	port_pin_set_output_level(BOOT_LED, 0)
-#else
-#	define DEBUG_PIN_HIGH 	do{}while(0)
-#	define DEBUG_PIN_LOW 	do{}while(0)
-#endif
 
 /**
  *  \brief SAMD21 SAM-BA Main loop.
@@ -185,11 +142,11 @@ int main(void)
 #if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
     if (pCdc->IsConfigured(pCdc) != 0)
     {
-      main_b_cdc_enable = true;
+      ul_usb_cdc_enabled = 1;
     }
 
     /* Check if a USB enumeration has succeeded and if comm port has been opened */
-    if (main_b_cdc_enable)
+    if (ul_usb_cdc_enabled == 1)
     {
       sam_ba_monitor_init(SAM_BA_INTERFACE_USBCDC);
       /* SAM-BA on USB loop */
@@ -202,7 +159,7 @@ int main(void)
 
 #if SAM_BA_INTERFACE == SAM_BA_UART_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
     /* Check if a '#' has been received */
-    if (!main_b_cdc_enable && serial_sharp_received())
+    if ((ul_usb_cdc_enabled == 0) && serial_sharp_received())
     {
       sam_ba_monitor_init(SAM_BA_INTERFACE_USART);
       /* SAM-BA on Serial loop */

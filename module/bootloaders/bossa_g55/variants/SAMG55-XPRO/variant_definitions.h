@@ -21,34 +21,44 @@
 #ifndef _VARIANT_DEFINITIONS_H_
 #define _VARIANT_DEFINITIONS_H_
 
-/*
- * If BOOT_LOAD_PIN is defined the bootloader is started if the selected
- * pin is tied LOW.
- */
-//#define BOOT_LOAD_PIN                     PIN_PA21 // Pin 7
-//#define BOOT_LOAD_PIN                     PIN_PA15 // Pin 5
-#define BOOT_PIN_MASK                     (1U << (BOOT_LOAD_PIN & 0x1f))
-
-#define CPU_FREQUENCY                     (120000000ul)
-
-#define BOOT_USART_MODULE                 USART0
-
 /* Frequency of the board main oscillator */
-#define VARIANT_MAINOSC	                  (8000000ul)
+#define BOARD_MAINOSC                             (8000000ul)
+#define BOARD_CPU_FREQUENCY                       (120000000ul)
 
-/* Master clock frequency */
-#define VARIANT_MCK			                  CPU_FREQUENCY
+/*
+ * The bootloader is started if the selected pin is tied LOW.
+ */
+#define BOOT_LOAD_PIN                             PIO_PA2 // GPIO port A Pin 2
+#define BOOT_LOAD_PIN_PORT                        PIOA // GPIO port A
+#define BOOT_LOAD_PIN_PORT_ID                     ID_IOA // GPIO port A ID for input clock
+#define BOOT_LOAD_PIN_MASK                        (1U << (BOOT_LOAD_PIN & 0x1f))
 
 /*
  * LEDs definitions
  */
-#define BOARD_LED_PORT                    (0)
-#define BOARD_LED_PIN                     (17)
+#define BOARD_LED_PORT                            (0)
+#define BOARD_LED_PIN                             (17)
 
-#define BOARD_LEDRX_PORT                  (1)
-#define BOARD_LEDRX_PIN                   (3)
+#define BOARD_LEDRX_PORT                          (1)
+#define BOARD_LEDRX_PIN                           (3)
 
-#define BOARD_LEDTX_PORT                  (0)
-#define BOARD_LEDTX_PIN                   (27)
+#define BOARD_LEDTX_PORT                          (0)
+#define BOARD_LEDTX_PIN                           (27)
+
+/*
+ * Serial definitions
+ */
+#define BOOT_USART_MODULE                         USART0
+
+/*
+ * USB definitions
+ */
+#define BOARD_USB_EP_CTRL                         (0u)
+#define BOARD_USB_EP_CDC_OUT                      (2u)
+#define BOARD_USB_EP_CDC_OUT_SIZE                 (0x40u)
+#define BOARD_USB_EP_CDC_IN                       (1u)
+#define BOARD_USB_EP_CDC_IN_SIZE                  (0x40u)
+#define BOARD_USB_EP_CDC_COMM                     (3u)
+#define BOARD_USB_EP_MAX                          (4u)
 
 #endif // _VARIANT_DEFINITIONS_H_
