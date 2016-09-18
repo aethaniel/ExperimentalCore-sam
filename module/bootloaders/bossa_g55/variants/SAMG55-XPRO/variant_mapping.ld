@@ -66,12 +66,12 @@ ENTRY(Reset_Handler)
 
 SECTIONS
 {
-  . = ORIGIN(FLASH);
+  . = ORIGIN(FLASH_BL);
 
   .vectors :
   {
     KEEP(*(.isr_vector))
-  } > FLASH
+  } > FLASH_BL
 
   .text :
   {

@@ -19,8 +19,10 @@
 
 #include <stdint.h>
 #include <string.h>
+#include "variant_definitions.h"
+#include "misc.h"
 #include "sam_ba_usb.h"
-#include "board_driver_usb.h"
+#include "variant_driver_usb.h"
 #include "sam_ba_cdc.h"
 
 /* This data array will be copied into SRAM as its length is inferior to 64 bytes,
@@ -137,7 +139,7 @@ char cfgDescriptor[] =
   0x05,   // bDescriptorType
   0x81,   // bEndpointAddress, Endpoint 01 - IN
   0x02,   // bmAttributes      BULK
-  USB_EP_IN_SIZE,   // wMaxPacketSize
+  BOARD_USB_EP_CDC_IN_SIZE,   // wMaxPacketSize
   0x00,
   0x00,   // bInterval
 
@@ -146,17 +148,17 @@ char cfgDescriptor[] =
   0x05,   // bDescriptorType
   0x02,   // bEndpointAddress, Endpoint 02 - OUT
   0x02,   // bmAttributes      BULK
-  USB_EP_OUT_SIZE,   // wMaxPacketSize
+  BOARD_USB_EP_CDC_OUT_SIZE,   // wMaxPacketSize
   0x00,
   0x00    // bInterval
 };
 
 #ifndef STRING_MANUFACTURER
-#  define STRING_MANUFACTURER "Arduino LLC"
+#  define STRING_MANUFACTURER "Aethaniel"
 #endif
 
 #ifndef STRING_PRODUCT
-#  define STRING_PRODUCT "Arduino Zero"
+#  define STRING_PRODUCT "Bootloader"
 #endif
 
 USB_CDC sam_ba_cdc;
@@ -166,14 +168,15 @@ USB_CDC sam_ba_cdc;
  */
 void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 {
-  UsbDev *pUsb = pCdc->pUsb;
+  USB_DEVICE *pUsb = pCdc->pUsb;
   static volatile uint8_t bmRequestType, bRequest, dir;
   static volatile uint16_t wValue, wIndex, wLength, wStatus;
 
   /* Clear the Received Setup flag */
-  pUsb->DEVICE.DeviceEndpoint[0].EPINTFLAG.bit.RXSTP = true;
+// TODO G55 pUsb->DEVICE.DeviceEndpoint[0].EPINTFLAG.bit.RXSTP = true;
 
   /* Read the USB request parameters */
+/* TODO G55
   bmRequestType = udd_ep_out_cache_buffer[0][0];
   bRequest      = udd_ep_out_cache_buffer[0][1];
   wValue        = (udd_ep_out_cache_buffer[0][2] & 0xFF);
@@ -182,9 +185,10 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
   wIndex       |= (udd_ep_out_cache_buffer[0][5] << 8);
   wLength       = (udd_ep_out_cache_buffer[0][6] & 0xFF);
   wLength      |= (udd_ep_out_cache_buffer[0][7] << 8);
+*/
 
   /* Clear the Bank 0 ready flag on Control OUT */
-  pUsb->DEVICE.DeviceEndpoint[0].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSCLR_BK0RDY;
+// TODO G55 pUsb->DEVICE.DeviceEndpoint[0].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSCLR_BK0RDY;
 
   /* Handle supported standard device request Cf Table 9-3 in USB specification Rev 1.1 */
   switch ((bRequest << 8) | bmRequestType)
@@ -193,14 +197,14 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
       if (wValue>>8 == STD_GET_DESCRIPTOR_DEVICE)
       {
         /* Return Device Descriptor */
-        USB_Write(pCdc->pUsb, devDescriptor, SAM_BA_MIN(sizeof(devDescriptor), wLength), USB_EP_CTRL);
+        USB_Write(pCdc->pUsb, devDescriptor, min_u32(sizeof(devDescriptor), wLength), BOARD_USB_EP_CTRL);
       }
       else
       {
         if (wValue>>8 == STD_GET_DESCRIPTOR_CONFIGURATION)
         {
           /* Return Configuration Descriptor */
-          USB_Write(pCdc->pUsb, cfgDescriptor, SAM_BA_MIN(sizeof(cfgDescriptor), wLength), USB_EP_CTRL);
+          USB_Write(pCdc->pUsb, cfgDescriptor, min_u32(sizeof(cfgDescriptor), wLength), BOARD_USB_EP_CTRL);
         }
         else
         {
@@ -212,7 +216,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
               case STRING_INDEX_LANGUAGES:
                 uint16_t STRING_LANGUAGE[2] = { (STD_GET_DESCRIPTOR_STRING<<8) | 4, 0x0409 };
 
-                USB_Write(pCdc->pUsb, (const char*)STRING_LANGUAGE, SAM_BA_MIN(sizeof(STRING_LANGUAGE), wLength), USB_EP_CTRL);
+                USB_Write(pCdc->pUsb, (const char*)STRING_LANGUAGE, min_u32(sizeof(STRING_LANGUAGE), wLength), BOARD_USB_EP_CTRL);
               break;
 
               case STRING_INDEX_MANUFACTURER:
@@ -224,7 +228,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
               break;
               default:
                 /* Stall the request */
-                USB_SendStall(pUsb, true);
+                USB_SendStall(pUsb);
               break;
             }
           }
@@ -232,7 +236,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 #endif // 0
           {
             /* Stall the request */
-            USB_SendStall(pUsb, true);
+            USB_SendStall(pUsb);
           }
         }
       }
@@ -258,17 +262,17 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 
     case STD_GET_CONFIGURATION:
       /* Return current configuration value */
-      USB_Write(pCdc->pUsb, (char *) &(pCdc->currentConfiguration), sizeof(pCdc->currentConfiguration), USB_EP_CTRL);
+      USB_Write(pCdc->pUsb, (char *) &(pCdc->currentConfiguration), sizeof(pCdc->currentConfiguration), BOARD_USB_EP_CTRL);
     break;
 
     case STD_GET_STATUS_ZERO:
       wStatus = 0;
-      USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), USB_EP_CTRL);
+      USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), BOARD_USB_EP_CTRL);
     break;
 
     case STD_GET_STATUS_INTERFACE:
       wStatus = 0;
-      USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), USB_EP_CTRL);
+      USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), BOARD_USB_EP_CTRL);
     break;
 
     case STD_GET_STATUS_ENDPOINT:
@@ -279,27 +283,25 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
       {
         if (dir)
         {
-          //wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.reg & USB_DEVICE_EPSTATUSSET_STALLRQ1) ? 1 : 0;
-          wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<1)) ? 1 : 0;
+// TODO G55          wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<1)) ? 1 : 0;
         }
         else
         {
-          //wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.reg & USB_DEVICE_EPSTATUSSET_STALLRQ0) ? 1 : 0;
-          wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<0)) ? 1 : 0;
+// TODO G55          wStatus = (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<0)) ? 1 : 0;
         }
         /* Return current status of endpoint */
-        USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), USB_EP_CTRL);
+        USB_Write(pCdc->pUsb, (char *) &wStatus, sizeof(wStatus), BOARD_USB_EP_CTRL);
       }
       else
       {
         /* Stall the request */
-        USB_SendStall(pUsb, true);
+        USB_SendStall(pUsb);
       }
     break;
 
     case STD_SET_FEATURE_ZERO:
       /* Stall the request */
-      USB_SendStall(pUsb, true);
+      USB_SendStall(pUsb);
     break;
 
     case STD_SET_FEATURE_INTERFACE:
@@ -315,13 +317,11 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
         /* Set STALL request for the endpoint */
         if (dir)
         {
-          //pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.reg = USB_DEVICE_EPSTATUSSET_STALLRQ1;
-          pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.bit.STALLRQ = (1<<1);
+// TODO G55          pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.bit.STALLRQ = (1<<1);
         }
         else
         {
-          //pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.reg = USB_DEVICE_EPSTATUSSET_STALLRQ0;
-          pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.bit.STALLRQ = (1<<0);
+// TODO G55          pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSSET.bit.STALLRQ = (1<<0);
         }
 
         /* Send ZLP */
@@ -330,14 +330,14 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
       else
       {
         /* Stall the request */
-        USB_SendStall(pUsb, true);
+        USB_SendStall(pUsb);
       }
     break;
 
     case STD_SET_INTERFACE:
     case STD_CLEAR_FEATURE_ZERO:
       /* Stall the request */
-      USB_SendStall(pUsb, true);
+      USB_SendStall(pUsb);
     break;
 
     case STD_CLEAR_FEATURE_INTERFACE:
@@ -353,6 +353,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
       {
         if (dir)
         {
+/* TODO G55
           if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<1))
           {
             // Remove stall request
@@ -364,9 +365,11 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
               pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSSET_DTGLIN;
             }
           }
+*/
         }
         else
         {
+/* TODO G55
           if (pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUS.bit.STALLRQ & (1<<0))
           {
             // Remove stall request
@@ -378,13 +381,14 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
               pUsb->DEVICE.DeviceEndpoint[wIndex].EPSTATUSCLR.reg = USB_DEVICE_EPSTATUSSET_DTGLOUT;
             }
           }
+*/
         }
         /* Send ZLP */
         USB_SendZlp(pUsb);
       }
       else
       {
-        USB_SendStall(pUsb, true);
+        USB_SendStall(pUsb);
       }
     break;
 
@@ -396,7 +400,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 
     case GET_LINE_CODING:
       /* Send current line coding */
-      USB_Write(pCdc->pUsb, (char *) &line_coding, SAM_BA_MIN(sizeof(usb_cdc_line_coding_t), wLength), USB_EP_CTRL);
+      USB_Write(pCdc->pUsb, (char *) &line_coding, min_u32(sizeof(usb_cdc_line_coding_t), wLength), BOARD_USB_EP_CTRL);
     break;
 
     case SET_CONTROL_LINE_STATE:
@@ -408,7 +412,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
 
     default:
       /* Stall the request */
-      USB_SendStall(pUsb, true);
+      USB_SendStall(pUsb);
     break;
   }
 }
@@ -418,7 +422,7 @@ void sam_ba_usb_CDC_Enumerate(P_USB_CDC pCdc)
  */
 P_USB_CDC usb_init(void)
 {
-  sam_ba_cdc.pUsb = USB;
+  sam_ba_cdc.pUsb = BOARD_USB_DEVICE_PORT;
 
   /* Initialize USB */
   USB_Init();
@@ -449,6 +453,6 @@ uint32_t USB_SendString(Usb *pUsb, const char* ascii_string, uint8_t length, uin
   string_descriptor[0] = (resulting_length<<1);
   string_descriptor[1] = STD_GET_DESCRIPTOR_STRING;
 
-  return USB_Write(pUsb, (const char*)unicode_string, resulting_length, USB_EP_CTRL);
+  return USB_Write(pUsb, (const char*)unicode_string, resulting_length, BOARD_USB_EP_CTRL);
 }
 #endif // 0

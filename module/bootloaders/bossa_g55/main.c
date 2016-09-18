@@ -21,8 +21,8 @@
 #include <sam.h>
 #include "sam_ba_monitor.h"
 #include "sam_ba_serial.h"
-#include "board_definitions.h"
-#include "board_driver_led.h"
+#include "variant_definitions.h"
+#include "variant_driver_led.h"
 #include "sam_ba_usb.h"
 #include "sam_ba_cdc.h"
 
@@ -80,11 +80,8 @@ uint32_t* pulSketch_Start_Address;
 #if defined(BOOT_LOAD_PIN)
   volatile bool boot_en;
 
-  // Enable the input mode in Boot GPIO Pin
-  PMC->PMC_PCER0=1<<BOOT_LOAD_PIN_PORT_ID;
-  BOOT_LOAD_PIN_PORT->PIO_ODR = BOOT_PIN_MASK;
   // Read the BOOT_LOAD_PIN status
-  boot_en = (USRBP1_PIO->PIO_PDSR & BOOT_PIN_MASK) == 0;
+  boot_en = (BOOT_LOAD_PIN_PORT->PIO_PDSR & BOOT_LOAD_PIN_MASK) == 0;
 
   // Check the bootloader enable condition
   if (!boot_en)
@@ -112,34 +109,31 @@ uint32_t* pulSketch_Start_Address;
  */
 int main(void)
 {
-#if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USB_CDC
   P_USB_CDC pCdc;
-#endif
-  DEBUG_PIN_HIGH;
+#endif // BOARD_HAS_USB_CDC
 
   /* Jump in application if condition is satisfied */
   check_start_application();
 
   /* We have determined we should stay in the monitor. */
   /* System initialization */
-  board_init();
+  variant_init();
   __enable_irq();
 
-#if SAM_BA_INTERFACE == SAM_BA_UART_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USART
   /* UART is enabled in all cases */
-  serial_open();
-#endif
+  samba_serial_open();
+#endif // BOARD_HAS_USART
 
-#if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USB_CDC
   pCdc = usb_init();
-#endif
-
-  DEBUG_PIN_LOW;
+#endif // BOARD_HAS_USB_CDC
 
   /* Wait for a complete enum on usb or a '#' char on serial line */
   while (1)
   {
-#if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USB_CDC
     if (pCdc->IsConfigured(pCdc) != 0)
     {
       ul_usb_cdc_enabled = 1;
@@ -155,11 +149,11 @@ int main(void)
         sam_ba_monitor_run();
       }
     }
-#endif
+#endif // BOARD_HAS_USB_CDC
 
-#if SAM_BA_INTERFACE == SAM_BA_UART_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USART
     /* Check if a '#' has been received */
-    if ((ul_usb_cdc_enabled == 0) && serial_sharp_received())
+    if ((ul_usb_cdc_enabled == 0) && samba_serial_sharp_received())
     {
       sam_ba_monitor_init(SAM_BA_INTERFACE_USART);
       /* SAM-BA on Serial loop */
@@ -168,6 +162,6 @@ int main(void)
         sam_ba_monitor_run();
       }
     }
-#endif
+#endif // BOARD_HAS_USART
   }
 }

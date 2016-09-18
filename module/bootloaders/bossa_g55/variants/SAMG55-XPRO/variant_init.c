@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <sam.h>
+#include "sam.h"
 #include "variant_definitions.h"
 
 /**
@@ -31,5 +31,7 @@
 
 void variant_init(void)
 {
-// TODOG55
+  // Enable the input mode in Boot GPIO Pin
+  PMC->PMC_PCER0=1<<BOOT_LOAD_PIN_PORT_ID;
+  BOOT_LOAD_PIN_PORT->PIO_ODR = BOOT_LOAD_PIN_MASK;
 }

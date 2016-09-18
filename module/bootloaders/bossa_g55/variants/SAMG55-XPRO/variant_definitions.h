@@ -21,6 +21,8 @@
 #ifndef _VARIANT_DEFINITIONS_H_
 #define _VARIANT_DEFINITIONS_H_
 
+#include "sam.h"
+
 /* Frequency of the board main oscillator */
 #define BOARD_MAINOSC                             (8000000ul)
 #define BOARD_CPU_FREQUENCY                       (120000000ul)
@@ -30,7 +32,7 @@
  */
 #define BOOT_LOAD_PIN                             PIO_PA2 // GPIO port A Pin 2
 #define BOOT_LOAD_PIN_PORT                        PIOA // GPIO port A
-#define BOOT_LOAD_PIN_PORT_ID                     ID_IOA // GPIO port A ID for input clock
+#define BOOT_LOAD_PIN_PORT_ID                     ID_PIOA // GPIO port A ID for input clock
 #define BOOT_LOAD_PIN_MASK                        (1U << (BOOT_LOAD_PIN & 0x1f))
 
 /*
@@ -48,11 +50,16 @@
 /*
  * Serial definitions
  */
-#define BOOT_USART_MODULE                         USART0
+#define BOARD_HAS_USART                           (1)
+#define BOARD_USART_PORT                          USART0
 
 /*
  * USB definitions
  */
+#define BOARD_HAS_USB_DEVICE                      (1)
+#define BOARD_HAS_USB_CDC                         (1)
+#define BOARD_USB_DEVICE_PORT                     USBDEV
+
 #define BOARD_USB_EP_CTRL                         (0u)
 #define BOARD_USB_EP_CDC_OUT                      (2u)
 #define BOARD_USB_EP_CDC_OUT_SIZE                 (0x40u)

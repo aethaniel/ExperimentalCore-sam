@@ -18,7 +18,7 @@
 */
 
 #include "sam_ba_cdc.h"
-#include "board_driver_usb.h"
+#include "variant_driver_usb.h"
 
 usb_cdc_line_coding_t line_coding=
 {
@@ -33,7 +33,7 @@ usb_cdc_line_coding_t line_coding=
 int cdc_putc(/*P_USB_CDC pCdc,*/ int value)
 {
   /* Send single byte on USB CDC */
-  USB_Write(pCdc->pUsb, (const char *)&value, 1, USB_EP_IN);
+  USB_Write(pCdc->pUsb, (const char *)&value, 1, BOARD_USB_EP_CDC_IN);
 
   return 1;
 }
@@ -55,13 +55,13 @@ bool cdc_is_rx_ready(/*P_USB_CDC pCdc*/void)
     return 0;
 
   /* Return transfer complete 0 flag status */
-  return (pCdc->pUsb->DEVICE.DeviceEndpoint[USB_EP_OUT].EPINTFLAG.bit.TRCPT & (1<<0));
+  return 0; // TODO G55 (pCdc->pUsb->DEVICE.DeviceEndpoint[BOARD_USB_EP_CDC_OUT].EPINTFLAG.bit.TRCPT & (1<<0));
 }
 
 uint32_t cdc_write_buf(/*P_USB_CDC pCdc,*/ void const* data, uint32_t length)
 {
   /* Send the specified number of bytes on USB CDC */
-  USB_Write(pCdc->pUsb, (const char *)data, length, USB_EP_IN);
+  USB_Write(pCdc->pUsb, (const char *)data, length, BOARD_USB_EP_CDC_IN);
   return length;
 }
 

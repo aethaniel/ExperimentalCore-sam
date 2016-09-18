@@ -70,12 +70,12 @@ uint32_t USB_Write(USB_DEVICE *pUsb, const char *pData, uint32_t length, uint8_t
   volatile uint32_t i = 0;
 
   // Send the first packet
-  cpt = min_u32(length, USB_EP_IN_SIZE);
+  cpt = min_u32(length, BOARD_USB_EP_CDC_IN_SIZE);
   length -= cpt;
 
-  while (cpt--) pUsb->USBDEV_FDR[USB_EP_IN] = *pData++;
+  while (cpt--) pUsb->USBDEV_FDR[BOARD_USB_EP_CDC_IN] = *pData++;
   {
-    pUsb->USBDEV_CSR[USB_EP_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
+    pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
   }
 
   while ( length )
@@ -84,39 +84,43 @@ uint32_t USB_Write(USB_DEVICE *pUsb, const char *pData, uint32_t length, uint8_t
     for (i = 0; i < 15; i++);
 
     // Fill the second bank
-    cpt = min_u32(length, USB_EP_IN_SIZE);
+    cpt = min_u32(length, BOARD_USB_EP_CDC_IN_SIZE);
     length -= cpt;
     while (cpt--)
     {
-      pUsb->USBDEV_FDR[USB_EP_IN] = *pData++;
+      pUsb->USBDEV_FDR[BOARD_USB_EP_CDC_IN] = *pData++;
     }
 
     // Wait for the the first bank to be sent
-    while ( !(pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP) )
+    while ( !(pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] & USBDEV_CSR_TXCOMP) )
     {
+/* TODO G55
       if ( !USB_IsConfigured(pCdc) )
       {
         return length;
       }
+*/
     }
-    pUsb->USBDEV_CSR[USB_EP_IN] &= ~(USBDEV_CSR_TXCOMP);
+    pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] &= ~(USBDEV_CSR_TXCOMP);
 
-    while (pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP);
+    while (pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] & USBDEV_CSR_TXCOMP);
 
-    pUsb->USBDEV_CSR[USB_EP_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
+    pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] |= USB_COMMON_CFG_BITS | USBDEV_CSR_TXPKTRDY;
   }
 
   // Wait for the end of transfer
-  while ( !(pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP) )
+  while ( !(pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] & USBDEV_CSR_TXCOMP) )
   {
+/* TODO G55
     if ( !USB_IsConfigured(pCdc) )
     {
       return length;
     }
+*/
   }
-  pUsb->USBDEV_CSR[USB_EP_IN] &= ~(USBDEV_CSR_TXCOMP);
+  pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] &= ~(USBDEV_CSR_TXCOMP);
 
-  while (pUsb->USBDEV_CSR[USB_EP_IN] & USBDEV_CSR_TXCOMP);
+  while (pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_IN] & USBDEV_CSR_TXCOMP);
 
   return length;
 }
@@ -132,19 +136,20 @@ uint32_t USB_Read(USB_DEVICE *pUsb, char *pData, uint32_t length)
 
   while (!ulBytesReceived)
   {
+/* TODO G55
     if ( !USB_IsConfigured(pCdc) )
     {
       break;
     }
-
-    if ( pUsb->USBDEV_CSR[USB_EP_OUT] & currentReceiveBank )
+*/
+    if ( pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_OUT] & currentReceiveBank )
     {
-      for ( ulPacketSize = MIN(pUsb->USBDEV_CSR[USB_EP_OUT] >> 16, length) ; ulPacketSize-- ; )
+      for ( ulPacketSize = min_u32(pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_OUT] >> 16, length) ; ulPacketSize-- ; )
       {
-        pData[ulBytesReceived++] = pUsb->USBDEV_FDR[USB_EP_OUT];
+        pData[ulBytesReceived++] = pUsb->USBDEV_FDR[BOARD_USB_EP_CDC_OUT];
       }
 
-      pUsb->USBDEV_CSR[USB_EP_OUT] &= ~(currentReceiveBank);
+      pUsb->USBDEV_CSR[BOARD_USB_EP_CDC_OUT] &= ~(currentReceiveBank);
 
       if ( currentReceiveBank == USBDEV_CSR_RX_DATA_BK0 )
       {
@@ -187,7 +192,7 @@ uint8_t USB_IsConfigured(P_USB_CDC pCdc)
     {
       // Reset current configuration value to 0
       pCdc->currentConfiguration = 0;
-      pCdc->GetSetInterface = 0;
+//      pCdc->GetSetInterface = 0;
       // reset all endpoints
       pUsb->USBDEV_RST_EP  = (uint32_t) -1;
       pUsb->USBDEV_RST_EP  = 0;
@@ -202,7 +207,7 @@ uint8_t USB_IsConfigured(P_USB_CDC pCdc)
     {
       if (isr & USBDEV_ISR_EP0INT)
       {
-        CDC_Enumerate(pCdc);
+// TODO G55        CDC_Enumerate(pCdc);
       }
       // else Nothing to do
     }

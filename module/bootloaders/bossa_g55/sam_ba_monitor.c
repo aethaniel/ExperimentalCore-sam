@@ -21,8 +21,8 @@
 #include <string.h>
 #include "sam_ba_monitor.h"
 #include "sam_ba_serial.h"
-#include "board_driver_serial.h"
-#include "board_driver_usb.h"
+#include "variant_driver_serial.h"
+#include "variant_driver_usb.h"
 #include "sam_ba_usb.h"
 #include "sam_ba_cdc.h"
 
@@ -48,21 +48,21 @@ typedef struct
   uint32_t (*getdata_xmd)(void* data, uint32_t length);
 } t_monitor_if;
 
-#if SAM_BA_INTERFACE == SAM_BA_UART_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USART
 /* Initialize structures with function pointers from supported interfaces */
 const t_monitor_if uart_if =
 {
-  .put_c =       serial_putc,
-  .get_c =       serial_getc,
-  .is_rx_ready = serial_is_rx_ready,
-  .putdata =     serial_putdata,
-  .getdata =     serial_getdata,
-  .putdata_xmd = serial_putdata_xmd,
-  .getdata_xmd = serial_getdata_xmd
+  .put_c =       samba_serial_putc,
+  .get_c =       samba_serial_getc,
+  .is_rx_ready = samba_serial_is_rx_ready,
+  .putdata =     samba_serial_putdata,
+  .getdata =     samba_serial_getdata,
+  .putdata_xmd = samba_serial_putdata_xmd,
+  .getdata_xmd = samba_serial_getdata_xmd
 };
-#endif
+#endif // BOARD_HAS_USART
 
-#if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USB_CDC
 //Please note that USB doesn't use Xmodem protocol, since USB already includes flow control and data verification
 //Data are simply forwarded without further coding.
 const t_monitor_if usbcdc_if =
@@ -75,31 +75,33 @@ const t_monitor_if usbcdc_if =
   .putdata_xmd =   cdc_write_buf,
   .getdata_xmd =   cdc_read_buf_xmd
 };
-#endif
+#endif // BOARD_HAS_USB_CDC
 
 /* The pointer to the interface object use by the monitor */
 t_monitor_if * ptr_monitor_if;
 
 /* b_terminal_mode mode (ascii) or hex mode */
-volatile bool b_terminal_mode = false;
-volatile bool b_sam_ba_interface_usart = false;
+static volatile bool b_terminal_mode = false;
+static volatile bool b_sam_ba_interface_usart = false;
+static volatile uint32_t sp;
 
 void sam_ba_monitor_init(uint8_t com_interface)
 {
-#if SAM_BA_INTERFACE == SAM_BA_UART_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#ifdef BOARD_HAS_USART
   //Selects the requested interface for future actions
   if (com_interface == SAM_BA_INTERFACE_USART)
   {
     ptr_monitor_if = (t_monitor_if*) &uart_if;
     b_sam_ba_interface_usart = true;
   }
-#endif
-#if SAM_BA_INTERFACE == SAM_BA_USBCDC_ONLY  ||  SAM_BA_INTERFACE == SAM_BA_BOTH_INTERFACES
+#endif // BOARD_HAS_USART
+
+#ifdef BOARD_HAS_USB_CDC
   if (com_interface == SAM_BA_INTERFACE_USBCDC)
   {
     ptr_monitor_if = (t_monitor_if*) &usbcdc_if;
   }
-#endif
+#endif // BOARD_HAS_USB_CDC
 }
 
 /**
@@ -148,7 +150,6 @@ void sam_ba_putdata_term(uint8_t* data, uint32_t length)
   return;
 }
 
-volatile uint32_t sp;
 void call_applet(uint32_t address)
 {
   uint32_t app_start_address;
@@ -325,11 +326,13 @@ static void sam_ba_monitor_loop(void)
 
         while (dst_addr < MAX_FLASH)
         {
+/* TODO G55
           // Execute "ER" Erase Row
           NVMCTRL->ADDR.reg = dst_addr / 2;
           NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_ER;
           while (NVMCTRL->INTFLAG.bit.READY == 0)
             ;
+*/
           dst_addr += PAGE_SIZE * 4; // Skip a ROW
         }
 
@@ -362,15 +365,17 @@ static void sam_ba_monitor_loop(void)
           uint32_t *dst_addr = (uint32_t*)ptr_data;
 
           // Set automatic page write
-          NVMCTRL->CTRLB.bit.MANW = 0;
+// TODO G55          NVMCTRL->CTRLB.bit.MANW = 0;
 
           // Do writes in pages
           while (size)
           {
+/* TODO G55
             // Execute "PBC" Page Buffer Clear
             NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_PBC;
             while (NVMCTRL->INTFLAG.bit.READY == 0)
               ;
+*/
 
             // Fill page buffer
             uint32_t i;
@@ -379,11 +384,13 @@ static void sam_ba_monitor_loop(void)
               dst_addr[i] = src_addr[i];
             }
 
+/* TODO G55
             // Execute "WP" Write Page
             //NVMCTRL->ADDR.reg = ((uint32_t)dst_addr) / 2;
             NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_WP;
             while (NVMCTRL->INTFLAG.bit.READY == 0)
               ;
+*/
 
             // Advance to next page
             dst_addr += i;
@@ -409,7 +416,7 @@ static void sam_ba_monitor_loop(void)
         uint16_t crc = 0;
         uint32_t i = 0;
         for (i=0; i<size; i++)
-          crc = serial_add_crc(*data++, crc);
+          crc = samba_serial_add_crc(*data++, crc);
 
         // Send response
         ptr_monitor_if->putdata("Z", 1);
@@ -458,10 +465,12 @@ static void sam_ba_monitor_loop(void)
  */
 void sam_ba_monitor_run(void)
 {
+/* TODO G55
   uint32_t pageSizes[] = { 8, 16, 32, 64, 128, 256, 512, 1024 };
   PAGE_SIZE = pageSizes[NVMCTRL->PARAM.bit.PSZ];
   PAGES = NVMCTRL->PARAM.bit.NVMP;
   MAX_FLASH = PAGE_SIZE * PAGES;
+*/
 
   ptr_data = NULL;
   command = 'z';

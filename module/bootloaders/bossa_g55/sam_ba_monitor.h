@@ -17,19 +17,10 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _MONITOR_SAM_BA_H_
-#define _MONITOR_SAM_BA_H_
+#ifndef _SAM_BA_MONITOR_H_
+#define _SAM_BA_MONITOR_H_
 
 #define SAM_BA_VERSION              "2.0"
-
-/* Enable the interfaces to save code size */
-#define SAM_BA_BOTH_INTERFACES      0
-#define SAM_BA_UART_ONLY            1
-#define SAM_BA_USBCDC_ONLY          2
-
-#ifndef SAM_BA_INTERFACE
-#define SAM_BA_INTERFACE    SAM_BA_BOTH_INTERFACES
-#endif
 
 /* Selects USB as the communication interface of the monitor */
 #define SAM_BA_INTERFACE_USBCDC     0
@@ -63,4 +54,4 @@ void sam_ba_putdata_term(uint8_t* data, uint32_t length);
  */
 void call_applet(uint32_t address);
 
-#endif // _MONITOR_SAM_BA_H_
+#endif // _SAM_BA_MONITOR_H_
