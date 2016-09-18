@@ -146,10 +146,10 @@ $(BUILD_PATH):
 print_info:
 	@echo ----------------------------------------------------------
 	@echo Compiling bootloader using $(VARIANT)
-	@echo BASE PATH = $(MODULE_PATH)
-	@echo GCC  PATH = $(ARM_GCC_PATH)
-	@echo VPATH     = $(VPATH)
-#	@echo OS        = $(OS)
+	@echo BASE PATH = "$(MODULE_PATH)"
+	@echo GCC  PATH = "$(ARM_GCC_PATH)"
+	@echo VPATH     = "$(VPATH)"
+	@echo OS        = $(OS)
 #	@echo SHELL     = $(SHELL)
 #	@echo TERM      = $(TERM)
 #	"$(CC)" -v
