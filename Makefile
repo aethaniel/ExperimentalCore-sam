@@ -20,6 +20,7 @@
 
 SHELL = /bin/sh
 
+.SUFFIXES:
 .SUFFIXES: .tar.bz2
 
 ROOT_PATH := .
