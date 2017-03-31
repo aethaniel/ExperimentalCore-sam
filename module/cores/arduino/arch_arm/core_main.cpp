@@ -20,7 +20,7 @@
 //#include <Arduino.h>
 #include "core_init.h"
 #include "core_delay.h"
-#include "core_watchdog.c"
+#include "core_watchdog.h"
 #if defined(USBCON)
 //#include ""
 #endif
