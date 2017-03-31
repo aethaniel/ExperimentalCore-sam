@@ -33,7 +33,7 @@
 #include "avr_compat/core_interrupt.h"
 
 #include "core_binary.h"
-#include "core_itoa.h"
+//#include "core_itoa.h"
 
 // Include board variant
 #include "variant.h" // includes "core_variant.h"
