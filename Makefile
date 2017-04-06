@@ -93,7 +93,7 @@ all: help print_info $(PRINT_INFO_TRAVIS)
 	@echo ----------------------------------------------------------
 	@echo  Build examples: $(EXAMPLES)
 	@echo    for variant: $(VARIANT_NAME)
-	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) all -C $(EXAMPLES_PATH)/$(example) ; )
+	@$(foreach example,$(EXAMPLES),echo ----------------------------------------------------------------------------------------;echo " Building example $(example)";echo ----------------------------------------------------------------------------------------;$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) all -C $(EXAMPLES_PATH)/$(example); )
 	@echo ----------------------------------------------------------
 
 clean:

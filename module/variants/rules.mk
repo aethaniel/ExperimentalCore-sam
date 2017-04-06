@@ -113,7 +113,8 @@ COMMON_FLAGS += --param max-inline-insns-single=500
 ifeq ($(DEBUG),0)
 COMMON_FLAGS += -Os
 else
-COMMON_FLAGS += -ggdb3 -O0
+COMMON_FLAGS += -gdwarf-2
+COMMON_FLAGS += -g3 -ggdb3 -Og
 COMMON_FLAGS += -Wformat=2
 endif
 
@@ -163,29 +164,29 @@ print_info:
 	@echo ---------------------------------------------------------------------------------------
 
 $(OUTPUT_FILE_PATH): $(OBJ_PATH) ../rules.mk ../sources.mk $(VARIANT_PATH)/Makefile $(AOBJS) $(COBJS) $(CPPOBJS)
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(AOBJS)
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(COBJS)
-	$(AR) -rv $(OUTPUT_FILE_PATH) $(CPPOBJS)
-	$(NM) $(OUTPUT_FILE_PATH) > $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
+	@$(AR) -rv $(OUTPUT_FILE_PATH) $(AOBJS)
+	@$(AR) -rv $(OUTPUT_FILE_PATH) $(COBJS)
+	@$(AR) -rv $(OUTPUT_FILE_PATH) $(CPPOBJS)
+	@$(NM) $(OUTPUT_FILE_PATH) > $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
 
 #|---------------------------------------------------------------------------------------|
 #| Compile or assemble                                                                   |
 #|---------------------------------------------------------------------------------------|
 $(AOBJS): $(OBJ_PATH)/%.o: %.s
 	@echo +++ Assembling [$(notdir $<)]
-	@$(AS) $(AFLAGS) $< -o $@
+	@$(AS) $(AFLAGS) $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 $(AOBJS): $(OBJ_PATH)/%.o: %.S
 	@echo +++ Assembling [$(notdir $<)]
-	@$(AS) $(AFLAGS) $< -o $@
+	@$(AS) $(AFLAGS) $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 $(COBJS): $(OBJ_PATH)/%.o: %.c
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 $(CPPOBJS): $(OBJ_PATH)/%.o: %.cpp
 	@echo +++ Compiling [$(notdir $<)]
-	@$(CC) $(CPPFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) -c $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 #|---------------------------------------------------------------------------------------|
 #| Output folder                                                                         |
@@ -204,40 +205,6 @@ clean:
 #-rm -f $(VARIANT_PATH)/$(OUTPUT_NAME)_symbols.txt
 
 #|---------------------------------------------------------------------------------------|
-#| Dependencies                                                                          |
-#|---------------------------------------------------------------------------------------|
-$(OBJ_PATH)/%.d: %.s $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d: %.S $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d: %.c $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(CFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d: %.cpp $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(CPPFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-#|---------------------------------------------------------------------------------------|
-#| Include dependencies, if existing                                                     |
-#| Little trick to avoid dependencies build for some rules when useless                  |
-#| CAUTION: this won't work as expected with 'make clean all'                            |
-#|---------------------------------------------------------------------------------------|
-DEP_EXCLUDE_RULES := clean print_info
-ifeq (,$(findstring $(MAKECMDGOALS), $(DEP_EXCLUDE_RULES)))
--include $(AOBJS:%.o=%.d)
--include $(COBJS:%.o=%.d)
--include $(CPPOBJS:%.o=%.d)
-endif
-
-
-#|---------------------------------------------------------------------------------------|
 #| Module packaging for Arduino IDE Board Manager                                        |
 #|---------------------------------------------------------------------------------------|
 packaging: $(OUTPUT_FILE_PATH)
-
-%.d:

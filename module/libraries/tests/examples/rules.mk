@@ -55,7 +55,8 @@ COMMON_FLAGS += -nostdlib --param max-inline-insns-single=500
 ifeq ($(DEBUG),0)
 COMMON_FLAGS += -Os
 else
-COMMON_FLAGS += -ggdb3 -O0
+COMMON_FLAGS += -gdwarf-2
+COMMON_FLAGS += -g3 -ggdb3 -Og
 COMMON_FLAGS += -Wformat=2
 endif
 
@@ -70,6 +71,8 @@ CPPFLAGS = $(COMMON_FLAGS) -std=gnu++11 -fno-rtti -fno-exceptions
 
 LDFLAGS = -mcpu=$(DEVICE_CORE) -mthumb $(LIB_PATH)
 LDFLAGS += -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align
+# we will use newlib nano to reduce footprint and nosys for default empty syscalls, include _sbrk used for new(), not used in Arduino usual context
+LDFLAGS += --specs=nano.specs --specs=nosys.specs
 #LDFLAGS += -nostartfiles
 #-std=c++11 --param max-inline-insns-single=100 -fno-rtti -fno-exceptions -fno-threadsafe-statics
 
@@ -110,31 +113,35 @@ print_info:
 	@echo ---------------------------------------------------------------------------------------
 
 $(OUTPUT_FILE_PATH).bin: $(OUTPUT_FILE_PATH).elf
-	$(OBJCOPY) -O binary $(OUTPUT_FILE_PATH).elf $(OUTPUT_FILE_PATH).bin
+	@$(OBJCOPY) -O binary $(OUTPUT_FILE_PATH).elf $(OUTPUT_FILE_PATH).bin
+	@$(OBJCOPY) -O ihex "$(OUTPUT_FILE_PATH).elf" "$(OUTPUT_FILE_PATH).hex"
 
 $(OUTPUT_FILE_PATH).elf: $(OBJ_PATH) $(VARIANT_LIB_PATH) $(PROJECT_PATH)/Makefile $(RESOURCES_LINKER) $(AOBJS) $(COBJS) $(CPPOBJS)
-	$(CC) $(LDFLAGS) "-T$(notdir $(RESOURCES_LINKER))" "-Wl,-Map,$(OUTPUT_FILE_PATH).map" --specs=nano.specs --specs=nosys.specs -o "$(OUTPUT_FILE_PATH).elf" -Wl,--start-group $(AOBJS) $(COBJS) $(CPPOBJS) -lm -lgcc -l$(VARIANT_NAME) -Wl,--end-group
-	$(NM) $(OUTPUT_FILE_PATH).elf >$(OUTPUT_FILE_PATH)_symbols.txt
-	$(SIZE) --format=sysv -t -x $(OUTPUT_FILE_PATH).elf
+	@$(CC) $(LDFLAGS) "-T$(notdir $(RESOURCES_LINKER))" "-Wl,-Map,$(OUTPUT_FILE_PATH).map" -o "$(OUTPUT_FILE_PATH).elf" -Wl,--start-group $(AOBJS) $(COBJS) $(CPPOBJS) -lm -lgcc -l$(VARIANT_NAME) -Wl,--end-group
+	@$(NM) $(OUTPUT_FILE_PATH).elf >$(OUTPUT_FILE_PATH)_symbols.txt
+#	$(SIZE) --format=sysv -t -x $(OUTPUT_FILE_PATH).elf
+	@$(SIZE) -d --format=berkeley $(OUTPUT_FILE_PATH).elf
+	@$(SIZE) -x --format=sysv $(OUTPUT_FILE_PATH).elf
+	@$(OBJDUMP) -h -S "$(OUTPUT_FILE_PATH).elf" > "$(basename $(OUTPUT_FILE_PATH)).lss"
 
 $(VARIANT_LIB_PATH):
 	@echo +++ Checking if library needs to be built [$(notdir $@)]
-	make --no-builtin-rules -C $(dir $(VARIANT_LIB_PATH)) DEBUG=$(DEBUG)
+	@make --no-builtin-rules -C $(dir $(VARIANT_LIB_PATH)) DEBUG=$(DEBUG)
 
 #|---------------------------------------------------------------------------------------|
-#| Compile or assemble                                                                  |
+#| Compile or assemble                                                                   |
 #|---------------------------------------------------------------------------------------|
 $(AOBJS): $(OBJ_PATH)/%.o: %.s $(OBJ_PATH)
 	@echo +++ Assembling [$(notdir $<)]
-	$(AS) $(AFLAGS) $< -o $@
+	@$(AS) $(AFLAGS) $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 $(COBJS): $(OBJ_PATH)/%.o: %.c $(OBJ_PATH)
 	@echo +++ Compiling [$(notdir $<)]
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 $(CPPOBJS): $(OBJ_PATH)/%.o: %.cpp $(OBJ_PATH)
 	@echo +++ Compiling [$(notdir $<)]
-	$(CC) $(CPPFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) -c $< -o $@ -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"
 
 #|---------------------------------------------------------------------------------------|
 #| Output folder                                                                         |
@@ -144,37 +151,18 @@ $(OBJ_PATH):
 	@-mkdir $(OBJ_PATH)
 
 #|---------------------------------------------------------------------------------------|
-#| Dependencies                                                                          |
-#|---------------------------------------------------------------------------------------|
-$(OBJ_PATH)/%.d : %.s $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d : %.S $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(AFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d : %.c $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(CFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-$(OBJ_PATH)/%.d : %.cpp $(OBJ_PATH)
-	@echo +++ Dependencies of [$(notdir $<)]
-	@$(CC) $(CPPFLAGS) -MM -c $< -MT $(basename $@).o -o $@
-
-#|---------------------------------------------------------------------------------------|
 #| Cleanup                                                                               |
 #|---------------------------------------------------------------------------------------|
 clean:
-	-rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
-	-rmdir $(OBJ_PATH)
-	-rm -f $(OUTPUT_FILE_PATH).elf
-	-rm -f $(OUTPUT_FILE_PATH).bin
-	-rm -f $(OUTPUT_FILE_PATH).map
-	-rm -f $(OUTPUT_FILE_PATH)_symbols.txt
+	-@rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
+	-@rmdir $(OBJ_PATH)
+	-@rm -f $(OUTPUT_FILE_PATH).elf
+	-@rm -f $(OUTPUT_FILE_PATH).bin
+	-@rm -f $(OUTPUT_FILE_PATH).map
+	-@rm -f $(OUTPUT_FILE_PATH)_symbols.txt
 
-$(OBJ_PATH)/%.o : %.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+#$(OBJ_PATH)/%.o : %.c
+#	@$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 #|---------------------------------------------------------------------------------------|
 #| Upload example binary using openocd software tool                                     |
@@ -183,7 +171,7 @@ upload_openocd: $(OUTPUT_FILE_PATH).elf
 	$(TOOL_OPENOCD) -f "$(RESOURCES_OPENOCD_UPLOAD)" -c "program $(OUTPUT_FILE_PATH).elf verify reset"
 
 #|---------------------------------------------------------------------------------------|
-#| Upload example binary using JLink Commander software tool                            |
+#| Upload example binary using JLink Commander software tool                             |
 #|---------------------------------------------------------------------------------------|
 upload_jlink: $(OUTPUT_FILE_PATH).elf
 	$(TOOL_JLINK) -CommandFile "$(RESOURCES_JLINK_UPLOAD)"
@@ -221,16 +209,4 @@ debug: $(OUTPUT_FILE_PATH).elf
 #| This rule is added in case of                                                         |
 #|---------------------------------------------------------------------------------------|
 packaging:
-
-#|---------------------------------------------------------------------------------------|
-#| Include dependencies, if existing                                                     |
-#| Little trick to avoid dependencies build for some rules when useless                  |
-#| CAUTION: this won't work as expected with 'make clean all'                            |
-#|---------------------------------------------------------------------------------------|
-DEP_EXCLUDE_RULES := clean print_info
-ifeq (,$(findstring $(MAKECMDGOALS), $(DEP_EXCLUDE_RULES)))
--include $(AOBJS:%.o=%.d)
--include $(COBJS:%.o=%.d)
--include $(CPPOBJS:%.o=%.d)
-endif
 
