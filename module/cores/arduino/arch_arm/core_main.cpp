@@ -26,6 +26,7 @@
 #endif
 #include "variant.h"
 #include "CoreHardwareSerial.hpp"
+#include "Arduino.h" // for setup() and loop() declarations
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
