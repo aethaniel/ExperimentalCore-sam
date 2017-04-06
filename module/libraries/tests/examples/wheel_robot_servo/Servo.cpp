@@ -30,7 +30,7 @@ static servo_t servos[MAX_SERVOS];                          // static array of s
 
 uint8_t ServoCount = 0;                                     // the total number of attached servos
 
-static volatile int8_t Channel[_Nbr_16timers ];             // counter for the servo being pulsed for each timer (or -1 if refresh interval)
+static volatile int8_t Channel[_Nbr_16timers];              // counter for the servo being pulsed for each timer (or -1 if refresh interval)
 
 // convenience macros
 #define SERVO_INDEX_TO_TIMER(_servo_nbr) ((timer16_Sequence_t)(_servo_nbr / SERVOS_PER_TIMER)) // returns the timer controlling this servo
@@ -49,28 +49,33 @@ static volatile int8_t Channel[_Nbr_16timers ];             // counter for the s
 static void Servo_Handler(timer16_Sequence_t timer, Tc *pTc, uint8_t channel);
 
 #if defined (_useTimer1)
-void HANDLER_FOR_TIMER1(void) {
-    Servo_Handler(_timer1, TC_FOR_TIMER1, CHANNEL_FOR_TIMER1);
+void HANDLER_FOR_TIMER1(void)
+{
+  Servo_Handler(_timer1, TC_FOR_TIMER1, CHANNEL_FOR_TIMER1);
 }
 #endif
 #if defined (_useTimer2)
-void HANDLER_FOR_TIMER2(void) {
-    Servo_Handler(_timer2, TC_FOR_TIMER2, CHANNEL_FOR_TIMER2);
+void HANDLER_FOR_TIMER2(void)
+{
+  Servo_Handler(_timer2, TC_FOR_TIMER2, CHANNEL_FOR_TIMER2);
 }
 #endif
 #if defined (_useTimer3)
-void HANDLER_FOR_TIMER3(void) {
-    Servo_Handler(_timer3, TC_FOR_TIMER3, CHANNEL_FOR_TIMER3);
+void HANDLER_FOR_TIMER3(void)
+{
+  Servo_Handler(_timer3, TC_FOR_TIMER3, CHANNEL_FOR_TIMER3);
 }
 #endif
 #if defined (_useTimer4)
-void HANDLER_FOR_TIMER4(void) {
-    Servo_Handler(_timer4, TC_FOR_TIMER4, CHANNEL_FOR_TIMER4);
+void HANDLER_FOR_TIMER4(void)
+{
+  Servo_Handler(_timer4, TC_FOR_TIMER4, CHANNEL_FOR_TIMER4);
 }
 #endif
 #if defined (_useTimer5)
-void HANDLER_FOR_TIMER5(void) {
-    Servo_Handler(_timer5, TC_FOR_TIMER5, CHANNEL_FOR_TIMER5);
+void HANDLER_FOR_TIMER5(void)
+{
+  Servo_Handler(_timer5, TC_FOR_TIMER5, CHANNEL_FOR_TIMER5);
 }
 #endif
 
@@ -78,28 +83,37 @@ void Servo_Handler(timer16_Sequence_t timer, Tc *tc, uint8_t channel)
 {
     // clear interrupt
     tc->TC_CHANNEL[channel].TC_SR;
-    if (Channel[timer] < 0) {
-        tc->TC_CHANNEL[channel].TC_CCR |= TC_CCR_SWTRG; // channel set to -1 indicated that refresh interval completed so reset the timer
-    } else {
-        if (SERVO_INDEX(timer,Channel[timer]) < ServoCount && SERVO(timer,Channel[timer]).Pin.isActive == true) {
-            digitalWrite(SERVO(timer,Channel[timer]).Pin.nbr, LOW); // pulse this channel low if activated
-        }
+    if (Channel[timer] < 0)
+    {
+      tc->TC_CHANNEL[channel].TC_CCR |= TC_CCR_SWTRG; // channel set to -1 indicated that refresh interval completed so reset the timer
+    }
+    else
+    {
+      if (SERVO_INDEX(timer,Channel[timer]) < ServoCount && SERVO(timer,Channel[timer]).Pin.isActive == true)
+      {
+        digitalWrite(SERVO(timer,Channel[timer]).Pin.nbr, LOW); // pulse this channel low if activated
+      }
     }
 
     Channel[timer]++;    // increment to the next channel
-    if( SERVO_INDEX(timer,Channel[timer]) < ServoCount && Channel[timer] < SERVOS_PER_TIMER) {
+    if( SERVO_INDEX(timer,Channel[timer]) < ServoCount && Channel[timer] < SERVOS_PER_TIMER)
+    {
         tc->TC_CHANNEL[channel].TC_RA = tc->TC_CHANNEL[channel].TC_CV + SERVO(timer,Channel[timer]).ticks;
-        if(SERVO(timer,Channel[timer]).Pin.isActive == true) {    // check if activated
-            digitalWrite( SERVO(timer,Channel[timer]).Pin.nbr,HIGH); // its an active channel so pulse it high
+        if(SERVO(timer,Channel[timer]).Pin.isActive == true)    // check if activated
+        {
+          digitalWrite( SERVO(timer,Channel[timer]).Pin.nbr,HIGH); // its an active channel so pulse it high
         }
     }
-    else {
+    else
+    {
         // finished all channels so wait for the refresh period to expire before starting over
-        if( (tc->TC_CHANNEL[channel].TC_CV) + 4 < usToTicks(REFRESH_INTERVAL) ) { // allow a few ticks to ensure the next OCR1A not missed
-            tc->TC_CHANNEL[channel].TC_RA = (unsigned int)usToTicks(REFRESH_INTERVAL);
+        if( (tc->TC_CHANNEL[channel].TC_CV) + 4 < usToTicks(REFRESH_INTERVAL) )  // allow a few ticks to ensure the next OCR1A not missed
+        {
+          tc->TC_CHANNEL[channel].TC_RA = (unsigned int)usToTicks(REFRESH_INTERVAL);
         }
-        else {
-            tc->TC_CHANNEL[channel].TC_RA = tc->TC_CHANNEL[channel].TC_CV + 4;  // at least REFRESH_INTERVAL has elapsed
+        else
+        {
+          tc->TC_CHANNEL[channel].TC_RA = tc->TC_CHANNEL[channel].TC_CV + 4;  // at least REFRESH_INTERVAL has elapsed
         }
         Channel[timer] = -1; // this will get incremented at the end of the refresh period to start again at the first channel
     }
@@ -155,39 +169,39 @@ static void _initISR(Tc *tc, uint32_t channel, uint32_t id, IRQn_Type irqn)
 static void initISR(timer16_Sequence_t timer)
 {
 #if defined (_useTimer1)
-    if (timer == _timer1)
-    {
-      vectorAssign( IRQn_FOR_TIMER1, HANDLER_FOR_TIMER1);
-      _initISR(TC_FOR_TIMER1, CHANNEL_FOR_TIMER1, ID_TC_FOR_TIMER1, IRQn_FOR_TIMER1);
-    }
+  if (timer == _timer1)
+  {
+    vectorAssign( IRQn_FOR_TIMER1, HANDLER_FOR_TIMER1);
+    _initISR(TC_FOR_TIMER1, CHANNEL_FOR_TIMER1, ID_TC_FOR_TIMER1, IRQn_FOR_TIMER1);
+  }
 #endif
 #if defined (_useTimer2)
-    if (timer == _timer2)
-    {
-      vectorAssign( IRQn_FOR_TIMER2, HANDLER_FOR_TIMER2);
-        _initISR(TC_FOR_TIMER2, CHANNEL_FOR_TIMER2, ID_TC_FOR_TIMER2, IRQn_FOR_TIMER2);
-    }
+  if (timer == _timer2)
+  {
+    vectorAssign( IRQn_FOR_TIMER2, HANDLER_FOR_TIMER2);
+    _initISR(TC_FOR_TIMER2, CHANNEL_FOR_TIMER2, ID_TC_FOR_TIMER2, IRQn_FOR_TIMER2);
+  }
 #endif
 #if defined (_useTimer3)
-    if (timer == _timer3)
-    {
-      vectorAssign( IRQn_FOR_TIMER3, HANDLER_FOR_TIMER3);
-        _initISR(TC_FOR_TIMER3, CHANNEL_FOR_TIMER3, ID_TC_FOR_TIMER3, IRQn_FOR_TIMER3);
-    }
+  if (timer == _timer3)
+  {
+    vectorAssign( IRQn_FOR_TIMER3, HANDLER_FOR_TIMER3);
+    _initISR(TC_FOR_TIMER3, CHANNEL_FOR_TIMER3, ID_TC_FOR_TIMER3, IRQn_FOR_TIMER3);
+  }
 #endif
 #if defined (_useTimer4)
-    if (timer == _timer4)
-    {
-      vectorAssign( IRQn_FOR_TIMER4, HANDLER_FOR_TIMER4);
-        _initISR(TC_FOR_TIMER4, CHANNEL_FOR_TIMER4, ID_TC_FOR_TIMER4, IRQn_FOR_TIMER4);
-    }
+  if (timer == _timer4)
+  {
+    vectorAssign( IRQn_FOR_TIMER4, HANDLER_FOR_TIMER4);
+    _initISR(TC_FOR_TIMER4, CHANNEL_FOR_TIMER4, ID_TC_FOR_TIMER4, IRQn_FOR_TIMER4);
+  }
 #endif
 #if defined (_useTimer5)
-    if (timer == _timer5)
-    {
-      vectorAssign( IRQn_FOR_TIMER5, HANDLER_FOR_TIMER5);
-      _initISR(TC_FOR_TIMER5, CHANNEL_FOR_TIMER5, ID_TC_FOR_TIMER5, IRQn_FOR_TIMER5);
-    }
+  if (timer == _timer5)
+  {
+    vectorAssign( IRQn_FOR_TIMER5, HANDLER_FOR_TIMER5);
+    _initISR(TC_FOR_TIMER5, CHANNEL_FOR_TIMER5, ID_TC_FOR_TIMER5, IRQn_FOR_TIMER5);
+  }
 #endif
 }
 
@@ -195,23 +209,23 @@ static void finISR(timer16_Sequence_t timer)
 {
 #if defined (_useTimer1)
 //    TC_Stop(TC_FOR_TIMER1, CHANNEL_FOR_TIMER1);
-    TC_FOR_TIMER1->TC_CHANNEL[CHANNEL_FOR_TIMER1].TC_CCR = TC_CCR_CLKDIS ;
+  TC_FOR_TIMER1->TC_CHANNEL[CHANNEL_FOR_TIMER1].TC_CCR = TC_CCR_CLKDIS ;
 #endif
 #if defined (_useTimer2)
 //    TC_Stop(TC_FOR_TIMER2, CHANNEL_FOR_TIMER2);
-    TC_FOR_TIMER2->TC_CHANNEL[CHANNEL_FOR_TIMER2].TC_CCR = TC_CCR_CLKDIS ;
+  TC_FOR_TIMER2->TC_CHANNEL[CHANNEL_FOR_TIMER2].TC_CCR = TC_CCR_CLKDIS ;
 #endif
 #if defined (_useTimer3)
 //    TC_Stop(TC_FOR_TIMER3, CHANNEL_FOR_TIMER3);
-    TC_FOR_TIMER3->TC_CHANNEL[CHANNEL_FOR_TIMER3].TC_CCR = TC_CCR_CLKDIS ;
+  TC_FOR_TIMER3->TC_CHANNEL[CHANNEL_FOR_TIMER3].TC_CCR = TC_CCR_CLKDIS ;
 #endif
 #if defined (_useTimer4)
 //    TC_Stop(TC_FOR_TIMER4, CHANNEL_FOR_TIMER4);
-    TC_FOR_TIMER4->TC_CHANNEL[CHANNEL_FOR_TIMER4].TC_CCR = TC_CCR_CLKDIS ;
+  TC_FOR_TIMER4->TC_CHANNEL[CHANNEL_FOR_TIMER4].TC_CCR = TC_CCR_CLKDIS ;
 #endif
 #if defined (_useTimer5)
 //    TC_Stop(TC_FOR_TIMER5, CHANNEL_FOR_TIMER5);
-    TC_FOR_TIMER5->TC_CHANNEL[CHANNEL_FOR_TIMER5].TC_CCR = TC_CCR_CLKDIS ;
+  TC_FOR_TIMER5->TC_CHANNEL[CHANNEL_FOR_TIMER5].TC_CCR = TC_CCR_CLKDIS ;
 #endif
 }
 
@@ -222,7 +236,9 @@ static boolean isTimerActive(timer16_Sequence_t timer)
   for(uint8_t channel=0; channel < SERVOS_PER_TIMER; channel++)
   {
     if(SERVO(timer,channel).Pin.isActive == true)
+    {
       return true;
+    }
   }
   return false;
 }
@@ -242,22 +258,22 @@ Servo::Servo()
   }
 }
 
-uint8_t Servo::attach(int pin)
+uint8_t Servo::attach(int _pin)
 {
-  return this->attach(pin, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
+  return this->attach(_pin, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
 }
 
-uint8_t Servo::attach(int pin, int min, int max)
+uint8_t Servo::attach(int _pin, int _min, int _max)
 {
   timer16_Sequence_t timer;
 
   if (this->servoIndex < MAX_SERVOS)
   {
-    pinMode(pin, OUTPUT);                                   // set servo pin to output
-    servos[this->servoIndex].Pin.nbr = pin;
+    pinMode(_pin, OUTPUT);                                   // set servo pin to output
+    servos[this->servoIndex].Pin.nbr = _pin;
     // todo min/max check: abs(min - MIN_PULSE_WIDTH) /4 < 128
-    this->min  = (MIN_PULSE_WIDTH - min)/4; //resolution of min/max is 4 uS
-    this->max  = (MAX_PULSE_WIDTH - max)/4;
+    this->min  = (MIN_PULSE_WIDTH - _min)/4; //resolution of min/max is 4 uS
+    this->max  = (MAX_PULSE_WIDTH - _max)/4;
     // initialize the timer if it has not already been initialized
     timer = SERVO_INDEX_TO_TIMER(servoIndex);
     if (isTimerActive(timer) == false)
@@ -287,9 +303,16 @@ void Servo::write(int value)
   if (value < MIN_PULSE_WIDTH)
   {
     if (value < 0)
+    {
       value = 0;
-    else if (value > 180)
-      value = 180;
+    }
+    else
+    {
+      if (value > 180)
+      {
+        value = 180;
+      }
+    }
 
     value = map(value, 0, 180, SERVO_MIN(), SERVO_MAX());
   }
@@ -322,9 +345,13 @@ int Servo::readMicroseconds()
 {
   unsigned int pulsewidth;
   if (this->servoIndex != INVALID_SERVO)
+  {
     pulsewidth = ticksToUs(servos[this->servoIndex].ticks)  + TRIM_DURATION;
+  }
   else
+  {
     pulsewidth  = 0;
+  }
 
   return pulsewidth;
 }

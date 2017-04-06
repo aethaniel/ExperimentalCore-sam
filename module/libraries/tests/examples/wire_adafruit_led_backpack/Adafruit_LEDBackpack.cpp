@@ -141,9 +141,8 @@ void Adafruit_8x8matrix::drawPixel(int16_t x, int16_t y, uint16_t color)
 // drawBitmap() variant for RAM-resident (not PROGMEM) bitmaps.
 void Adafruit_8x8matrix::drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color)
 {
-
   int16_t i, j, byteWidth = (w + 7) / 8;
-  uint8_t data;
+  uint8_t data=0;
 
   for (j=0; j<h; j++)
   {
