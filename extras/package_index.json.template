@@ -39,12 +39,17 @@
             {
               "packager": "arduino",
               "name": "bossac",
-              "version": "1.5-arduino"
+              "version": "1.7.0"
             },
             {
               "packager": "arduino",
               "name": "openocd",
               "version": "0.9.0-arduino"
+            },
+            {
+              "packager": "arduino",
+              "name": "CMSIS",
+              "version": "4.5.0"
             }
           ]
         }
