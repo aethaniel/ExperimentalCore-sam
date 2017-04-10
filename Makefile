@@ -1,7 +1,7 @@
 #
 #  SAM Arduino IDE Module makefile.
 #
-#  Copyright (c) 2015 Thibaut VIARD. All right reserved.
+#  Copyright (c) 2015-2017 Thibaut VIARD. All right reserved.
 #
 #  This library is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public
@@ -40,7 +40,8 @@ PRINT_INFO_TRAVIS=
 endif
 
 CORE_VERSION := $(shell grep version= $(ROOT_PATH)/module/platform.txt | sed 's/version=//g')
-PACKAGE_NAME := $(basename $(notdir $(CURDIR)))
+#PACKAGE_NAME := $(basename $(notdir $(CURDIR)))
+PACKAGE_NAME := ExperimentalCore-sam
 PACKAGE_FOLDER := module
 
 # -----------------------------------------------------------------------------
@@ -80,8 +81,8 @@ endif
 
 ifeq (postpackaging,$(findstring $(MAKECMDGOALS),postpackaging))
   PACKAGE_OS_FILENAME=$(PACKAGE_NAME)-$(CORE_VERSION)-$(PACKAGE_OS).tar.bz2
-  PACKAGE_CHKSUM := $(firstword $(shell sha256sum $(PACKAGE_OS_FILENAME)))
-  PACKAGE_SIZE := $(firstword $(shell wc -c $(PACKAGE_OS_FILENAME)))
+  PACKAGE_CHKSUM := $(firstword $(shell sha256sum "$(PACKAGE_OS_FILENAME)"))
+  PACKAGE_SIZE := $(firstword $(shell wc -c "$(PACKAGE_OS_FILENAME)"))
 endif
 
 # end of packaging specific
@@ -100,7 +101,8 @@ clean:
 	@echo ----------------------------------------------------------
 	@echo  Clean examples: $(EXAMPLES)
 	@echo    for variant: $(VARIANT_NAME)
-	$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules VARIANT_NAME=$(VARIANT_NAME) clean -C $(EXAMPLES_PATH)/$(example) ; )
+	$(foreach variant,$(VARIANTS),$(foreach example,$(EXAMPLES),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(EXAMPLES_PATH)/$(example) ; ))
+	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(VARIANTS_PATH)/$(variant) ; )
 	@echo ----------------------------------------------------------
 
 help:
@@ -153,12 +155,12 @@ print_info_travis:
 	@echo "TRAVIS_BUILD_ID     = $(TRAVIS_BUILD_ID)"
 	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
 
-packaging: packaging_clean build_variants $(PACKAGE_TO_BE_PROCESSED)
+#build_variants 
+packaging: packaging_clean $(PACKAGE_TO_BE_PROCESSED)
 
 build_variants:
 	@echo ----------------------------------------------------------
 	@echo  Build variants: $(VARIANTS)
-	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) clean -C $(VARIANTS_PATH)/$(variant) ; )
 	$(foreach variant,$(VARIANTS),$(MAKE) --no-builtin-rules VARIANT_NAME=$(variant) all -C $(VARIANTS_PATH)/$(variant) ; )
 	@echo ----------------------------------------------------------
 
