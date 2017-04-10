@@ -155,7 +155,7 @@ print_info_travis:
 	@echo "TRAVIS_BUILD_ID     = $(TRAVIS_BUILD_ID)"
 	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
 
-#build_variants 
+#build_variants
 packaging: packaging_clean $(PACKAGE_TO_BE_PROCESSED)
 
 build_variants:
@@ -193,7 +193,7 @@ postpackaging:
 	@echo "TRAVIS_BUILD_NUMBER = $(TRAVIS_BUILD_NUMBER)"
 	@echo "PACKAGE_OS_FILENAME = $(PACKAGE_OS_FILENAME)"
 	cat extras/package_index.json.template | sed s/%%VERSION%%/$(CORE_VERSION)/ | sed s/%%FILENAME%%/$(PACKAGE_OS_FILENAME)/ | sed s/%%CHECKSUM%%/$(PACKAGE_CHKSUM)/ | sed s/%%SIZE%%/$(PACKAGE_SIZE)/ > package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json
-	cp package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json test_package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json
+#	cp package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json test_package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json
 	@echo "package_$(PACKAGE_NAME)_$(CORE_VERSION)_$(PACKAGE_OS)_index.json created"
 
 packaging_clean:
