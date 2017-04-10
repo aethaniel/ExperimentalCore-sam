@@ -154,12 +154,9 @@ $(OBJ_PATH):
 #| Cleanup                                                                               |
 #|---------------------------------------------------------------------------------------|
 clean:
-	-@rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
-	-@rmdir $(OBJ_PATH)
-	-@rm -f $(OUTPUT_FILE_PATH).elf
-	-@rm -f $(OUTPUT_FILE_PATH).bin
-	-@rm -f $(OUTPUT_FILE_PATH).map
-	-@rm -f $(OUTPUT_FILE_PATH)_symbols.txt
+#	-@rm -f $(OBJ_PATH)/* $(OBJ_PATH)/*.*
+	-@rm -rf $(OBJ_PATH)
+	-@rm -f $(OUTPUT_FILE_PATH).elf $(OUTPUT_FILE_PATH).bin $(OUTPUT_FILE_PATH).hex $(OUTPUT_FILE_PATH).lss $(OUTPUT_FILE_PATH).map $(OUTPUT_FILE_PATH)_symbols.txt
 
 #$(OBJ_PATH)/%.o : %.c
 #	@$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
