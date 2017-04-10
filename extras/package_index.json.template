@@ -27,7 +27,7 @@
             { "name": "Atmel SAM4S-WPIR-RD" },
             { "name": "Atmel SAM4S-Xplained Pro" },
             { "name": "Atmel SAM4E-Xplained Pro" },
-            { "name": "Atmel SAMG55-Xplained Pro" },
+            { "name": "Atmel SAMG55-Xplained Pro" }
           ],
           "toolsDependencies":
           [
