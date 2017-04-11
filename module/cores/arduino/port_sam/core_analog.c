@@ -62,8 +62,10 @@ uint32_t analogRead(uint32_t ulPin)
 
   uint32_t ulChannel;
 
+#if defined(PIN_A0)
   if (ulPin < A0)
     ulPin += A0;
+#endif
 
   ulChannel = g_aPinMap[ulPin].ulADCChannelNumber ;
 
@@ -188,7 +190,7 @@ uint32_t analogRead(uint32_t ulPin)
 #endif // 0
     
     
-#if defined(SAMG55_SERIES)
+#if defined(_SAMG55J19_)
     //ADC setup is done in variant_init.cpp
     //enable channel
     ADC->ADC_CHER=(0x1<<ulChannel);
