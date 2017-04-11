@@ -60,13 +60,14 @@ uint32_t analogRead(uint32_t ulPin)
 {
   uint32_t ulValue = 0;
 
-#if 0 // TODO: implement
   uint32_t ulChannel;
 
   if (ulPin < A0)
     ulPin += A0;
 
   ulChannel = g_aPinMap[ulPin].ulADCChannelNumber ;
+
+#if 0 // TODO: implement
 
 #if defined __SAM3U4E__
   switch ( g_aPinMap[ulPin].ulAnalogChannel )
@@ -185,6 +186,27 @@ uint32_t analogRead(uint32_t ulPin)
 #endif
 
 #endif // 0
+    
+    
+#if defined(SAMG55_SERIES)
+    //ADC setup is done in variant_init.cpp
+    //enable channel
+    ADC->ADC_CHER=(0x1<<ulChannel);
+    //enable channel's End Of Conversion interrupt
+    ADC->ADC_IER=(0x1<<ulChannel);
+    //start ADC conversion
+    ADC->ADC_CR=ADC_CR_START;
+    //wait till conversion is over
+    while(!(ADC->ADC_ISR & (0x1<<ulChannel)));
+    //get ADC conversion value
+    ulValue=ADC->ADC_CDR[ulChannel];
+    //disable channel
+    ADC->ADC_CHDR=(0x1<<ulChannel);
+    //disable channel's End Of Conversion interrupt
+    ADC->ADC_IDR=(0x1<<ulChannel);
+    //map value to readResolution
+    ulValue = mapResolution(ulValue, ADC_RESOLUTION, _readResolution);
+#endif
 
   return ulValue;
 }
