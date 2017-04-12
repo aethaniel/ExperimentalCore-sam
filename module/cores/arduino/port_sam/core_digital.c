@@ -32,9 +32,9 @@ void pinMode( uint32_t ulPin, PinMode ulMode )
 
   if ( (ulMode == INPUT) || (ulMode == INPUT_PULLUP) || (ulMode == INPUT_PULLDOWN) )
   {
-    /* if all pins are INPUT, enable PIO Controller clocking (Datasheet Table 16-4. PIO_OSR reset state) */
-    if ( Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_OSR == 0x00000000 )
-    {
+      /* check if PIO is already clocked */
+      if (!(PMC->PMC_PCSR0 & (1 << Ports[g_aPinMap[ulPin].iPort].ulId)))
+      {
 //      if (Ports[g_aPinMap[ulPin].iPort].ulId < 32)
       {
         PMC->PMC_PCER0 = 1 << Ports[g_aPinMap[ulPin].iPort].ulId;
