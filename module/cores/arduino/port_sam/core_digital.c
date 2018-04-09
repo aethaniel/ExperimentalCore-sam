@@ -169,9 +169,22 @@ int digitalRead( uint32_t ulPin )
     return LOW ;
   }
 
-  if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PDSR & g_aPinMap[ulPin].ulPin) != 0 )
+  /* Test if pin is under control of GPIO */
+  if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PSR & g_aPinMap[ulPin].ulPin) != 0 )
   {
-    return HIGH ;
+    /* Read Output Status */
+    if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_ODSR & g_aPinMap[ulPin].ulPin) != 0)
+    {
+      return HIGH;
+    }
+  }
+  else // Pin is configured as input
+  {
+    /* Read Pin Status */
+    if ( (Ports[g_aPinMap[ulPin].iPort].pGPIO->PIO_PDSR & g_aPinMap[ulPin].ulPin) != 0 )
+    {
+      return HIGH ;
+    }
   }
 
   return LOW ;
@@ -180,4 +193,3 @@ int digitalRead( uint32_t ulPin )
 #ifdef __cplusplus
 }
 #endif
-
