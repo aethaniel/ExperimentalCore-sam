@@ -90,22 +90,16 @@ extern "C"
 /*
  * Analog pins
  */
-#if 0 // TODO Analog pins
-#define PIN_A0               (14ul)
-#define PIN_A1               (15ul)
-#define PIN_A2               (16ul)
-#define PIN_A3               (17ul)
-#define PIN_A4               (18ul)
-#define PIN_A5               (19ul)
+#define PIN_A0               (22ul)
+#define PIN_A1               (23ul)
+#define PIN_A2               (24ul)
+#define PIN_A3               (25ul)
 
 static const uint8_t A0  = PIN_A0 ;
 static const uint8_t A1  = PIN_A1 ;
 static const uint8_t A2  = PIN_A2 ;
 static const uint8_t A3  = PIN_A3 ;
-static const uint8_t A4  = PIN_A4 ;
-static const uint8_t A5  = PIN_A5 ;
 #define ADC_RESOLUTION		12
-#endif // TODO Analog pins
 
 /*
  * Serial interfaces

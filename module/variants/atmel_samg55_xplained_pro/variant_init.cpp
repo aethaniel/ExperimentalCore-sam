@@ -32,4 +32,11 @@ void initVariant( void )
   // Initialize Serial port Flexcom6 pins
   pinPeripheral(PIN_SERIAL2_RX, GPIO_PERIPH_B);
   pinPeripheral(PIN_SERIAL2_TX, GPIO_PERIPH_B);
+    
+  //ADC setup
+  PMC->PMC_PCR = PMC_PCR_PID(ID_ADC)|PMC_PCR_CMD|PMC_PCR_DIV(1)|PMC_PCR_EN; //Set ADC peripheral clock to MCK/1 = 120MHz
+  PMC->PMC_PCER0 = (1<<ID_ADC);   //enable ADC peripheral clock
+    
+  //ADCCLK=PERIPHCLK/(2*(PRESCAL+1))  <=>  PRESCAL=(PERIPHCLK/(2*ADCCLK))-1
+  ADC->ADC_MR =ADC_MR_PRESCAL(5); //fastest ADC conversion clock (10MHz with 120MHz peripheral clock)
 }
