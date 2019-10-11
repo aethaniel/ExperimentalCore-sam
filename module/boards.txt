@@ -189,3 +189,27 @@ atmel_samg55_xplained_pro_dbg.build.pid=0x003e
 atmel_samg55_xplained_pro_dbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 atmel_samg55_xplained_pro_dbg.bootloader.tool=openocd
 atmel_samg55_xplained_pro_dbg.bootloader.file=openblt/atmel_samg55_xplained_pro.bin
+
+atmel_samg55_xplained_pro_edbg.name=Atmel SAMG55-Xplained Pro (Programming Port - EDBG)
+atmel_samg55_xplained_pro_edbg.vid.0=0x03eb
+atmel_samg55_xplained_pro_edbg.pid.0=0x2111
+atmel_samg55_xplained_pro_edbg.upload.tool=edbg
+atmel_samg55_xplained_pro_edbg.upload.protocol=CMSIS-DAP
+atmel_samg55_xplained_pro_edbg.upload.maximum_size=524288
+atmel_samg55_xplained_pro_edbg.upload.use_1200bps_touch=false
+atmel_samg55_xplained_pro_edbg.upload.wait_for_upload_port=false
+atmel_samg55_xplained_pro_edbg.upload.native_usb=false
+atmel_samg55_xplained_pro_edbg.build.mcu=cortex-m4
+atmel_samg55_xplained_pro_edbg.build.f_cpu=120000000L
+atmel_samg55_xplained_pro_edbg.build.usb_product="Atmel SAMG55-Xplained Pro"
+atmel_samg55_xplained_pro_edbg.build.board=SAM_SAMG55_XPRO
+atmel_samg55_xplained_pro_edbg.build.core=arduino
+atmel_samg55_xplained_pro_edbg.build.extra_flags=-D__SAMG55J19__ -mthumb {build.usb_flags}
+atmel_samg55_xplained_pro_edbg.build.ldscript=linker_scripts/gcc/variant_without_bootloader.ld
+atmel_samg55_xplained_pro_edbg.build.openocdscript=openocd_scripts/variant.cfg
+atmel_samg55_xplained_pro_edbg.build.variant=atmel_samg55_xplained_pro
+atmel_samg55_xplained_pro_edbg.build.vid=0x2341
+atmel_samg55_xplained_pro_edbg.build.pid=0x003e
+atmel_samg55_xplained_pro_edbg.build.usb_flags.off=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+atmel_samg55_xplained_pro_edbg.bootloader.tool=openocd
+atmel_samg55_xplained_pro_edbg.bootloader.file=openblt/atmel_samg55_xplained_pro.bin

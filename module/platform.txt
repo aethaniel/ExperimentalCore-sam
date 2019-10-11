@@ -119,3 +119,15 @@ tools.bossac.upload.params.verbose=-i -d
 tools.bossac.upload.params.quiet=
 tools.bossac.upload.pattern="{path}/{cmd}" {upload.verbose} --port={serial.port.file} -U {upload.native_usb} -e -w -v -b "{build.path}/sketch/{build.project_name}.bin" -R
 
+#
+# EDBG
+#
+tools.edbg.path={runtime.platform.path}/tools/edbg
+tools.edbg.cmd.macosx=osx/edbg
+tools.edbg.cmd.linux=linux32/edbg
+tools.edbg.cmd.windows=win32/edbg
+
+tools.edbg.upload.params.verbose=-b
+tools.edbg.upload.params.quiet=
+tools.edbg.upload.pattern="{path}/{cmd}" "{upload.verbose}" -pv -t atmel_cm4 -f "{build.path}/sketch/{build.project_name}.bin"
+
